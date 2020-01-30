@@ -1,0 +1,14 @@
+.sc-icons {
+  height: 2rem;
+  margin: 0.5rem 0;
+  text-align: right;
+}
+
+.sc-icons a {
+  height: inherit;
+  margin: 0 0.25rem;
+}
+
+.icon {
+  height: inherit;  
+}

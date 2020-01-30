@@ -1,0 +1,27 @@
+.var-keyword {
+  color: black;
+  font-weight: bold;
+}
+
+.variable {
+  color: #8f72f0;
+}
+
+.function-menu h2 {
+  font-weight: normal;
+  text-align: center;
+}
+
+.function-menu a {
+  color: #bdbdbd;
+  text-decoration: none;
+  margin: 0 0.25em;
+}
+
+.function-menu a:hover {
+  color: #fd9d69;
+}
+
+.function-menu a.selected {
+  color: #db692b;
+}

@@ -5,7 +5,7 @@ export default () => {
   return(
     <div className='cover-letter'>
       <div className='img-container'>
-        <img src='/imgs/profile.jpg' alt="Profile picture for this site" />
+        <img src='./imgs/profile.jpg' alt="Profile picture for this site" />
       </div>
       <div className="desc-container">
         <h1>Hello!</h1>

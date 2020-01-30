@@ -4,4 +4,12 @@
   margin: 2vh auto;
 }
 
+hr {
+  width: 75%;
+  border-width: medium;
+  border-style: inset;
+  margin: 2rem auto;
+  opacity: 0.25;
+}
+
 
