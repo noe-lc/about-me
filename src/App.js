@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './App.css';
-import CoverLetter from './components/CoverLetter';
+import CoverLetter from './components/CoverLetter/CoverLetter';
 
 function App() {
   return (
