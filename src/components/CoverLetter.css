@@ -1,0 +1,12 @@
+.cover-letter{
+  width: 100%;
+  display: flex;
+}
+
+.img-container {
+  width: 35%
+}
+
+.desc-container {
+  width: 65%;
+}
