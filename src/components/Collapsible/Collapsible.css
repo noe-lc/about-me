@@ -1,0 +1,37 @@
+.collapsible-parent {
+  width: 100%;
+}
+
+.header {
+  width: 100%;
+  padding: 0.1rem;
+  display: flex;
+}
+
+.collapsed {
+  height: 0rem;
+  max-height: 0rem;
+  overflow: hidden;
+}
+
+.expanded {
+  height: auto;
+  max-height: 9999rem;
+}
+
+.title {
+  width: 90%;
+}
+
+.btn {
+  width: 10%;
+  height: 100%;
+}
+
+.btn .collapsed {
+  background-image: url(/public/icons/expand.svg);
+}
+
+.btn .expanded {
+  background-image: url(/public/icons/collapse.svg);
+}

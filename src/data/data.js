@@ -30,7 +30,7 @@ export const experienceData = [
     title: 'Geoinformatics Developer',
     icon: 'datalabmx',
     companyName: 'DataLab MX',
-    location: ' Mexico City, Mexico',
+    location: 'Mexico City, Mexico',
     description: 'Developer of web applications for interactive data and cartographic visualization', 
     details: [
       `Platforms for visualizing service issues and user reports for major transportation service providers`,
