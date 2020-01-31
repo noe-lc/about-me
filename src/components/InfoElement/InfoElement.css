@@ -13,12 +13,10 @@
   justify-content: center;
 }
 
-.details-list {
-  margin: 0.25rem 0;
-}
-
-.details-list li {
-  margin-bottom: 0.25em;
+.info-container h4 {
+  margin: 0 0 0.25em 0;
+  font-size: 1rem;
+  font-weight: normal;
 }
 
 .wrap {
@@ -46,11 +44,26 @@
   border-radius: 50%;
 }
 
-.info-container {
-  width: 65%;
+.details-list {
+  margin: 0.25rem 0;
+  list-style-type: disc;
 }
 
-.info-container h4 {
-  margin: 0;
-  font-weight: normal;
+.details-list li {
+  margin-bottom: 0.25em;
+}
+
+@media only screen and (max-width:600px) {
+  .info-element {
+    flex-direction: column-reverse;
+  }
+
+  .wrap {
+    display: block;
+  }
+
+  .icon-container {
+    width: 20%;
+    margin-top: 1em;
+  }
 }
