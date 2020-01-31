@@ -17,6 +17,7 @@
   word-spacing: 0.25em;
   margin-bottom: 0.5em;
   text-align: center;
+  font-family: monospace;
 }
 
 .function-menu a {
@@ -34,4 +35,14 @@
 .function-menu a.selected {
   color: #db692b;
   font-style: normal;
+}
+
+@media only screen and (max-width:600px) {
+  .function-menu h2 {
+    word-break: break-all;
+  }
+
+  .function-menu a {
+    display: block;
+  }
 }

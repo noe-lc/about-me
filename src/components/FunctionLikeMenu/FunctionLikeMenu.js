@@ -23,7 +23,7 @@ export default (props) => {
       return (
         <div className='function-menu'>
           <h2>
-            <span className='var-keyword'>const </span> 
+            {/*<span className='var-keyword'>const </span> */}
             <span className='variable'>getMoreInfo</span>({renderChildren()}) 
             => {'{'} 
           </h2>
