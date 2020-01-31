@@ -15,21 +15,23 @@ function App(props) {
   return (
     <Router>
       <Route path='/' render={() => 
-        <div className="main">
-        <CoverLetter />
-        <SocialMedia links={urls} />
-        <hr></hr>
-        <FunctionLikeMenu>
-          <Link to='/education'>Education</Link>
-          <Link to='/experience'>Experience</Link>
-          <Link to='/skills-and-languages'>Skills and Languages</Link>
-        </FunctionLikeMenu>
-        <Switch>
-          <Route path='/education' exact component={InfoContainer(educationData,'institutionName')}></Route>
-          <Route path='/experience' exact component={InfoContainer(experienceData,'companyName')}></Route>
-          <Route path='/skills-and-languages' exact component={InfoContainer(skillsLangData,'')}></Route>
-        </Switch>
-      </div>
+        <Router>
+          <div className="main">
+            <CoverLetter />
+            <SocialMedia links={urls} />
+            <hr></hr>
+            <FunctionLikeMenu>
+              <Link to='/education'>Education</Link>
+              <Link to='/experience'>Experience</Link>
+              <Link to='/skills-and-languages'>Skills and Languages</Link>
+            </FunctionLikeMenu>
+            <Switch>
+              <Route path='/education' component={InfoContainer(educationData,'institutionName')}></Route>
+              <Route path='/experience' component={InfoContainer(experienceData,'companyName')}></Route>
+              <Route path='/skills-and-languages' component={InfoContainer(skillsLangData,'')}></Route>
+            </Switch>
+          </div>
+        </Router>
       }/>
     </Router>
     

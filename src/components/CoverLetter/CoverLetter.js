@@ -8,7 +8,7 @@ export default () => {
         <img src='./imgs/profile.jpg' alt="Profile picture for this site" />
       </div>
       <div className="desc-container">
-        <h1>Hello!</h1>
+        <h1 className='greeting'>Hi!</h1>
         <p>
           My name is Noé Landaverde and I am a Mexican Geoinformatics Engineer.
           Although my profession is heavily oriented towards Geographic Information
