@@ -6,16 +6,18 @@ export const urls = [
 export const educationData = [
   { 
     term: ['2009-01-01','2014-01-01'],
+    icon: 'uaslp',
     level: "Bachelor's Degree",
-    programme: 'Geoinformatics Engineering (formerly Geomatics Engineering)',
+    programme: 'BE Geomatics Engineering',
     institutionName: 'Autonomous University of San Luis Potosi',
     location: 'San Luis Potosí, SLP, Mexico',
     thesisTopic: 'Web Application for Public Transportation Inquiring'
   },
   { 
     term: ['2009-01-01','2014-01-01'],
+    icon: 'itc',
     level: "Master of Science",
-    programme: 'Geoinformation Science and Earth Observation',
+    programme: 'MSc Geoinformation Science and Earth Observation',
     institutionName: 'Faculty of Geoinformation Science and Earth Observation (ITC), University of Twente',
     location: 'Enschede, The Netherlands',
     thesisTopic: 'A Conceptual Framework for Interactive Cartographic Storytelling'
@@ -26,6 +28,7 @@ export const experienceData = [
   { 
     term: ['2019-01-07','2020-01-07'],
     title: 'Geoinformatics Developer',
+    icon: 'datalabmx',
     companyName: 'DataLab MX',
     location: ' Mexico City, Mexico',
     description: 'Developer of web applications for interactive data and cartographic visualization', 
@@ -42,6 +45,7 @@ export const experienceData = [
     term: ['2018-06-04','2020-11-16'],
     title: 'Intern', 
     companyName: 'Environmental Systems Research Institute (ESRI)', 
+    icon: 'esri',
     location: 'Redlands, California',
     description: 'Supported the now GIS Industry Solutions division on tasks related to Marketing and Statistics',
     details: [
@@ -55,6 +59,7 @@ export const experienceData = [
     term: ['2015-09-02','2016-09-05'],
     title: 'Part-time Teacher', 
     companyName: 'Autonomous University of San Luis Potosi (UASLP)',
+    icon: 'uaslp',
     location: 'San Luis Potosi, SLP, MX', 
     description: `Part-time teacher & member of the Geoinformatics Academic Board. During that
       year I taught four subjects and gave courses and seminars on new trends and technologies
@@ -66,7 +71,8 @@ export const experienceData = [
   },
   { 
     term: ['2014-05-02','2014-08-02'],
-    title: 'Cartography Technician', 
+    title: 'Cartography Technician',
+    icon: 'implan',
     companyName: 'Municipal Institute of Planning (IMPLAN), San Luis Potosi, MX', 
     location: 'San Luis Potosi, SLP, MX',
     description: `Three-month project, during which our team was able to update and rectify cadastral

@@ -1,3 +1,8 @@
+.function-menu {
+  width: 97.5%;
+  margin: 0 auto;
+}
+
 .var-keyword {
   color: black;
   font-weight: bold;
@@ -9,19 +14,23 @@
 
 .function-menu h2 {
   font-weight: normal;
-  text-align: center;
+  word-spacing: 0.25em;
+  margin-bottom: 0.5em;
 }
 
 .function-menu a {
   color: #bdbdbd;
   text-decoration: none;
   margin: 0 0.25em;
+  font-style: italic;
 }
 
 .function-menu a:hover {
   color: #fd9d69;
+  font-style: normal;
 }
 
 .function-menu a.selected {
   color: #db692b;
+  font-style: normal;
 }

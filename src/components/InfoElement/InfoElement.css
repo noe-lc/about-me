@@ -1,0 +1,41 @@
+.info-element {
+  width: 100%;
+  display: flex;
+}
+
+.icon-container {
+  width: 35%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrap {
+  margin-right: 0.5rem;
+}
+
+.highlight {
+  font-weight: 600;
+}
+
+.small {
+  font-size: 0.85em;
+}
+
+.icon-container .icon {
+  width: 40%;
+}
+
+.icon-container .icon img {
+  width: 100%;
+  border-radius: 50%;
+}
+
+.info-container {
+  width: 65%;
+}
+
+.info-container h4 {
+  margin: 0;
+  font-weight: normal;
+}

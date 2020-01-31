@@ -1,10 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import { urls } from './data/data';
+import { urls, educationData, experienceData, skillsLangData } from './data/data';
 
 import CoverLetter from './components/CoverLetter/CoverLetter';
 import SocialMedia from './components/SocialMedia/SocialMedia';
 import FunctionLikeMenu from './components/FunctionLikeMenu/FunctionLikeMenu';
+import InfoContainer from './components/InfoContainer/InfoContainer';
+//import ExpInfo from './components/ExpInfo/ExpInfo';
+//import SkInfo from './components/SkInfo/SkInfo';
 
 import './App.css';
 
@@ -20,13 +23,11 @@ function App(props) {
         <Link to='/experience'>Experience</Link>
         <Link to='/skills-and-languages'>Skills and Languages</Link>
       </FunctionLikeMenu>
-      <div className='info-container'>
-        <Switch>
-          <Route path='/education' render={() => <h1>Education</h1>}></Route>
-          <Route path='/experience' render={() => <h1>Exp</h1>}></Route>
-          <Route path='/skills-and-languages' render={() => <h1>Skillz</h1>}></Route>
-        </Switch>
-      </div>
+      <Switch>
+        <Route path='/education' exact component={InfoContainer(educationData,'institutionName')}></Route>
+        <Route path='/experience' exact component={InfoContainer(experienceData,'companyName')}></Route>
+        <Route path='/skills-and-languages' exact component={InfoContainer(skillsLangData,'')}></Route>
+      </Switch>
     </div>
     </Router>
     
