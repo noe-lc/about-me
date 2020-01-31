@@ -73,7 +73,7 @@ export const experienceData = [
     term: ['2014-05-02','2014-08-02'],
     title: 'Cartography Technician',
     icon: 'implan',
-    companyName: 'Municipal Institute of Planning (IMPLAN), San Luis Potosi, MX', 
+    companyName: 'Municipal Institute of Planning (IMPLAN)', 
     location: 'San Luis Potosi, SLP, MX',
     description: `Three-month project, during which our team was able to update and rectify cadastral
     and thematic cartography & databases of the metropolitan area of the San Luis Potosí city`,

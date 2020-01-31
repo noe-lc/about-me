@@ -6,8 +6,6 @@ import CoverLetter from './components/CoverLetter/CoverLetter';
 import SocialMedia from './components/SocialMedia/SocialMedia';
 import FunctionLikeMenu from './components/FunctionLikeMenu/FunctionLikeMenu';
 import InfoContainer from './components/InfoContainer/InfoContainer';
-//import ExpInfo from './components/ExpInfo/ExpInfo';
-//import SkInfo from './components/SkInfo/SkInfo';
 
 import './App.css';
 
