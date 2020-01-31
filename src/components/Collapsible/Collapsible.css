@@ -24,14 +24,19 @@
 }
 
 .btn {
-  width: 10%;
-  height: 100%;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  border: 1px solid black;
+  background-color: transparent;
+  background-position: center;
+  background-size: contain;
 }
 
-.btn .collapsed {
+.btn-collapsed {
   background-image: url(/public/icons/expand.svg);
 }
 
-.btn .expanded {
+.btn-expanded {
   background-image: url(/public/icons/collapse.svg);
 }
