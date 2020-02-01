@@ -29,6 +29,7 @@
 
 .selected {
   background-color: #e4e4e4;
+  transition: background-color ease-in-out 0.25s;
 }
 
 .small {

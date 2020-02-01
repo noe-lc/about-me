@@ -27,7 +27,7 @@ const renderJobDetails = (description,details,onCollapsedSet) => {
 
 export default (props) => {
   const { title, programme, term, thesisTopic, 
-    companyName, institutionName, location, description, details } = props;
+    companyName, institutionName, city, description, details } = props;
   const [state,setState] = useState({ selected: false });
   const onCollapsedSet = (bool) => {
     setState({ ...state, selected: bool });
@@ -37,7 +37,8 @@ export default (props) => {
     <div className={'info-element' + (state.selected ? ' selected' : '')}>
       <div className='icon-container'>
         <div className='icon'>
-          <img src={`./icons/${props.icon}`}></img>
+          <img src={`./icons/${props.icon}.png`}
+            alt={`Icon of the insitution or company named ${companyName || institutionName}`}></img>
         </div>
       </div>
       <div className='info-container'>
@@ -48,7 +49,7 @@ export default (props) => {
         {includeThesisTopic(thesisTopic)}
         <h4>
           <span className='wrap highlight'>{companyName || institutionName}</span>
-          <span className='wrap small'>({location})</span>
+          <span className='wrap small'>({city})</span>
         </h4>
         {renderJobDetails(description,details,onCollapsedSet)}
       </div>
