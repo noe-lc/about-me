@@ -6,7 +6,7 @@
   border-bottom: 2px solid rgb(0,0,0,0.05);
 }
 
-.icon-container {
+.title-container {
   width: 40%;
   display: flex;
   align-items: center;
@@ -27,14 +27,10 @@
   font-weight: 600;
 }
 
-
 .small {
   font-size: 0.85em;
 }
 
-.icon-container .icon {
-  width: 40%;
-}
 
 @media only screen and (max-width:600px) {
   .info-element.non-reverse {
@@ -45,8 +41,8 @@
     display: block;
   }
 
-  .icon-container {
-    width: 20%;
+  .title-container {
+    width: auto;
     margin-top: 1em;
   }
 }

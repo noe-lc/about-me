@@ -18,38 +18,43 @@ const getInfoElements = (data,keyProp) => {
 function App(props) {
   return (
     <Router>
-      <Route path='/' render={() => 
-        <Router>
-          <div className="main">
-            <CoverLetter />
-            <SocialMedia links={urls} />
-            <hr></hr>
-            <FunctionLikeMenu>
-              <Link to='/education'>Education</Link>
-              <Link to='/experience'>Experience</Link>
-              <Link to='/skills-and-languages'>Skills & Languages</Link>
-            </FunctionLikeMenu>
-            <Switch>
-              <Route path='/education' exact>
-                <InfoContainer>
-                  {getInfoElements(educationData,'institutionName')}
-                </InfoContainer>
-              </Route>
-              <Route path='/experience'>
-                <InfoContainer>
-                  {getInfoElements(experienceData,'companyName')}
-                </InfoContainer>
-              </Route>
-              <Route path='/skills-and-languages'>
-                <InfoContainer>
-                  {Object.entries(skillsLangData).map(([key,value]) => 
-                    <SkInfo title={key[0].toUpperCase() + key.slice(1)} data={value} />
-                  )}
-                </InfoContainer>
-              </Route>
-            </Switch>
-          </div>
-        </Router>
+      <Route path='/about-me' render={props => {
+        const { url, path } = props.match;
+        return (
+          <Router>
+            <div className="main">
+              <CoverLetter />
+              <SocialMedia links={urls} />
+              <hr key={console.log(props)}></hr>
+              <FunctionLikeMenu>
+                <Link to={`${path}/education`}>Education</Link>
+                <Link to={`${path}/experience`}>Experience</Link>
+                <Link to={`${path}/skills-and-languages`}>Skills & Languages</Link>
+              </FunctionLikeMenu>
+              <Switch>
+                <Route path={`${url}/education`} exact>
+                  <InfoContainer>
+                    {getInfoElements(educationData,'institutionName')}
+                  </InfoContainer>
+                </Route>
+                <Route path={`${url}/experience`}>
+                  <InfoContainer>
+                    {getInfoElements(experienceData,'companyName')}
+                  </InfoContainer>
+                </Route>
+                <Route path={`${url}/skills-and-languages`}>
+                  <InfoContainer>
+                    {Object.entries(skillsLangData).map(([key,value]) => 
+                      <SkInfo key={key} title={key[0].toUpperCase() + key.slice(1)} data={value} />
+                    )}
+                  </InfoContainer>
+                </Route>
+              </Switch>
+            </div>
+          </Router>
+        )
+      }
+        
       }/>
     </Router>
     

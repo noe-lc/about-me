@@ -100,5 +100,5 @@ export const skillsLangData = {
     { name: 'Python', level: 'Intermediate', sublist: ['GDAL','Pandas','Numpy','Scikit Learn','ArcPy'] },
     { name: 'SQL', level: 'Intermediate', sublist: ['MySQL','PostgreSQL'] },
   ],
-  other: ['Git']
+  other: [{ name:'Git' }]
 };

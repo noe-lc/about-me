@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useLocation } from 'react';
 import './CoverLetter.css';
 
 export default () => {
-  return(
+  return (
     <div className='cover-letter'>
       <div className='img-container'>
         <img src='./imgs/profile.jpg' alt="Profile picture for this site" />
