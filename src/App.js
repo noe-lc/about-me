@@ -42,13 +42,9 @@ function App(props) {
               </Route>
               <Route path='/skills-and-languages'>
                 <InfoContainer>
-                  {Object.keys(skillsLangData).map(key => {
-                    return (
-
-                      <SkInfo title={key[0].toUpperCase() + key.slice(1)}></SkInfo>
-                      
-                    )
-                  })}
+                  {Object.entries(skillsLangData).map(([key,value]) => 
+                    <SkInfo title={key[0].toUpperCase() + key.slice(1)} data={value} />
+                  )}
                 </InfoContainer>
               </Route>
             </Switch>
