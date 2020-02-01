@@ -49,10 +49,10 @@ export const experienceData = [
     city: 'Redlands, California',
     description: 'Supported the now GIS Industry Solutions division on tasks related to Marketing and Statistics',
     details: [
-      `Creation and testing of GIS workflows, in order to migrate them into the latest
+      `Creation and testing of GIS workflows, in order to migrate them into the latest software
       version available (ArcMap/ArcGIS Pro and Drone2Map)`,
       `Searching and updating content used in internal and external publications through web scraping`,
-      `Updating, analyzing a database of global indicators to create thematic cartography for marketing planning purposes`
+      `Updating & analyzing a database of global indicators to create thematic cartography for marketing planning purposes`
     ]
   },
   { 

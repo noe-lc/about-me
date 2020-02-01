@@ -3,7 +3,7 @@ import './Collapsible.css';
 
 export default (props) => {
   let classes = { header: 'header expanded', btn: 'btn btn-expanded', div: 'collapsible expanded' };
-  let headerText = 'See less';
+  let headerText = props.headerText || 'See less';
   const [state,setState] = useState({ collapsed: true });
   const collapse = () => {
     const collapsed = !state.collapsed;
@@ -12,7 +12,7 @@ export default (props) => {
   };
 
   if(state.collapsed) {
-    headerText = 'See more'
+    headerText = props.headerText || 'See more';
     classes.header = 'header';
     classes.btn = 'btn btn-collapsed';
     classes.div = 'collapsible collapsed';

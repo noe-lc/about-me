@@ -6,7 +6,6 @@ const languages = ['JavaScript','Python'];
 
 export default (props) => {
   const [state,setState] = useState({ language: languages[0] });
-  console.log(props.match);
   const renderChildren = () => {
     return React.Children.map(props.children,child => {
       let { children, to } = child.props;
