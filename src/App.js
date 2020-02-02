@@ -43,17 +43,17 @@ const aboutMe = props => {
         </FunctionLikeMenu>
         <div>
           <Switch>
-            <Route exact path={`${path}/education`}>
+            <Route path={`${path}/education`}>
               <InfoContainer>
                 {getInfoElements(educationData,'institutionName')}
               </InfoContainer>
             </Route>
-            <Route exact path={`${path}/experience`}>
+            <Route path={`${path}/experience`}>
               <InfoContainer>
                 {getInfoElements(experienceData,'companyName')}
               </InfoContainer>
             </Route>
-            <Route exact path={`${path}/skills-and-languages`}>
+            <Route path={`${path}/skills-and-languages`}>
               <InfoContainer>
                 {Object.entries(skillsLangData).map(([key,value]) => 
                   <SkInfo key={key} title={key[0].toUpperCase() + key.slice(1)} data={value} />
