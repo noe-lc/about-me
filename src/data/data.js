@@ -87,18 +87,19 @@ export const skillsLangData = {
     { name: 'English', level: 'Advanced' },
   ],
   software: [
-    { name: 'Microsoft Office', subList: ['Excel','Word','PowerPoint','Visio','Access'] },
-    { name: 'ArcGIS', subList: ['ArcMap','ArcGIS Pro','ArcGIS Online','Portal','Insights','Story Maps'] },
+    { name: 'Microsoft Office', sublist: ['Excel','Word','PowerPoint','Visio','Access'] },
+    { name: 'ArcGIS', sublist: ['ArcMap','ArcGIS Pro','ArcGIS Online','Portal','Insights','Story Maps'] },
     { name: 'QGIS', sublist: [] },
-    { name: 'AutoCAD', subList: [] },
-    { name: 'Tableau', subList: [] },
+    { name: 'AutoCAD', sublist: [] },
+    { name: 'Tableau', sublist: [] },
   ],
   programming: [
-    { name: 'HTML', level: 'Advanced' },
-    { name: 'CSS', level: 'Advanced' },
-    { name: 'JavaScript', level: 'Advanced', sublist: ['React','Redux','D3','Google Maps API','Turf','ArcGIS API'] },
-    { name: 'Python', level: 'Intermediate', sublist: ['GDAL','Pandas','Numpy','Scikit Learn','ArcPy'] },
-    { name: 'SQL', level: 'Intermediate', sublist: ['MySQL','PostgreSQL'] },
+    { name: 'HTML', level: 6, color: '#00aeef' },
+    { name: 'CSS', level: 6, color: '#fa568f' },
+    { name: 'JavaScript', level: 6, color: '#e6c301',  sublist: ['React','Redux','D3','Google Maps API','Turf','ArcGIS API'] },
+    { name: 'Python', level: 5, color: '#606060', sublist: ['GDAL','Pandas','Numpy','Scikit Learn','ArcPy'] },
+    { name: 'SQL', level: 5, sublist: ['MySQL','PostgreSQL'] },
+    { name:'Git', level: 3 }
   ],
-  other: [{ name:'Git' }]
+  other: []
 };
