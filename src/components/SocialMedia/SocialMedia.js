@@ -4,13 +4,16 @@ import './SocialMedia.css';
 export default (props) => {
   return(
     <div className='sc-icons'>
-      {(props.links || []).map(link =>
-        <a target='_blank' href={link.url} key={link.name} rel='noopener noreferrer'>
-          <img
-            className='icon' 
-            src={`./icons/${link.name.toLowerCase()}.svg`} alt={`Link to my ${link.name} page`} />
-        </a>
-      )}
+      {props.children}
+      <div className='sc-icons-container'>
+        {(props.links || []).map(link =>
+          <a target='_blank' href={link.url} key={link.name} rel='noopener noreferrer'>
+            <img
+              className='icon' 
+              src={`./icons/${link.name.toLowerCase()}.svg`} alt={`Link to my ${link.name} page`} />
+          </a>
+        )}
+      </div>
     </div>
   )
 }

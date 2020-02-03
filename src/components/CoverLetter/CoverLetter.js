@@ -18,7 +18,7 @@ export default () => {
           cartographic purposes.
         </p>
         <p>
-          I consider myself open-minded, versatile and adaptable very adaptable, as well
+          I consider myself open-minded, versatile and very adaptable, as well
           as always looking forward to learning more and improving in all aspects possible.
         </p>
       </div>

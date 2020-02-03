@@ -1,11 +1,18 @@
 .sc-icons {
-  height: 2rem;
   margin: 0.5rem 0;
   text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  word-wrap: wrap;
+}
+
+.sc-icons-container {
+  display: flex;
+  align-items: center;
 }
 
 .sc-icons a {
-  height: inherit;
+  height: 2rem;
   margin: 0 0.25rem;
 }
 
@@ -16,6 +23,12 @@
 
 @media only screen and (max-width: 600px) {
   .sc-icons {
-    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sc-icons-container {
+    margin: 0.5em;
   }
 }

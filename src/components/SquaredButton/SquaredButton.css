@@ -1,0 +1,8 @@
+.squared-btn {
+  border: 2px solid black;
+  padding: 0.5rem;
+  display: inline-block;
+  text-align: center;
+  margin: 0.25em;
+  cursor: pointer;
+}

@@ -17,7 +17,7 @@
   font-weight: normal;
   word-spacing: 0.25em;
   margin-bottom: 0.5em;
-  text-align: center;
+  text-align: left;
   font-family: monospace;
 }
 
@@ -41,6 +41,7 @@
 @media only screen and (max-width:600px) {
   .function-menu h2 {
     word-break: break-all;
+    text-align: center;
   }
 
   .function-menu a {

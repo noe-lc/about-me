@@ -8,6 +8,8 @@ import FunctionLikeMenu from './components/FunctionLikeMenu/FunctionLikeMenu';
 import InfoContainer from './components/InfoContainer/InfoContainer';
 import InfoElement from './components/InfoElement/InfoElement';
 import SkInfo from './components/SkInfo/SkInfo';
+import SquaredButton from './components/SquaredButton/SquaredButton';
+import Portfolio from './components/Portfolio/Portfolio';
 
 import './App.css';
 import './components/FunctionLikeMenu/FunctionLikeMenu.css';
@@ -18,11 +20,15 @@ const getInfoElements = (data,keyProp) => {
 
 function App(props) {
   return (
-    <Router basename={process.env.PUBLIC_URL}>
-      <Switch> 
-        <Route path={'/'} component={AboutMe}/>
-      </Switch>
-    </Router>
+    <div className="main">
+      <Router basename={process.env.PUBLIC_URL}>
+        <Switch>
+          <Route exact path={'/portfolio'} component={Portfolio}/>
+          <Route path={'/'} component={AboutMe}/>
+          {/*<Route render={(props) => <SquaredButton/>}/> No match component? */} 
+        </Switch>
+      </Router>
+    </div>
   );
 }
 
@@ -31,16 +37,21 @@ const AboutMe = props => {
   url = url.slice(-1) === '/' ? url.slice(0,-1) : url;
   path = path.slice(-1) === '/' ? path.slice(0,-1) : path;
   return (
-    <div className="main">
+    <React.Fragment>
       <CoverLetter />
-      <SocialMedia links={urls} />
-      <hr key={console.log(props)}></hr>
+      <SocialMedia links={urls}>
+        <SquaredButton text="See portfolio" onClick={() => props.history.push(`${url}/portfolio`) } />
+      </SocialMedia>
+      <hr></hr>
       <FunctionLikeMenu>
         <Link to={`${url}/education`}>Education</Link>
         <Link to={`${url}/experience`}>Experience</Link>
         <Link to={`${url}/skills-and-languages`}>Skills & Languages</Link>
       </FunctionLikeMenu>
       <Switch>
+        <Route exact path={`${path}/`}>
+          <p className='comment'>// Select a parameter value</p>
+        </Route>
         <Route exact path={`${path}/education`}>
           <InfoContainer>
             {getInfoElements(educationData,'institutionName')}
@@ -62,7 +73,7 @@ const AboutMe = props => {
       <div className='function-menu'>
         <h2 style={{textAlign:'left'}}>{'};'}</h2>
       </div>
-    </div>
+    </React.Fragment>
   )
 } 
 
