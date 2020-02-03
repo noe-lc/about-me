@@ -13,7 +13,10 @@ const renderJobDetails = (description,details,onCollapsedSet) => {
         <h4 className='description'>{description}</h4>
         {
           details && details.length > 0 ? 
-            <Collapsible onCollapsedSet={onCollapsedSet}>
+            <Collapsible 
+              onCollapsedSet={onCollapsedSet} 
+              headerText={['See more details', 'See less']}
+            >
               <ol className='details-list'>
                 {details.map((d,i) => <li key={''+i + d[i]} className='small'>{d}</li>)}
               </ol>

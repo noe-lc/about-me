@@ -17,6 +17,11 @@
 
 .title {
   flex: 1;
+  text-shadow: 1px 1px 10px #4e4e4e;
+}
+
+.title:hover {
+  color: #4f4f4f;
 }
 
 .btn-container {

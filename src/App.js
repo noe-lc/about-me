@@ -10,6 +10,7 @@ import InfoElement from './components/InfoElement/InfoElement';
 import SkInfo from './components/SkInfo/SkInfo';
 
 import './App.css';
+import './components/FunctionLikeMenu/FunctionLikeMenu.css';
 
 const getInfoElements = (data,keyProp) => {
   return data.map(d => <InfoElement key={d[keyProp]} {...d}/>)
@@ -17,53 +18,51 @@ const getInfoElements = (data,keyProp) => {
 
 function App(props) {
   return (
-    <Router>
-      <Switch>
-        <Route path='/about-me' component={aboutMe}/>
+    <Router basename={process.env.PUBLIC_URL}>
+      <Switch> 
+        <Route path={'/'} component={AboutMe}/>
       </Switch>
     </Router>
-    
   );
 }
 
-const aboutMe = props => {
+const AboutMe = props => {
   let { url, path } = props.match;
   url = url.slice(-1) === '/' ? url.slice(0,-1) : url;
   path = path.slice(-1) === '/' ? path.slice(0,-1) : path;
   return (
-    <Router>
-      <div className="main">
-        <CoverLetter />
-        <SocialMedia links={urls} />
-        <hr key={console.log(props)}></hr>
-        <FunctionLikeMenu>
-          <Link to={`${url}/education`}>Education</Link>
-          <Link to={`${url}/experience`}>Experience</Link>
-          <Link to={`${url}/skills-and-languages`}>Skills & Languages</Link>
-        </FunctionLikeMenu>
-        <div>
-          <Switch>
-            <Route path={`${path}/education`}>
-              <InfoContainer>
-                {getInfoElements(educationData,'institutionName')}
-              </InfoContainer>
-            </Route>
-            <Route path={`${path}/experience`}>
-              <InfoContainer>
-                {getInfoElements(experienceData,'companyName')}
-              </InfoContainer>
-            </Route>
-            <Route path={`${path}/skills-and-languages`}>
-              <InfoContainer>
-                {Object.entries(skillsLangData).map(([key,value]) => 
-                  <SkInfo key={key} title={key[0].toUpperCase() + key.slice(1)} data={value} />
-                )}
-              </InfoContainer>
-            </Route>
-          </Switch>
-        </div>
+    <div className="main">
+      <CoverLetter />
+      <SocialMedia links={urls} />
+      <hr key={console.log(props)}></hr>
+      <FunctionLikeMenu>
+        <Link to={`${url}/education`}>Education</Link>
+        <Link to={`${url}/experience`}>Experience</Link>
+        <Link to={`${url}/skills-and-languages`}>Skills & Languages</Link>
+      </FunctionLikeMenu>
+      <Switch>
+        <Route exact path={`${path}/education`}>
+          <InfoContainer>
+            {getInfoElements(educationData,'institutionName')}
+          </InfoContainer>
+        </Route>
+        <Route exact path={`${path}/experience`}>
+          <InfoContainer>
+            {getInfoElements(experienceData,'companyName')}
+          </InfoContainer>
+        </Route>
+        <Route exact path={`${path}/skills-and-languages`}>
+          <InfoContainer>
+            {Object.entries(skillsLangData).map(([key,value]) => 
+              <SkInfo key={key} title={key[0].toUpperCase() + key.slice(1)} data={value} />
+            )}
+          </InfoContainer>
+        </Route>
+      </Switch>
+      <div className='function-menu'>
+        <h2 style={{textAlign:'left'}}>{'};'}</h2>
       </div>
-    </Router>
+    </div>
   )
 } 
 

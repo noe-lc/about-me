@@ -83,23 +83,22 @@ export const experienceData = [
 
 export const skillsLangData = {
   languages: [
-    { name: 'Spanish', level: 'Native Speaker' },
-    { name: 'English', level: 'Advanced' },
+    { name: 'Spanish (Native speaker)', level: '' },
+    { name: 'English', level: 6 },
   ],
   software: [
     { name: 'Microsoft Office', sublist: ['Excel','Word','PowerPoint','Visio','Access'] },
     { name: 'ArcGIS', sublist: ['ArcMap','ArcGIS Pro','ArcGIS Online','Portal','Insights','Story Maps'] },
     { name: 'QGIS', sublist: [] },
-    { name: 'AutoCAD', sublist: [] },
     { name: 'Tableau', sublist: [] },
+    { name: 'AutoCAD', sublist: [] },
   ],
   programming: [
-    { name: 'HTML', level: 6, color: '#00aeef' },
-    { name: 'CSS', level: 6, color: '#fa568f' },
-    { name: 'JavaScript', level: 6, color: '#e6c301',  sublist: ['React','Redux','D3','Google Maps API','Turf','ArcGIS API'] },
+    { name: 'HTML', level: 5, color: '#00aeef' },
+    { name: 'CSS', level: 5, color: '#fa568f' },
+    { name: 'JavaScript', level: 5, color: '#e6c301',  sublist: ['React','Redux','D3','Google Maps API','Turf','ArcGIS API'] },
     { name: 'Python', level: 5, color: '#606060', sublist: ['GDAL','Pandas','Numpy','Scikit Learn','ArcPy'] },
-    { name: 'SQL', level: 5, sublist: ['MySQL','PostgreSQL'] },
+    { name: 'SQL', level: 4, sublist: ['MySQL','PostgreSQL'] },
     { name:'Git', level: 3 }
-  ],
-  other: []
+  ]
 };

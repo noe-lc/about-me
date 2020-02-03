@@ -3,8 +3,8 @@ import './Collapsible.css';
 
 export default (props) => {
   let classes = { header: 'header expanded', btn: 'btn btn-expanded', div: 'collapsible expanded' };
-  let headerText = props.headerText || 'See less';
-  let imgUrl = 'url(./icons/expand.svg)';
+  let headerText = props.headerText || ['See more','See less'];
+  let text = headerText[1];
   const [state,setState] = useState({ collapsed: true });
   const collapse = () => {
     const collapsed = !state.collapsed;
@@ -13,19 +13,18 @@ export default (props) => {
   };
 
   if(state.collapsed) {
-    headerText = props.headerText || 'See more';
+    text = headerText[0];
     classes.header = 'header';
     classes.btn = 'btn btn-collapsed';
-    imgUrl = 'url(./icons/collapse.svg)';
     classes.div = 'collapsible collapsed';
   }
 
   return (
     <div className='collapsible-parent' onClick={collapse}>
       <div className={classes.header}>
-        <h4 className='title'>{headerText}</h4>
+        <h4 className='title'>{text}</h4>
         <div className='btn-container'>
-          <button className={classes.btn} style={{backgroundImage:''}}></button>
+          <button className={classes.btn}></button>
         </div>
       </div>
       <div className={classes.div}>
