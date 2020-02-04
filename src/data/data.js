@@ -104,7 +104,29 @@ export const skillsLangData = {
 };
 
 export const portfolioData = [ // these paths are preceded by portfolio/
-  { name: 'Maps', path: 'maps' },
-  { name: 'Graphs & Charts', path:'graphs-and-charts' },
-  { name: 'Web Apps', path:'web-apps' }
+  { 
+    name: 'Maps', 
+    path: 'maps', 
+    list: [
+      {
+        name:'Opening Hours',
+        path:'opening-hours',
+        url:'https://raw.githubusercontent.com/noe-lc/noe-lc.github.io/master/data/manhattan_reduced_tjson.json',
+        resizeBy: 'style', // style || method 
+        class: 'OpeningHoursMap'
+      },
+    ] 
+  },
+  { name: 
+    'Graphs & Charts', 
+    path:'graphs-and-charts', 
+    list: [
+      {name:'',path:'',url:''},
+    ] 
+  },
+  { 
+    name: 'Web Apps', 
+    path:'web-apps', 
+    list: [] 
+  }
 ];

@@ -1,0 +1,62 @@
+.portfolio-main {
+  width: 100%;
+}
+
+.portfolio-content {
+  max-width: 980px;
+  width: 95%;
+  margin: 0 auto;
+  margin-top: 1rem;
+}
+
+.portfolio-nav {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  background-color: #e6e6e6;
+}
+
+.portfolio-nav a {
+  color: black;
+  font-size: 1rem;
+  text-decoration: none;
+  margin: 0 2rem;
+  padding: 0.25rem;
+}
+
+.portfolio-nav .current-page {
+  color: orange ;
+  border-bottom: 2px solid orange;
+  box-sizing: border-box;
+}
+
+.portfolio-element {
+  width: 100%;
+}
+
+.graphic-element {
+  width: 100%;
+  height: 500px;
+}
+
+.card-container {
+  width: 80%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin: 0 auto;
+}
+
+@media only screen and (max-width:600px) {
+  .portfolio-nav {
+    justify-content: space-around;
+  }
+
+  .portfolio-nav a {
+    margin: 0 0.5rem;
+  }
+
+}

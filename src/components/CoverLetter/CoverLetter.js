@@ -1,11 +1,11 @@
-import React, { useLocation } from 'react';
+import React from 'react';
 import './CoverLetter.css';
 
 export default () => {
   return (
     <div className='cover-letter'>
       <div className='img-container'>
-        <img src='./imgs/profile.jpg' alt="Profile picture for this site" />
+        <img src='./imgs/profile.jpg' alt="Author of this site" />
       </div>
       <div className="desc-container">
         <h1 className='greeting'>Hi!</h1>

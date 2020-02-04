@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { urls, educationData, experienceData, skillsLangData } from './data/data';
 
 import CoverLetter from './components/CoverLetter/CoverLetter';
@@ -9,7 +9,8 @@ import InfoContainer from './components/InfoContainer/InfoContainer';
 import InfoElement from './components/InfoElement/InfoElement';
 import SkInfo from './components/SkInfo/SkInfo';
 import SquaredButton from './components/SquaredButton/SquaredButton';
-import CardList from './components/CardList/CardList';
+//import CardList from './components/CardList/CardList';
+import Portfolio from './components/Portfolio/Portfolio';
 
 import './App.css';
 import './components/FunctionLikeMenu/FunctionLikeMenu.css';
@@ -20,15 +21,13 @@ const getInfoElements = (data,keyProp) => {
 
 function App(props) {
   return (
-    <div className="main">
-      <Router basename={process.env.PUBLIC_URL}>
-        <Switch>
-          <Route exact path={'/portfolio'} component={CardList}/>
-          <Route path={'/'} component={AboutMe}/>
-          {/*<Route render={(props) => <SquaredButton/>}/> No match component? */} 
-        </Switch>
-      </Router>
-    </div>
+    <Router basename={process.env.PUBLIC_URL}>
+      <Switch>
+        <Route path={'/portfolio'} component={Portfolio}/>
+        <Route path={'/'} component={AboutMe}/>
+        {/*<Route render={(props) => <SquaredButton/>}/> No match component? */} 
+      </Switch>
+    </Router>
   );
 }
 
@@ -37,7 +36,7 @@ const AboutMe = props => {
   url = url.slice(-1) === '/' ? url.slice(0,-1) : url;
   path = path.slice(-1) === '/' ? path.slice(0,-1) : path;
   return (
-    <React.Fragment>
+    <div className="main">
       <CoverLetter />
       <SocialMedia links={urls}>
         <SquaredButton text="See portfolio" onClick={() => props.history.push(`${url}/portfolio`) } />
@@ -73,7 +72,7 @@ const AboutMe = props => {
       <div className='function-menu'>
         <h2 style={{textAlign:'left'}}>{'};'}</h2>
       </div>
-    </React.Fragment>
+    </div>
   )
 } 
 
