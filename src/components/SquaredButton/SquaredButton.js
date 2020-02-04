@@ -1,17 +1,10 @@
-import React, { useLocation } from 'react';
+import React from 'react';
 import './SquaredButton.css';
-
-const onClick = (fn) => {
-  if(!fn || typeof fn !== 'function') {
-    return null;
-  }
-  return fn;
-}
+import { validateFn } from '../../utils/utils';
 
 export default (props) => {
-  
   return (
-    <div className='squared-btn' onClick={onClick(props.onClick)}>
+    <div className='squared-btn' onClick={validateFn(props.onClick)}>
       {props.text}
     </div>
   )

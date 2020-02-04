@@ -1,6 +1,7 @@
 .cover-letter {
   width: 100%;
   display: flex;
+  margin-top: 2vh;
 }
 
 .img-container {

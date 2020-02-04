@@ -9,7 +9,7 @@ import InfoContainer from './components/InfoContainer/InfoContainer';
 import InfoElement from './components/InfoElement/InfoElement';
 import SkInfo from './components/SkInfo/SkInfo';
 import SquaredButton from './components/SquaredButton/SquaredButton';
-import Portfolio from './components/Portfolio/Portfolio';
+import CardList from './components/CardList/CardList';
 
 import './App.css';
 import './components/FunctionLikeMenu/FunctionLikeMenu.css';
@@ -23,7 +23,7 @@ function App(props) {
     <div className="main">
       <Router basename={process.env.PUBLIC_URL}>
         <Switch>
-          <Route exact path={'/portfolio'} component={Portfolio}/>
+          <Route exact path={'/portfolio'} component={CardList}/>
           <Route path={'/'} component={AboutMe}/>
           {/*<Route render={(props) => <SquaredButton/>}/> No match component? */} 
         </Switch>

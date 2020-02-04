@@ -102,3 +102,9 @@ export const skillsLangData = {
     { name:'Git', level: 3 }
   ]
 };
+
+export const portfolioData = [ // these paths are preceded by portfolio/
+  { name: 'Maps', path: 'maps' },
+  { name: 'Graphs & Charts', path:'graphs-and-charts' },
+  { name: 'Web Apps', path:'web-apps' }
+];
