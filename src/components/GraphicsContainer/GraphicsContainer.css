@@ -1,7 +1,34 @@
+.graphics-svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* aspect ratio */
+  vertical-align: top;
+  overflow: hidden;
+}
+
+.svg-content-responsive {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 0;
+}
+
 .graphics-container {
   width: 100%;
   height: 100%;
-  min-width: 600px;
-  min-height: 400px;
   margin: 0 auto;
+  overflow: hidden;
+}
+
+.flex {
+  display: flex;
+}
+
+.graphics-menu {
+  width: 30%;
+}
+
+.graphics-area {
+  width: 70%;
 }

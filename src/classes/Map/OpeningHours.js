@@ -1,9 +1,27 @@
 import * as d3 from 'd3';
+import { fetchData } from '../../utils/utils';
+import Map from './Map';
 
-export class OpeningHoursMap {
-  constructor() {
+export class OpeningHoursMap extends Map {
+  constructor(container,data,settings,additionalData) {
+    super(container,data,settings);
+    this.addData(additionalData);
+  }
+
+  async addData(additionalData) {
+    if(!additionalData) {
+      return;
+    }
+    for (let e of additionalData) {
+      const res = await fetchData(e.url);
+      console.log('res :', res);
+      if(res) {
+        this.addElements(res,e.className);
+      }
+    }
     
   }
+
 };
 /*
 const pathGenerator = d3.geoPath()

@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import './Map.css';
 
-export class Map {
+export default class Map {
   constructor(container,data,settings) {
     this.container = container;
     this.data = data;
@@ -32,12 +32,7 @@ export class Map {
       .append('g')
         .attr('class','g-main');
     
-    g.selectAll('path')
-      .data(this.data.features).enter()
-      .append('path')
-        .attr('class','polygon')
-        .attr('d',this.pathGenerator);
-      
+    this.addElements(this.data);
   }
 
   setResizeMethod(containerSel,resizeBy) {
@@ -52,7 +47,17 @@ export class Map {
     }
   }
 
-  static setSubcontainers = (selection,isStyleResizable,dimensions) => {
+  addElements(data,className = 'polygon') {
+    const g = d3.select(this.container).select('g.g-main');
+    console.log('data :', data);
+    g.selectAll('path')
+      .data(data.features).enter()
+      .append('path')
+        .attr('class',className)
+        .attr('d',this.pathGenerator); 
+  }
+
+  static setSubcontainers(selection,isStyleResizable,dimensions) {
     if(!isStyleResizable) {
       selection.append('div')
         .classed('graphics-svg-container',true)
@@ -67,7 +72,9 @@ export class Map {
     }
     
   };
-}
+};
+
+export { Map };
 
 
 /*
