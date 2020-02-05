@@ -55,14 +55,14 @@ path.polygon {
   stroke: black;
 }
 
-path.coastline {
+path.land {
   fill: #f0f0f0;
   stroke-width: 0.25px;
   stroke: black;
   stroke-opacity: 0.25;
 }
 
-path.bold-coastline {
+path.land-outline {
   fill: none;
   stroke-width: 5px;
   stroke: #0086ff;

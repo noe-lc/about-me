@@ -29,7 +29,7 @@ export default (props) => {
                 return(
                   <div key={e.name} className='portfolio-element'>
                     <h1>{e.name}</h1>
-                    <div className='graphic-element'>
+                    <div className={'graphic-element' + (d.name === 'Maps' ? ' graphic-element-map' : '')}>
                       <GraphicsContainer useParent={true} {...e}/>
                     </div>
                   </div>

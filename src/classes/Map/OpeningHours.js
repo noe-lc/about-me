@@ -5,10 +5,51 @@ import Map from './Map';
 export class OpeningHoursMap extends Map {
   constructor(container,data,settings,additionalData) {
     super(container,data,settings);
-    this.addData(additionalData);
+    const callback = () => {
+      const a = d3.select(this.container)
+        .call(OpeningHoursMap.setAsLower,'path.land')
+        .call(OpeningHoursMap.clone,'path.land','land-outline')
+        .call(OpeningHoursMap.setAsLower,'path.land-outline')
+    };
+    this.addData(additionalData,callback);
+    // particular to this class
+    
+    
+
   }
 
-  async addData(additionalData) {
+  openingColor = d3.color('rgb(249, 249, 134)');
+  interpolator = d3.piecewise(
+    d3.interpolateRgb.gamma(1), 
+    [this.openingColor, 'orange', 'purple']);
+  dayNameMap = {
+    Mon: 'Monday',
+    Tue: 'Tuesday',
+    Wed: 'Wednesday',
+    Thu: 'Thursday',
+    Fri: 'Friday',
+    Sat: 'Saturday',
+    Sun: 'Sunday'
+  };
+  dayScale = d3.scaleLinear()
+    .domain([0,86400]) // seconds in 24hrs
+    .rangeRound([0,10000]) //ms
+
+  getFeatureOpeningHours() {
+    this.data.features.forEach(f => {
+      const { open_hours } = f.properties;
+      if(!open_hours) return;
+      for (let key in open_hours) {
+        let value = open_hours[key][0] || [];
+        let [open,close] = value;
+        f.properties.open_hours[key] = value || [];
+        f.properties[key] = value.length == 0 ? 
+          { open: 0, close: 0 } : OpeningHoursMap.getOpenHoursInSeconds(open,close);
+      }
+    });
+  }
+  
+  async addData(additionalData,callback = () => {}) {
     if(!additionalData) {
       return;
     }
@@ -19,7 +60,28 @@ export class OpeningHoursMap extends Map {
         this.addElements(res,e.className);
       }
     }
-    
+    callback();
+  }
+
+  static getOpenHoursInSeconds = (open,close) => {
+    [close,open] = [close,open].map(t => {
+      let index = t.indexOf(':'),
+        hours = +t.slice(0,index),
+        mins = +t.slice(index + 1);
+      return (hours * 60 * 60) + (mins * 60);
+    });
+    return { open, close };
+  };
+
+  static clone(selection,selector,className) {
+    return selection.select(selector).clone()
+      .attr('class',className);  
+  }
+
+  static setAsLower(selection,selector) {
+    return selection
+      .select('g.g-main')
+      .select(selector).lower();
   }
 
 };
@@ -30,55 +92,7 @@ const pathGenerator = d3.geoPath()
   
 function initializeMap() {
   d3.json('./data/manhattan.json').then(async (data) => {
-    let index = 0;
-    let fitHeight, polygons;
-    let alwaysOpen, allOthers, noOpenHours;
-    const coastlines = await d3.json('./data/manhattan_polygon.geojson');
-    const collection = topojson.feature(data,data.objects.manhattan),
-      svg = d3.select('svg#map'),
-      g = svg.append('g'),
-      pathProjection = pathGenerator.projection(),
-      openingColor = d3.color('rgb(249, 249, 134)'),
-      interpolator = d3.piecewise(d3.interpolateRgb.gamma(1), [openingColor, 'orange', 'purple']),
-      dayNameMap = {
-        Mon: 'Monday',
-        Tue: 'Tuesday',
-        Wed: 'Wednesday',
-        Thu: 'Thursday',
-        Fri: 'Friday',
-        Sat: 'Saturday',
-        Sun: 'Sunday'
-      };
 
-    const dayScale = d3.scaleLinear()
-      .domain([0,86400]) // seconds in 24hrs
-      .rangeRound([0,10000]) //ms
-    
-    const getOpenHoursInSeconds = (open,close) => {
-      [close,open] = [close,open].map(t => {
-        let index = t.indexOf(':'),
-          hours = +t.slice(0,index),
-          mins = +t.slice(index + 1);
-        return (hours * 60 * 60) + (mins * 60);
-      });
-      return { open, close };
-    };
-
-    collection.features.forEach(f => {
-      const { open_hours } = f.properties;
-      if(!open_hours) return;
-      for (let key in open_hours) {
-        let value = open_hours[key][0] || [];
-        let [open,close] = value;
-        f.properties.open_hours[key] = value || [];
-        f.properties[key] = value.length == 0 ? 
-          { open: 0, close: 0 } : getOpenHoursInSeconds(open,close);
-      }
-    });
-    
-    pathGenerator.projection(pathProjection.fitWidth(document.body.clientWidth,collection));
-
-    svg.style('background-color','#c0cdd7');
 
     const controller = d3.select('div#controller');
     controller.selectAll('p').data(Object.entries(dayNameMap)).enter()

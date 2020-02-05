@@ -14,11 +14,13 @@ export default class Map {
 
   applySettings(settings,data) {
     const container = d3.select(this.container);
-    const { projection, useParent, resizeBy } = settings;
+    const { projection, useParent, resizeBy, dimensions } = settings;
+    console.log('dimensions :', dimensions);
     this.dimensions = {
-      width: useParent ? parseInt(container.style('width')) : this.defaultWidth,
-      height: useParent ? parseInt(container.style('height')) : this.defaultHeight
+      width: dimensions.width || (useParent ? parseInt(container.style('width')) : this.defaultWidth),
+      height: dimensions.height || (useParent ? parseInt(container.style('height')) : this.defaultHeight)
     };
+    console.log('this.dimensions :', this.dimensions);
     this.projection = d3[projection] ? d3[projection]() : null || d3.geoMercator();
     this.pathGenerator = d3.geoPath()
       .projection(this.projection.fitSize([this.dimensions.width,this.dimensions.height],data));
@@ -49,12 +51,18 @@ export default class Map {
 
   addElements(data,className = 'polygon') {
     const g = d3.select(this.container).select('g.g-main');
-    console.log('data :', data);
-    g.selectAll('path')
-      .data(data.features).enter()
+    const update = g.selectAll(`path.${className}`)
+      .data(data.features,(d,i) => d.id || d.fid || i)
+      .attr('class',className)
+      .attr('d',this.pathGenerator); 
+
+    update.enter()
       .append('path')
         .attr('class',className)
         .attr('d',this.pathGenerator); 
+
+    update.exit()
+      .remove()
   }
 
   static setSubcontainers(selection,isStyleResizable,dimensions) {
@@ -74,7 +82,6 @@ export default class Map {
   };
 };
 
-export { Map };
 
 
 /*

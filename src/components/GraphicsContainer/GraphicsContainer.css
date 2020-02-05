@@ -10,8 +10,13 @@
 .svg-content-responsive {
   display: inline-block;
   position: absolute;
-  top: 10px;
   left: 0;
+  /*top: 10px;*/
+  /* max-height: 100%; */
+}
+
+.graphic-element-map {
+
 }
 
 .graphics-container {
@@ -31,4 +36,19 @@
 
 .graphics-area {
   width: 70%;
+  height: auto;
+}
+
+@media only screen and (max-width:600px) {
+  .graphics-menu {
+    display: none; /* TODO: rearrange layout for map? */
+  }
+
+  .graphics-area {
+    width: 100%;
+  }
+
+  .svg-content-responsive {
+    transform: scale(1.5,1.5);
+  }
 }

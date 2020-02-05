@@ -114,6 +114,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
         url:'https://raw.githubusercontent.com/noe-lc/noe-lc.github.io/master/data/manhattan_reduced_tjson.json',
         resizeBy: 'style', // style || method 
         class: 'OpeningHoursMap',
+        dimensions: { height: undefined, width: undefined },
         additionalData: [
           { 
             url: 'https://raw.githubusercontent.com/noe-lc/noe-lc.github.io/master/data/manhattan_polygon.geojson',
