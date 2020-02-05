@@ -30,10 +30,7 @@ export default (props) => {
                   <div key={e.name} className='portfolio-element'>
                     <h1>{e.name}</h1>
                     <div className='graphic-element'>
-                      <GraphicsContainer 
-                        useParent={true} 
-                        graphicClass={e.class} 
-                      />
+                      <GraphicsContainer useParent={true} {...e}/>
                     </div>
                   </div>
                 )

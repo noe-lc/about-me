@@ -1,15 +1,16 @@
 import * as d3 from 'd3';
-import topojson from 'topojson';
+import './Map.css';
 
 export class Map {
   constructor(container,data,settings) {
     this.container = container;
+    this.data = data;
     this.applySettings(settings,data);
   }
 
   defaultWidth = '600px';
   defaultHeight = '400px';
-  resizable = true;
+  resizable = false;
 
   applySettings(settings,data) {
     const container = d3.select(this.container);
@@ -18,7 +19,7 @@ export class Map {
       width: useParent ? parseInt(container.style('width')) : this.defaultWidth,
       height: useParent ? parseInt(container.style('height')) : this.defaultHeight
     };
-    this.projection = d3[projection]() || d3.geoMercator();
+    this.projection = d3[projection] ? d3[projection]() : null || d3.geoMercator();
     this.pathGenerator = d3.geoPath()
       .projection(this.projection.fitSize([this.dimensions.width,this.dimensions.height],data));
     
@@ -26,30 +27,45 @@ export class Map {
   }
 
   draw() {
-    const containerSel = d3.select(this.container);
-    containerSel.append('svg')
-      .attr('class','graphics-svg')
+    const g = d3.select(this.container)
+      .select('svg.graphics-svg')
+      .append('g')
+        .attr('class','g-main');
+    
+    g.selectAll('path')
+      .data(this.data.features).enter()
+      .append('path')
+        .attr('class','polygon')
+        .attr('d',this.pathGenerator);
+      
   }
 
   setResizeMethod(containerSel,resizeBy) {
+    const { dimensions, resizable } = this;
     if(!resizeBy || resizeBy === 'style') {
-      containerSel.call(Map.setSubcontainers);
+      containerSel.call(Map.setSubcontainers,resizable,dimensions);
     } else if(resizeBy === 'method') {
-      this.resizable = false;
+      this.resizable = true;
+      containerSel.call(Map.setSubcontainers,this.resizable,dimensions);
     } else {
-      containerSel.call(Map.setSubcontainers,this.dimensions);
+      containerSel.call(Map.setSubcontainers,resizable,dimensions);
     }
   }
 
-  static setSubcontainers = (selection,dimensions) => {
-    selection
-      .append('div')
+  static setSubcontainers = (selection,isStyleResizable,dimensions) => {
+    if(!isStyleResizable) {
+      selection.append('div')
         .classed('graphics-svg-container',true)
       .append('svg')
         .attr('class','graphics-svg')
         .attr('preserveAspectRatio', 'xMinYMin meet')
         .attr('viewBox', `0 0 ${dimensions.width} ${dimensions.height}`)
-        .classed('svg-content-responsive', true) // Class to make it responsive.
+        .classed('svg-content-responsive', true); // Class to make it responsive.
+    } else {
+       selection.append('svg')
+        .attr('class','graphics-svg');
+    }
+    
   };
 }
 

@@ -1,7 +1,9 @@
 import * as d3 from 'd3';
 
 export class OpeningHoursMap {
-
+  constructor() {
+    
+  }
 };
 /*
 const pathGenerator = d3.geoPath()
