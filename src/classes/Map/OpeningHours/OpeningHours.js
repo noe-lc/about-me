@@ -114,7 +114,7 @@ export class OpeningHoursMap extends Map {
     graphs.selectAll('.day-name')
       .text(d => d.alias);
     graphs.selectAll('.day-graph')
-      .call(OpeningHoursMap.buildDayGraph,this.data,days);
+      .call(OpeningHoursMap.buildDayGraph,this.featuresWithOpHours,days);
   }
   
   async addData(additionalData,callback = () => {}) {
@@ -171,21 +171,27 @@ export class OpeningHoursMap extends Map {
       .classed('svg-content-responsive', true); // Class to make it responsive.
   }
 
-  static buildDayGraph(selection,data,days) {
-    let bins = [];
-    const halfHourSeconds = 30 * 60;
-    for (let i=0;i <= (86400 / halfHourSeconds) - 1;i++) {
-      bins.push(i);
-      console.log(i)
+  static buildDayGraph(selection,dataSelection,days) {
+    let breaks = [];
+    const data = dataSelection.data(),
+      halfHourSeconds = 30 * 60,
+      initial = 0, final = 86400;
+    for (let i=initial;i <= (final / halfHourSeconds) - 1;i++) {
+      breaks.push((i * halfHourSeconds) - 1);
     }
-    console.log('bins.length :', bins.length);
-    //const bins = Array(86400 / halfHourSeconds)
-    //  .map((_,i) => i * (halfHourSeconds - 1));
-    data.features.forEach(({ props: properties }) => {
-      for (let day of days) {
+    breaks[0] = initial;
+    breaks[breaks.length - 1] = final;
+    
+    const bins = breaks.reduce((o,e,i) => {
+      o[`${e + 1}-${breaks[i + 1]}`] = 0;
+      return o;
+    },{});
+    console.log('bins :', bins);
 
-      }
-    });
+    //for (let { alias } of days) {
+    //  data.map(({properties: p}) => p[alias].close - p[alias].open); 
+    //  dayData = [...dayRanges[alias],...bins];
+    //}
 
   }
 };
