@@ -5,6 +5,7 @@
   padding-bottom: 100%; /* aspect ratio */
   vertical-align: top;
   overflow: hidden;
+  transform: scale(1,1);
 }
 
 .svg-content-responsive {
@@ -32,11 +33,20 @@
 
 .graphics-menu {
   width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .graphics-area {
   width: 70%;
   height: auto;
+}
+
+.spinner {
+  width: 100%;
+  height: 100%;
+  background: center / 10% no-repeat url(/icons/loading.gif);
 }
 
 @media only screen and (max-width:600px) {

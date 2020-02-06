@@ -1,20 +1,19 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as classMap from '../../classes/ClassMap';
 import { fetchData } from '../../utils/utils';
 import './GraphicsContainer.css';
 
-// TODO: make this component stateful and render a diff component
-// while rendering
-
 export default (props) => {
   const containerRef = useRef();
   const menuRef = useRef();
+  const [state,setState] = useState({ isLoading: true });
   useEffect(() => {
     const graphicsMount = async function() {
       const data = await fetchData(props.url); // replace for props.url
       if(!data) {
         return;
       }
+      setState({ isLoading: false });
       const containers = { menu: menuRef.current, main: containerRef.current };
       const params = [containers,data,props,props.additionalData];
       const graphic = new classMap[props.class](...params);
@@ -23,6 +22,10 @@ export default (props) => {
     
     
   },[]);
+
+  if(state.isLoading) {
+    return <Spinner />;
+  }
   
   switch(props.class) {
     case 'OpeningHoursMap':
@@ -37,3 +40,7 @@ export default (props) => {
   }
   
 };
+
+const Spinner = () => {
+  return (<div className='spinner'></div>)
+}

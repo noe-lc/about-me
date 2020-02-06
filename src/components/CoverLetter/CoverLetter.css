@@ -27,7 +27,7 @@
   padding: 0.5rem 2rem;
   background-color:black;
   color: #ffe834;
-  margin-bottom: 0;
+  margin-bottom: 0.5rem;
   opacity: 0.75;
 }
 
@@ -44,6 +44,5 @@
 
   .desc-container {
     width: 90%;
-    text-align: justify;
   }
 }

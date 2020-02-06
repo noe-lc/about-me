@@ -1,2 +1,2 @@
-export * from './Map';
-export * from './OpeningHours';
+export * from './Map/Map';
+export * from './OpeningHours/OpeningHours';

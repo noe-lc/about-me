@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
-import { fetchData } from '../../utils/utils';
-import Map from './Map';
+import { fetchData } from '../../../utils/utils';
+import Map from '../Map/Map';
+import './OpeningHours.css'
 
 export class OpeningHoursMap extends Map {
   constructor(containers,data,settings,additionalData) {
@@ -19,13 +20,13 @@ export class OpeningHoursMap extends Map {
   colorPalette = [this.openingColor, 'orange', 'purple'];
   interpolator = d3.piecewise(d3.interpolateRgb.gamma(1),this.colorPalette);
   dayNameMap = {
-    Mon: 'Monday',
-    Tue: 'Tuesday',
-    Wed: 'Wednesday',
-    Thu: 'Thursday',
-    Fri: 'Friday',
-    Sat: 'Saturday',
-    Sun: 'Sunday'
+    Mon: { name: 'Monday', order: 1 },
+    Tue: { name: 'Tuesday', order: 2 },
+    Wed: { name: 'Wednesday', order: 3 },
+    Thu: { name: 'Thursday', order: 4 },
+    Fri: { name: 'Friday', order: 5 },
+    Sat: { name: 'Saturday', order: 6 },
+    Sun: { name: 'Sunday', order: 7 }
   };
   dayTimeScale = d3.scaleLinear()
     .domain([0,86400]) // seconds in 24hrs
@@ -37,6 +38,7 @@ export class OpeningHoursMap extends Map {
     const features = this.findFeatures();
     this.initStyles(features);
     this.featuresWithOpHours = features.wOpenHours;
+    this.drawMenu();
   }
 
   getFeatureOpeningHours() {
@@ -99,7 +101,20 @@ export class OpeningHoursMap extends Map {
       width: parseInt(menu.style('width')),
       height: parseInt(menu.style('height'))
     };
-    
+    // TODO: handle size problems?
+    const days = Object.entries(this.dayNameMap)
+      .sort(([k1,a],[k2,b]) => a - b)
+      .map(([k,v]) => ({ alias: k, name: v.name }));
+    const heightPct = Math.floor((dimensions.height / days.length) / dimensions.height * 100);
+    const graphs = menu.selectAll('.day-graph-container').data(days).enter()
+      .append('div')
+        .attr('class','day-graph-container')
+        .style('height',`${heightPct}%`)
+        .call(OpeningHoursMap.appendDayGraphElements);
+    graphs.selectAll('.day-name')
+      .text(d => d.alias);
+    graphs.selectAll('.day-graph')
+      .call(OpeningHoursMap.buildDayGraph,this.data,days);
   }
   
   async addData(additionalData,callback = () => {}) {
@@ -136,6 +151,42 @@ export class OpeningHoursMap extends Map {
     return selection
       .select('g.g-main')
       .select(selector).lower();
+  }
+
+  static appendDayGraphElements(selection) {
+    selection.append('div')
+      .attr('class','day-name');
+    const graph = selection.append('div')
+      .attr('class','day-graph');
+    graph.append('div')
+        .classed('graphics-svg-container',true);
+    const dimensions = {
+      width: parseInt(graph.style('width')),
+      height: parseInt(graph.style('height'))
+    };
+    graph.append('svg')
+      .attr('class','graphics-svg')
+      .attr('preserveAspectRatio', 'xMinYMin meet')
+      .attr('viewBox', `0 0 ${dimensions.width} ${dimensions.height}`)
+      .classed('svg-content-responsive', true); // Class to make it responsive.
+  }
+
+  static buildDayGraph(selection,data,days) {
+    let bins = [];
+    const halfHourSeconds = 30 * 60;
+    for (let i=0;i <= (86400 / halfHourSeconds) - 1;i++) {
+      bins.push(i);
+      console.log(i)
+    }
+    console.log('bins.length :', bins.length);
+    //const bins = Array(86400 / halfHourSeconds)
+    //  .map((_,i) => i * (halfHourSeconds - 1));
+    data.features.forEach(({ props: properties }) => {
+      for (let day of days) {
+
+      }
+    });
+
   }
 };
 

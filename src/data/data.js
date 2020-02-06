@@ -86,13 +86,6 @@ export const skillsLangData = {
     { name: 'Spanish (Native speaker)', level: '' },
     { name: 'English', level: 6 },
   ],
-  software: [
-    { name: 'Microsoft Office', sublist: ['Excel','Word','PowerPoint','Visio','Access'] },
-    { name: 'ArcGIS', sublist: ['ArcMap','ArcGIS Pro','ArcGIS Online','Portal','Insights','Story Maps'] },
-    { name: 'QGIS', sublist: [] },
-    { name: 'Tableau', sublist: [] },
-    { name: 'AutoCAD', sublist: [] },
-  ],
   programming: [
     { name: 'HTML', level: 5, color: '#00aeef' },
     { name: 'CSS', level: 5, color: '#fa568f' },
@@ -100,6 +93,13 @@ export const skillsLangData = {
     { name: 'Python', level: 5, color: '#606060', sublist: ['GDAL','Pandas','Numpy','Scikit Learn','ArcPy'] },
     { name: 'SQL', level: 4, sublist: ['MySQL','PostgreSQL'] },
     { name:'Git', level: 3 }
+  ],
+  software: [
+    { name: 'Microsoft Office', sublist: ['Excel','Word','PowerPoint','Visio','Access'] },
+    { name: 'ArcGIS', sublist: ['ArcMap','ArcGIS Pro','ArcGIS Online','Portal','Insights','Story Maps'] },
+    { name: 'QGIS', sublist: [] },
+    { name: 'Tableau', sublist: [] },
+    { name: 'AutoCAD', sublist: [] },
   ]
 };
 

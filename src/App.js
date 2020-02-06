@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
 import { urls, educationData, experienceData, skillsLangData } from './data/data';
 
 import CoverLetter from './components/CoverLetter/CoverLetter';
@@ -25,6 +25,7 @@ function App(props) {
       <Switch>
         <Route path={'/portfolio'} component={Portfolio}/>
         <Route path={'/'} component={AboutMe}/>
+        {/*<Redirect from='/' to='/skills-and-languages' /> */}
         {/*<Route render={(props) => <SquaredButton/>}/> No match component? */} 
       </Switch>
     </Router>
@@ -43,9 +44,9 @@ const AboutMe = props => {
       </SocialMedia>
       <hr></hr>
       <FunctionLikeMenu>
-        <Link to={`${url}/education`}>Education</Link>
-        <Link to={`${url}/experience`}>Experience</Link>
         <Link to={`${url}/skills-and-languages`}>Skills & Languages</Link>
+        <Link to={`${url}/experience`}>Experience</Link>
+        <Link to={`${url}/education`}>Education</Link>
       </FunctionLikeMenu>
       <Switch>
         <Route exact path={`${path}/`}>
