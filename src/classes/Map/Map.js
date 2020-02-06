@@ -15,12 +15,10 @@ export default class Map {
   applySettings(settings,data) {
     const container = d3.select(this.container);
     const { projection, useParent, resizeBy, dimensions } = settings;
-    console.log('dimensions :', dimensions);
     this.dimensions = {
       width: dimensions.width || (useParent ? parseInt(container.style('width')) : this.defaultWidth),
       height: dimensions.height || (useParent ? parseInt(container.style('height')) : this.defaultHeight)
     };
-    console.log('this.dimensions :', this.dimensions);
     this.projection = d3[projection] ? d3[projection]() : null || d3.geoMercator();
     this.pathGenerator = d3.geoPath()
       .projection(this.projection.fitSize([this.dimensions.width,this.dimensions.height],data));
@@ -29,7 +27,7 @@ export default class Map {
   }
 
   draw() {
-    const g = d3.select(this.container)
+    d3.select(this.container)
       .select('svg.graphics-svg')
       .append('g')
         .attr('class','g-main');
@@ -62,7 +60,7 @@ export default class Map {
         .attr('d',this.pathGenerator); 
 
     update.exit()
-      .remove()
+      .remove();
   }
 
   static setSubcontainers(selection,isStyleResizable,dimensions) {
@@ -204,38 +202,6 @@ function initializeMap() {
     classes.append('h6')
       .attr('class','description')
       .text(d => d.text);
-    
-    polygons = g.selectAll('path.polygon');
-    alwaysOpen = polygons.filter(d => d.properties.seconds_per_week == 604800);
-    noOpenHours = polygons.filter(d => !d.properties.open_hours);
-
-    const idsToDiscard = [
-      ...alwaysOpen.data().map(f => f.properties.fid),
-      ...noOpenHours.data().map(f => f.properties.fid)
-    ];
-
-    allOthers = polygons.filter(d => !idsToDiscard.includes(d.properties.fid));
-    
-    alwaysOpen
-      .style('fill','#61b864');
-    noOpenHours
-      .style('fill','#cccccc');
-    allOthers.filter(d => d.properties['Mon'].open != '0')
-      .style('fill','purple');
-
-    function dayTransition(day) {
-      allOthers.filter(d => d.properties[day].open == '0')
-        .style('fill',openingColor);
-      allOthers.filter(d => d.properties[day].open != '0')
-        .style('fill','purple');
-
-      allOthers.transition()
-        .style('fill','black')
-        .delay(d => dayScale(d.properties[day].open))
-        .duration(d => dayScale(d.properties[day].close - d.properties[day].open))
-        .styleTween('fill',() => interpolator)
-        .style('stroke','white');
-    };
         
   });
 };

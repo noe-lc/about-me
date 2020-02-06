@@ -5,23 +5,19 @@ import Map from './Map';
 export class OpeningHoursMap extends Map {
   constructor(container,data,settings,additionalData) {
     super(container,data,settings);
-    const callback = () => {
-      const a = d3.select(this.container)
+    const callback = () => { // particular to this class
+      d3.select(this.container)
         .call(OpeningHoursMap.setAsLower,'path.land')
         .call(OpeningHoursMap.clone,'path.land','land-outline')
-        .call(OpeningHoursMap.setAsLower,'path.land-outline')
+        .call(OpeningHoursMap.setAsLower,'path.land-outline');
     };
+    
     this.addData(additionalData,callback);
-    // particular to this class
-    
-    
-
   }
 
   openingColor = d3.color('rgb(249, 249, 134)');
-  interpolator = d3.piecewise(
-    d3.interpolateRgb.gamma(1), 
-    [this.openingColor, 'orange', 'purple']);
+  colorPalette = [this.openingColor, 'orange', 'purple'];
+  interpolator = d3.piecewise(d3.interpolateRgb.gamma(1),this.colorPalette);
   dayNameMap = {
     Mon: 'Monday',
     Tue: 'Tuesday',
@@ -31,9 +27,16 @@ export class OpeningHoursMap extends Map {
     Sat: 'Saturday',
     Sun: 'Sunday'
   };
-  dayScale = d3.scaleLinear()
+  dayTimeScale = d3.scaleLinear()
     .domain([0,86400]) // seconds in 24hrs
     .rangeRound([0,10000]) //ms
+
+  draw() { // amends/overrides the base class method
+    super.draw();
+    const features = this.findFeatures();
+    this.initStyles(features);
+    this.featuresWithOpHours = features.featuresWithOpHours;
+  }
 
   getFeatureOpeningHours() {
     this.data.features.forEach(f => {
@@ -48,19 +51,59 @@ export class OpeningHoursMap extends Map {
       }
     });
   }
+
+  findFeatures() {
+    const polygons = d3.select(this.container).select('svg')
+      .select('g.g-main')
+      .selectAll('path.polygon');
+    const alwaysOpen = polygons.filter(d => d.properties.seconds_per_week == 604800),
+      noOpenHours = polygons.filter(d => !d.properties.open_hours),
+      idsToDiscard = [
+      ...alwaysOpen.data().map(f => f.properties.fid),
+      ...noOpenHours.data().map(f => f.properties.fid)
+      ];
+    const wOpenHours = polygons.filter(d => !idsToDiscard.includes(d.properties.fid));
+    return { alwaysOpen, noOpenHours, wOpenHours };
+  }
+
+  initStyles({alwaysOpen,noOpenHours,wOpenHours}) {
+    alwaysOpen
+      .style('fill','#61b864');
+    noOpenHours
+      .style('fill','#cccccc');
+    wOpenHours.filter(d => d.properties['Mon'].open != '0')
+      .style('fill','purple');
+  }
+
+  runTransition(day) {
+    const { openingColor, colorPalette, dayTimeScale, 
+      featuresWithOpHours, interpolator } = this;
+    featuresWithOpHours.filter(d => d.properties[day].open == '0')
+        .style('fill',openingColor);
+    featuresWithOpHours.filter(d => d.properties[day].open != '0')
+      .style('fill',colorPalette[colorPalette.length - 1]);
+
+    featuresWithOpHours.transition()
+      .style('fill','black')
+      .delay(d => dayTimeScale(d.properties[day].open))
+      .duration(d => dayTimeScale(d.properties[day].close - d.properties[day].open))
+      .styleTween('fill',() => interpolator)
+      .style('stroke','white');
+  }
   
   async addData(additionalData,callback = () => {}) {
     if(!additionalData) {
       return;
     }
+    let res;
     for (let e of additionalData) {
-      const res = await fetchData(e.url);
-      console.log('res :', res);
+      res = await fetchData(e.url);
       if(res) {
         this.addElements(res,e.className);
       }
     }
     callback();
+    return res;
   }
 
   static getOpenHoursInSeconds = (open,close) => {
@@ -84,158 +127,30 @@ export class OpeningHoursMap extends Map {
       .select(selector).lower();
   }
 
+
+
 };
-/*
-const pathGenerator = d3.geoPath()
-  .projection(d3.geoMercator()/*.angle(29));
 
-  
-function initializeMap() {
-  d3.json('./data/manhattan.json').then(async (data) => {
-
-
-    const controller = d3.select('div#controller');
-    controller.selectAll('p').data(Object.entries(dayNameMap)).enter()
-      .append('p')
-      .attr('class','day-selector')
-      .text(d => d[1])
-      .on('click',d => dayTransition(d[0]));
-    const showLegend = controller.append('div')
-      .attr('class','legend')
-      .on('click',() => { 
-        let display = d3.select('div#legend').style('display');
-        display = display == 'none' ? 'block' : 'none';
-        d3.select('div#legend').style('display',display);
-      });
-    showLegend.append('img')
-      .attr('class','legend-icon')
-      .attr('src','imgs/legend.png');
-    showLegend.append('span')
-      .text('Show legend');
+/** loops through the dates
+  function runTransition() {
+    circles.transition()
+      .on('start',function repeat(d) {
+        d.index = !isNaN(d.index) ? d.index += 1 : 0;
+        let prop = props[d.index];
       
-
-    g.selectAll('path').data(collection.features)
-      .enter().append('path')
-        .attr('class','polygon')
-        .attr('d',pathGenerator);
-    
-    g.selectAll('path.coastline').data(coastlines.features)
-      .enter()
-      .append('path')
-        .attr('class','coastline')
-        .attr('d',pathGenerator)
-        .lower()
-        .clone()
-          .attr('class','bold-coastline')
-          .lower();
-
-
-    fitHeight = g.node().getBBox().height;
-    svg.style('height',Math.ceil(fitHeight));
-
-    const legend = d3.select('div#controller').append('div')
-      .attr('id','legend');
-    const ramp = legend.append('div')
-      .attr('class','ramp-container');
-    ramp.append('img')
-      .attr('src','imgs/color-ramp.png');
-    ramp.append('h6')
-      .attr('class','indicator')
-      .style('top','-3px')
-      .text('-Closed');
-    ramp.append('h6')
-      .attr('class','indicator')
-      .style('top','195px')
-      .text('-Just opened');
-    
-    const classes = legend.selectAll('.class').data(
-      [{ color: '#61b864', text: 'Open 24/7' },{ color: '#cccccc', text: 'No Data' }]
-    )
-      .enter().append('div')
-        .attr('class','class-row');
-    classes.append('div')
-      .attr('class','patch')
-      .style('background-color',d => d.color);
-    classes.append('h6')
-      .attr('class','description')
-      .text(d => d.text);
-    
-    
-
-    polygons = g.selectAll('path.polygon');
-    alwaysOpen = polygons.filter(d => d.properties.seconds_per_week == 604800);
-    noOpenHours = polygons.filter(d => !d.properties.open_hours);
-
-    const idsToDiscard = [
-      ...alwaysOpen.data().map(f => f.properties.fid),
-      ...noOpenHours.data().map(f => f.properties.fid)
-    ];
-
-    allOthers = polygons.filter(d => !idsToDiscard.includes(d.properties.fid));
-    
-    alwaysOpen
-      .style('fill','#61b864');
-    noOpenHours
-      .style('fill','#cccccc');
-    allOthers.filter(d => d.properties['Mon'].open != '0')
-      .style('fill','purple');
-
-    function dayTransition(day) {
-      allOthers.filter(d => d.properties[day].open == '0')
-        .style('fill',openingColor);
-      allOthers.filter(d => d.properties[day].open != '0')
-        .style('fill','purple');
-
-      allOthers.transition()
-        .style('fill','black')
-        .delay(d => dayScale(d.properties[day].open))
-        .duration(d => dayScale(d.properties[day].close - d.properties[day].open))
-        .styleTween('fill',() => interpolator)
-        .style('stroke','white');
-    };
-
-    //dayTransition('Thu');
-    
-    //window.dayInterval = setInterval(() => {
-    //  let dayName = dayNames[index];
-    //  if(!dayName){
-    //    clearInterval(window.dayInterval);
-    //    index = 0;
-    //    return;
-    //  }
-    //  dayTransition(dayNames[index]);
-    //  index += 1;
-    //},dayScale.range()[1]);
-    
-    
-    //function runTransition() {
-    //  circles.transition()
-    //    .on('start',function repeat(d) {
-    //      d.index = !isNaN(d.index) ? d.index += 1 : 0;
-    //      let prop = props[d.index];
-    //    
-    //      if(d.index > props.length - 1) {
-    //        d.index = 0;
-    //        return;
-    //      }
-    //    
-    //      d3.active(this).transition()
-    //        .delay(d => scale(d[prop].start))
-    //        .duration(d => scale(d[prop].end) - scale(d[prop].start))
-    //        .styleTween('fill',() => interpolator)
-    //      .transition()
-    //        .delay(d => totalTime - scale(d[prop].end ))
-    //        .on('start',repeat);
-    //    });
-    //    
-    //};
-    
-    
-  });
-};
-
-const zoom = (selection) => {
-  console.log('d3.event.transform :', d3.event.transform);
-  selection.attr('transform',d3.event.transform);
-};
-*/
+        if(d.index > props.length - 1) {
+          d.index = 0;
+          return;
+        }
+      
+        d3.active(this).transition()
+          .delay(d => scale(d[prop].start))
+          .duration(d => scale(d[prop].end) - scale(d[prop].start))
+          .styleTween('fill',() => interpolator)
+        .transition()
+          .delay(d => totalTime - scale(d[prop].end ))
+          .on('start',repeat);
+      });
+      
+  };
+ */
