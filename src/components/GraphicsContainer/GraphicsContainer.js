@@ -8,13 +8,16 @@ import './GraphicsContainer.css';
 
 export default (props) => {
   const containerRef = useRef();
+  const menuRef = useRef();
   useEffect(() => {
-    const fn = async function() {
+    const graphicsMount = async function() {
       const data = await fetchData(props.url); // replace for props.url
       if(!data) {
         return;
       }
-      const graphic = new classMap[props.class](containerRef.current,data,props,props.additionalData);
+      const containers = { menu: menuRef.current, main: containerRef.current };
+      const params = [containers,data,props,props.additionalData];
+      const graphic = new classMap[props.class](...params);
       graphic.draw();
     }();
     
@@ -25,7 +28,7 @@ export default (props) => {
     case 'OpeningHoursMap':
       return (
         <div className='graphics-container flex'>
-          <div className='graphics-menu'></div>
+          <div ref={menuRef} className='graphics-menu'></div>
           <div ref={containerRef} className='graphics-area ocean'></div>
         </div>
       )

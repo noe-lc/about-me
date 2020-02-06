@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import './Map.css';
 
 export default class Map {
-  constructor(container,data,settings) {
+  constructor({main: container},data,settings) {
     this.container = container;
     this.data = data;
     this.applySettings(settings,data);
@@ -158,20 +158,6 @@ function initializeMap() {
     showLegend.append('span')
       .text('Show legend');
       
-    g.selectAll('path').data(collection.features)
-      .enter().append('path')
-        .attr('class','polygon')
-        .attr('d',pathGenerator);
-    
-    g.selectAll('path.coastline').data(coastlines.features)
-      .enter()
-      .append('path')
-        .attr('class','coastline')
-        .attr('d',pathGenerator)
-        .lower()
-      .clone()
-        .attr('class','bold-coastline')
-        .lower();
 
     fitHeight = g.node().getBBox().height;
     svg.style('height',Math.ceil(fitHeight));

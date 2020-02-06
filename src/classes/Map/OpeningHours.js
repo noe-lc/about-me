@@ -3,15 +3,15 @@ import { fetchData } from '../../utils/utils';
 import Map from './Map';
 
 export class OpeningHoursMap extends Map {
-  constructor(container,data,settings,additionalData) {
-    super(container,data,settings);
+  constructor(containers,data,settings,additionalData) {
+    super(containers,data,settings);
     const callback = () => { // particular to this class
       d3.select(this.container)
         .call(OpeningHoursMap.setAsLower,'path.land')
         .call(OpeningHoursMap.clone,'path.land','land-outline')
         .call(OpeningHoursMap.setAsLower,'path.land-outline');
     };
-    
+    this.menuContainer = containers.menu;
     this.addData(additionalData,callback);
   }
 
@@ -33,9 +33,10 @@ export class OpeningHoursMap extends Map {
 
   draw() { // amends/overrides the base class method
     super.draw();
+    this.getFeatureOpeningHours();
     const features = this.findFeatures();
     this.initStyles(features);
-    this.featuresWithOpHours = features.featuresWithOpHours;
+    this.featuresWithOpHours = features.wOpenHours;
   }
 
   getFeatureOpeningHours() {
@@ -59,8 +60,8 @@ export class OpeningHoursMap extends Map {
     const alwaysOpen = polygons.filter(d => d.properties.seconds_per_week == 604800),
       noOpenHours = polygons.filter(d => !d.properties.open_hours),
       idsToDiscard = [
-      ...alwaysOpen.data().map(f => f.properties.fid),
-      ...noOpenHours.data().map(f => f.properties.fid)
+        ...alwaysOpen.data().map(f => f.properties.fid),
+        ...noOpenHours.data().map(f => f.properties.fid)
       ];
     const wOpenHours = polygons.filter(d => !idsToDiscard.includes(d.properties.fid));
     return { alwaysOpen, noOpenHours, wOpenHours };
@@ -89,6 +90,16 @@ export class OpeningHoursMap extends Map {
       .duration(d => dayTimeScale(d.properties[day].close - d.properties[day].open))
       .styleTween('fill',() => interpolator)
       .style('stroke','white');
+  }
+
+  drawMenu() {
+    if(!this.menuContainer) return;
+    const menu = d3.select(this.menuContainer);
+    const dimensions = {
+      width: parseInt(menu.style('width')),
+      height: parseInt(menu.style('height'))
+    };
+    
   }
   
   async addData(additionalData,callback = () => {}) {
@@ -126,9 +137,6 @@ export class OpeningHoursMap extends Map {
       .select('g.g-main')
       .select(selector).lower();
   }
-
-
-
 };
 
 /** loops through the dates
