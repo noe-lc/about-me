@@ -42,15 +42,19 @@ export class OpeningHoursMap extends Map {
   }
 
   getFeatureOpeningHours() {
+    let value, open, close;
     this.data.features.forEach(f => {
       const { open_hours } = f.properties;
       if(!open_hours) return;
       for (let key in open_hours) {
-        let value = open_hours[key][0] || [];
-        let [open,close] = value;
-        f.properties.open_hours[key] = value || [];
-        f.properties[key] = value.length == 0 ? 
-          { open: 0, close: 0 } : OpeningHoursMap.getOpenHoursInSeconds(open,close);
+        [value] = open_hours[key];
+        if(value) {
+          [open,close] = value;
+          f.properties.open_hours[key] = value;
+          f.properties[key] = OpeningHoursMap.getOpenHoursInSeconds(open,close);
+        } else {
+          f.properties.open_hours[key] = null;
+        }
       }
     });
   }
@@ -59,6 +63,7 @@ export class OpeningHoursMap extends Map {
     const polygons = d3.select(this.container).select('svg')
       .select('g.g-main')
       .selectAll('path.polygon');
+    //console.log(polygons.filter(d => d.properties.open_hours.Mon[0]))
     const alwaysOpen = polygons.filter(d => d.properties.seconds_per_week == 604800),
       noOpenHours = polygons.filter(d => !d.properties.open_hours),
       idsToDiscard = [
@@ -74,7 +79,7 @@ export class OpeningHoursMap extends Map {
       .style('fill','#61b864');
     noOpenHours
       .style('fill','#cccccc');
-    wOpenHours.filter(d => d.properties['Mon'].open != '0')
+    wOpenHours.filter(d => d.properties['Mon'])
       .style('fill','purple');
   }
 
@@ -181,18 +186,48 @@ export class OpeningHoursMap extends Map {
     }
     breaks[0] = initial;
     breaks[breaks.length - 1] = final;
+
+    console.log('data.length :', data.length);
+
+    const bins = breaks.map((e,i) => { // intervals' length is breaks.length - 1
+      return [e + 1,breaks[i + 1]]; // lower, upper
+    });
+    bins.pop(); // last bin is not an interval
+    bins[0][0] = initial;
+    bins[bins.length - 1][1] = final;
     
-    const bins = breaks.reduce((o,e,i) => {
-      o[`${e + 1}-${breaks[i + 1]}`] = 0;
-      return o;
-    },{});
-    console.log('bins :', bins);
+    let open, close, count ,copy, nextCopy, dist = {};
+    for (let { alias } of days) {
+      copy = [...data];
+      nextCopy = [...data];
+      dist[alias] = bins.map(([lower,upper],i) => {
+        count = 0;
+        copy.forEach(({properties: p}) => {
+          if(!p[alias]) {
+            return;
+          }
+          ({ open, close } = p[alias]);
+          if(lower <= open && open <= upper) {
+            count += 1;
+          } else if(lower <= close || upper <= close) {
+            count += 1;
+          } else if(close < lower) {
+            nextCopy.splice(i,1);
+          }
+        });
+        copy = nextCopy;
+        return [lower,upper,count];
+      });
+    }
 
-    //for (let { alias } of days) {
-    //  data.map(({properties: p}) => p[alias].close - p[alias].open); 
-    //  dayData = [...dayRanges[alias],...bins];
-    //}
-
+    console.log(dist.Mon.reduce((f,c) => f += c[2],0));
+    console.log(dist.Tue.reduce((f,c) => f += c[2],0));
+    console.log(dist.Wed.reduce((f,c) => f += c[2],0));
+    console.log(dist.Thu.reduce((f,c) => f += c[2],0));
+    console.log(dist.Fri.reduce((f,c) => f += c[2],0));
+    console.log(dist.Sat.reduce((f,c) => f += c[2],0));
+    console.log(dist.Sun.reduce((f,c) => f += c[2],0));
+    console.log('dist :', dist);
   }
 };
 
