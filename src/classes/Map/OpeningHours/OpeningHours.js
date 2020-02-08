@@ -177,6 +177,7 @@ export class OpeningHoursMap extends Map {
   }
 
   static buildDayGraph(selection,dataSelection,days) {
+    console.time('START')
     let breaks = [];
     const data = dataSelection.data(),
       halfHourSeconds = 30 * 60,
@@ -186,8 +187,6 @@ export class OpeningHoursMap extends Map {
     }
     breaks[0] = initial;
     breaks[breaks.length - 1] = final;
-
-    console.log('data.length :', data.length);
 
     const bins = breaks.map((e,i) => { // intervals' length is breaks.length - 1
       return [e + 1,breaks[i + 1]]; // lower, upper
@@ -202,26 +201,27 @@ export class OpeningHoursMap extends Map {
       nextCopy = [...copy];
       dist[alias] = bins.map(([lower,upper],i) => {
         count = 0;
-        
         copy.forEach(({properties: p}) => {
           if(!p[alias]) {
             return;
           }
           ({ open, close } = p[alias]);
-          if(lower <= open && open <= upper) {
+          if(open < lower) { // left
+            if(close >= lower) {
+              count += 1;
+            } else {
+              nextCopy.splice(i,1,false);
+            }
+          } else if(!(open > upper)) { // not right (between)
             count += 1;
-            //nextCopy.push({ properties: p });
-          } else if(open <= upper && (lower <= close || upper <= close)) {
-            //nextCopy.push({ properties: p });
-            count += 1;
-          } else if(close <= upper) {
-            nextCopy.splice(i,1);
           }
         });
-        copy = [...nextCopy];
+        copy = nextCopy.filter(d => d);
         return [lower,upper,count];
       });
     }
+
+    console.timeEnd('START');
 
     console.log(dist.Mon.reduce((f,c) => f += c[2],0));
     console.log(dist.Tue.reduce((f,c) => f += c[2],0));
