@@ -199,9 +199,10 @@ export class OpeningHoursMap extends Map {
     let open, close, count ,copy, nextCopy, dist = {};
     for (let { alias } of days) {
       copy = [...data];
-      nextCopy = [...data];
+      nextCopy = [...copy];
       dist[alias] = bins.map(([lower,upper],i) => {
         count = 0;
+        
         copy.forEach(({properties: p}) => {
           if(!p[alias]) {
             return;
@@ -209,13 +210,15 @@ export class OpeningHoursMap extends Map {
           ({ open, close } = p[alias]);
           if(lower <= open && open <= upper) {
             count += 1;
-          } else if(lower <= close || upper <= close) {
+            //nextCopy.push({ properties: p });
+          } else if(open <= upper && (lower <= close || upper <= close)) {
+            //nextCopy.push({ properties: p });
             count += 1;
-          } else if(close < lower) {
+          } else if(close <= upper) {
             nextCopy.splice(i,1);
           }
         });
-        copy = nextCopy;
+        copy = [...nextCopy];
         return [lower,upper,count];
       });
     }
