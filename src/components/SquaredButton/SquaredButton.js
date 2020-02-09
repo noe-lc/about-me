@@ -1,6 +1,6 @@
 import React from 'react';
 import './SquaredButton.css';
-import { validateFn } from '../../utils/utils';
+import { validateFn } from '../../scripts/utils';
 
 export default (props) => {
   return (

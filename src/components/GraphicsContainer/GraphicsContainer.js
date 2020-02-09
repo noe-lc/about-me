@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as classMap from '../../classes/ClassMap';
-import { fetchData } from '../../utils/utils';
+import { fetchData } from '../../scripts/utils';
 import './GraphicsContainer.css';
 
 export default (props) => {

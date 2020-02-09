@@ -1,5 +1,5 @@
 .day-graph-container {
-  width: 100;
+  width: 100%;
   background-color: #eaeaea;
   border: 1px solid rgba(0,0,0,0.25);
   box-sizing: border-box;
@@ -17,4 +17,10 @@
 .day-graph {
   width: 80%;
   height: 100%;
+}
+
+.day-line {
+  fill: none;
+  stroke: yellowgreen;
+  stroke-width: 1px;
 }

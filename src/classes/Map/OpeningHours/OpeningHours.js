@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { fetchData } from '../../../utils/utils';
+import { fetchData, getRangeDistribution, getDimensions } from '../../../scripts/utils';
 import Map from '../Map/Map';
 import './OpeningHours.css'
 
@@ -38,6 +38,7 @@ export class OpeningHoursMap extends Map {
     const features = this.findFeatures();
     this.initStyles(features);
     this.featuresWithOpHours = features.wOpenHours;
+    this.dataBins = this.getDataBins(this.featuresWithOpHours);
     this.drawMenu();
   }
 
@@ -63,7 +64,6 @@ export class OpeningHoursMap extends Map {
     const polygons = d3.select(this.container).select('svg')
       .select('g.g-main')
       .selectAll('path.polygon');
-    //console.log(polygons.filter(d => d.properties.open_hours.Mon[0]))
     const alwaysOpen = polygons.filter(d => d.properties.seconds_per_week == 604800),
       noOpenHours = polygons.filter(d => !d.properties.open_hours),
       idsToDiscard = [
@@ -101,16 +101,14 @@ export class OpeningHoursMap extends Map {
 
   drawMenu() {
     if(!this.menuContainer) return;
+    const { featuresWithOpHours, dayNameMap, dataBins } = this;
     const menu = d3.select(this.menuContainer);
-    const dimensions = {
-      width: parseInt(menu.style('width')),
-      height: parseInt(menu.style('height'))
-    };
+    const { width, height } = getDimensions(this.menuContainer);
     // TODO: handle size problems?
-    const days = Object.entries(this.dayNameMap)
+    const days = Object.entries(dayNameMap)
       .sort(([k1,a],[k2,b]) => a - b)
       .map(([k,v]) => ({ alias: k, name: v.name }));
-    const heightPct = Math.floor((dimensions.height / days.length) / dimensions.height * 100);
+    const heightPct = Math.floor((height / days.length) / height * 100);
     const graphs = menu.selectAll('.day-graph-container').data(days).enter()
       .append('div')
         .attr('class','day-graph-container')
@@ -119,7 +117,7 @@ export class OpeningHoursMap extends Map {
     graphs.selectAll('.day-name')
       .text(d => d.alias);
     graphs.selectAll('.day-graph')
-      .call(OpeningHoursMap.buildDayGraph,this.featuresWithOpHours,days);
+      .call(OpeningHoursMap.buildDayGraph,featuresWithOpHours.data(),dataBins,days);
   }
   
   async addData(additionalData,callback = () => {}) {
@@ -135,6 +133,25 @@ export class OpeningHoursMap extends Map {
     }
     callback();
     return res;
+  }
+
+  getDataBins() {
+    let breaks = [];
+    const halfHourSeconds = 30 * 60,
+      initial = 0, final = 86400;
+    for (let i=initial;i <= (final / halfHourSeconds) - 1;i++) {
+      breaks.push((i * halfHourSeconds) - 1);
+    }
+    breaks[0] = initial;
+    breaks[breaks.length - 1] = final;
+
+    const bins = breaks.map((e,i) => { // intervals' length is breaks.length - 1
+      return [e + 1,breaks[i + 1]]; // lower, upper
+    });
+    bins.pop(); // last bin is not an interval
+    bins[0][0] = initial;
+    bins[bins.length - 1][1] = final;
+    return bins;
   }
 
   static getOpenHoursInSeconds = (open,close) => {
@@ -163,74 +180,41 @@ export class OpeningHoursMap extends Map {
       .attr('class','day-name');
     const graph = selection.append('div')
       .attr('class','day-graph');
+    const { width, height }= getDimensions(graph.node());
     graph.append('div')
-        .classed('graphics-svg-container',true);
-    const dimensions = {
-      width: parseInt(graph.style('width')),
-      height: parseInt(graph.style('height'))
-    };
-    graph.append('svg')
+      .classed('graphics-svg-container',true)
+    .append('svg')
       .attr('class','graphics-svg')
       .attr('preserveAspectRatio', 'xMinYMin meet')
-      .attr('viewBox', `0 0 ${dimensions.width} ${dimensions.height}`)
-      .classed('svg-content-responsive', true); // Class to make it responsive.
+      .attr('viewBox', `0 0 ${width} ${height}`)
+      .classed('svg-content-responsive', true) // Class to make it responsive.
   }
 
-  static buildDayGraph(selection,dataSelection,days) {
-    console.time('START')
-    let breaks = [];
-    const data = dataSelection.data(),
-      halfHourSeconds = 30 * 60,
-      initial = 0, final = 86400;
-    for (let i=initial;i <= (final / halfHourSeconds) - 1;i++) {
-      breaks.push((i * halfHourSeconds) - 1);
-    }
-    breaks[0] = initial;
-    breaks[breaks.length - 1] = final;
-
-    const bins = breaks.map((e,i) => { // intervals' length is breaks.length - 1
-      return [e + 1,breaks[i + 1]]; // lower, upper
+  static buildDayGraph(selection,data,bins) {
+    const svgs = selection.selectAll('svg');
+    svgs.datum(({alias}) => {
+      let dayData = data.map(({ properties: p }) => 
+        p[alias] ? [p[alias].open,p[alias].close] : null
+      );
+      return getRangeDistribution(dayData,bins);
     });
-    bins.pop(); // last bin is not an interval
-    bins[0][0] = initial;
-    bins[bins.length - 1][1] = final;
     
-    let open, close, count ,copy, nextCopy, dist = {};
-    for (let { alias } of days) {
-      copy = [...data];
-      nextCopy = [...copy];
-      dist[alias] = bins.map(([lower,upper]) => {
-        count = 0;
-        copy.forEach(({properties: p},i) => {
-          if(!p[alias]) {
-            return;
-          }
-          ({ open, close } = p[alias]);
-          if(open < lower) { // left
-            if(close >= lower) {
-              count += 1;
-            } else {
-              nextCopy.splice(i,1);
-            }
-          } else if(!(open > upper)) { // not right (between)
-            count += 1;
-          }
-        });
-        copy = [...nextCopy];
-        return [lower,upper,count];
-      });
-    }
+    const { width, height } = getDimensions(selection.node());
+    const hScale = d3.scaleLinear()
+      .domain([bins[0][0],bins[bins.length - 1][1]])
+      .range([0,width]);
+    const vScale = d3.scaleLinear()
+      .domain([0,Math.max(...svgs.data().flat().map(d => d[2]))])
+      .range([0,height]);
+    const lineGen = d3.line()
+      .x(d => hScale(d[0]))
+      .y(d => height - vScale(d[2]));
 
-    console.timeEnd('START');
+    svgs.append('g').append('path')
+      .attr('class','day-line')
+      .attr('d',d => lineGen(d));
 
-    console.log(dist.Mon.reduce((f,c) => f += c[2],0));
-    console.log(dist.Tue.reduce((f,c) => f += c[2],0));
-    console.log(dist.Wed.reduce((f,c) => f += c[2],0));
-    console.log(dist.Thu.reduce((f,c) => f += c[2],0));
-    console.log(dist.Fri.reduce((f,c) => f += c[2],0));
-    console.log(dist.Sat.reduce((f,c) => f += c[2],0));
-    console.log(dist.Sun.reduce((f,c) => f += c[2],0));
-    console.log('dist :', dist);
+    
   }
 };
 
