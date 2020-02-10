@@ -19,8 +19,13 @@
   height: 100%;
 }
 
-.day-line {
+.day-path {
   fill: none;
   stroke: yellowgreen;
   stroke-width: 1px;
+}
+
+.time-marker {
+  stroke-width: 1px;
+  stroke: black;
 }

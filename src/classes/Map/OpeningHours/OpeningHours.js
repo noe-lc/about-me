@@ -14,11 +14,15 @@ export class OpeningHoursMap extends Map {
     };
     this.menuContainer = containers.menu;
     this.addData(additionalData,callback);
+    window.testAnimation = this.testAnimation.bind(this);
   }
 
+  width = undefined;
+  height = undefined;
   openingColor = d3.color('rgb(249, 249, 134)');
   colorPalette = [this.openingColor, 'orange', 'purple'];
-  interpolator = d3.piecewise(d3.interpolateRgb.gamma(1),this.colorPalette);
+  colorInterpolator = d3.piecewise(d3.interpolateRgb.gamma(1),this.colorPalette);
+  xInterpolator = d3.interpolate(0)
   dayNameMap = {
     Mon: { name: 'Monday', order: 1 },
     Tue: { name: 'Tuesday', order: 2 },
@@ -31,6 +35,8 @@ export class OpeningHoursMap extends Map {
   dayTimeScale = d3.scaleLinear()
     .domain([0,86400]) // seconds in 24hrs
     .rangeRound([0,10000]) //ms
+  xScale = d3.scaleLinear();
+  yScale = d3.scaleLinear();
 
   draw() { // amends/overrides the base class method
     super.draw();
@@ -85,7 +91,7 @@ export class OpeningHoursMap extends Map {
 
   runTransition(day) {
     const { openingColor, colorPalette, dayTimeScale, 
-      featuresWithOpHours, interpolator } = this;
+      featuresWithOpHours, colorInterpolator } = this;
     featuresWithOpHours.filter(d => d.properties[day].open == '0')
         .style('fill',openingColor);
     featuresWithOpHours.filter(d => d.properties[day].open != '0')
@@ -95,7 +101,7 @@ export class OpeningHoursMap extends Map {
       .style('fill','black')
       .delay(d => dayTimeScale(d.properties[day].open))
       .duration(d => dayTimeScale(d.properties[day].close - d.properties[day].open))
-      .styleTween('fill',() => interpolator)
+      .styleTween('fill',() => colorInterpolator)
       .style('stroke','white');
   }
 
@@ -113,11 +119,11 @@ export class OpeningHoursMap extends Map {
       .append('div')
         .attr('class','day-graph-container')
         .style('height',`${heightPct}%`)
-        .call(OpeningHoursMap.appendDayGraphElements);
+        .call(this.appendDayGraphElements);
     graphs.selectAll('.day-name')
       .text(d => d.alias);
     graphs.selectAll('.day-graph')
-      .call(OpeningHoursMap.buildDayGraph,featuresWithOpHours.data(),dataBins,days);
+      .call(this.buildDayGraph,featuresWithOpHours.data(),dataBins,days);
   }
   
   async addData(additionalData,callback = () => {}) {
@@ -175,23 +181,36 @@ export class OpeningHoursMap extends Map {
       .select(selector).lower();
   }
 
-  static appendDayGraphElements(selection) {
+  appendDayGraphElements = (selection) => {
     selection.append('div')
       .attr('class','day-name');
     const graph = selection.append('div')
       .attr('class','day-graph');
-    const { width, height }= getDimensions(graph.node());
-    graph.append('div')
+    const { width, height } = getDimensions(graph.node());
+    const g = graph.append('div')
       .classed('graphics-svg-container',true)
     .append('svg')
       .attr('class','graphics-svg')
       .attr('preserveAspectRatio', 'xMinYMin meet')
       .attr('viewBox', `0 0 ${width} ${height}`)
       .classed('svg-content-responsive', true) // Class to make it responsive.
-  }
+    .append('g');
+        
+    g.append('line')
+      .attr('class','time-marker');
+    this.width = width;
+    this.height = height;
+   }
 
-  static buildDayGraph(selection,data,bins) {
-    const svgs = selection.selectAll('svg');
+  buildDayGraph = (selection,data,bins) => {
+    const { xScale, yScale } = this,
+      svgs = selection.selectAll('svg'),
+      gs = svgs.select('g'),
+      { width, height } = getDimensions(selection.node());
+    const lineGen = d3.line()
+      .x(d => xScale(d[0]))
+      .y(d => height - yScale(d[2]));
+    
     svgs.datum(({alias}) => {
       let dayData = data.map(({ properties: p }) => 
         p[alias] ? [p[alias].open,p[alias].close] : null
@@ -199,22 +218,35 @@ export class OpeningHoursMap extends Map {
       return getRangeDistribution(dayData,bins);
     });
     
-    const { width, height } = getDimensions(selection.node());
-    const hScale = d3.scaleLinear()
+    xScale
       .domain([bins[0][0],bins[bins.length - 1][1]])
       .range([0,width]);
-    const vScale = d3.scaleLinear()
+    yScale
       .domain([0,Math.max(...svgs.data().flat().map(d => d[2]))])
       .range([0,height]);
-    const lineGen = d3.line()
-      .x(d => hScale(d[0]))
-      .y(d => height - vScale(d[2]));
-
-    svgs.append('g').append('path')
-      .attr('class','day-line')
-      .attr('d',d => lineGen(d));
-
     
+    svgs.select('g').append('path')
+      .attr('class','day-path')
+      .attr('d',lineGen);
+
+    gs.select('line.time-marker')
+      .attr('x1',0).attr('y1',0)
+      .attr('x2',0).attr('y2',height)
+      //.style('display','none')
+      .raise();
+  }
+
+  testAnimation() {
+    const interpolator = d3.interpolate(0,this.width);
+    const selection = d3.select(this.menuContainer)
+      .select('g')
+      .select('line.time-marker')
+        .transition()
+        .duration(10000)
+        .attrTween('transform',d => console.log(d));
+
+    console.log(selection);
+    console.log('selection.datum() :', selection.datum());
   }
 };
 
@@ -233,7 +265,7 @@ export class OpeningHoursMap extends Map {
         d3.active(this).transition()
           .delay(d => scale(d[prop].start))
           .duration(d => scale(d[prop].end) - scale(d[prop].start))
-          .styleTween('fill',() => interpolator)
+          .styleTween('fill',() => colorInterpolator)
         .transition()
           .delay(d => totalTime - scale(d[prop].end ))
           .on('start',repeat);

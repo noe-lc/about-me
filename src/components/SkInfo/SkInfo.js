@@ -34,8 +34,8 @@ export default ({ title, data }) => {
       </div>
       <div className='info-container padding-left'>
         {data.map(d => (
-          <div className='flex-container'>
-            <h3 key={d.name} className='s-name code' style={{ color: d.color }}>{d.name}</h3>
+          <div key={d.name} className='flex-container'>
+            <h3 className='s-name code' style={{ color: d.color }}>{d.name}</h3>
             {renderGraph(d.level,d.color)}
             {renderSublist(d.sublist)}
           </div>
