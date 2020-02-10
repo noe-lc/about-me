@@ -187,17 +187,25 @@ export class OpeningHoursMap extends Map {
     const graph = selection.append('div')
       .attr('class','day-graph');
     const { width, height } = getDimensions(graph.node());
-    const g = graph.append('div')
+    const svg = graph.append('div')
       .classed('graphics-svg-container',true)
-    .append('svg')
-      .attr('class','graphics-svg')
+      .append('svg');
+
+    svg.attr('class','graphics-svg')
       .attr('preserveAspectRatio', 'xMinYMin meet')
       .attr('viewBox', `0 0 ${width} ${height}`)
       .classed('svg-content-responsive', true) // Class to make it responsive.
-    .append('g');
-        
-    g.append('line')
+    .append('g')
+      .attr('class','g-main');
+
+    const gm = svg.append('g')
+      .attr('class','g-marker');
+    gm.append('line')
       .attr('class','time-marker');
+    gm.append('text')
+      .attr('class','number')
+      .attr('x','3px')
+      .attr('y','8px');
     this.width = width;
     this.height = height;
    }
@@ -205,7 +213,7 @@ export class OpeningHoursMap extends Map {
   buildDayGraph = (selection,data,bins) => {
     const { xScale, yScale } = this,
       svgs = selection.selectAll('svg'),
-      gs = svgs.select('g'),
+      g = svgs.select('g.g-marker'),
       { width, height } = getDimensions(selection.node());
     const lineGen = d3.line()
       .x(d => xScale(d[0]))
@@ -229,24 +237,31 @@ export class OpeningHoursMap extends Map {
       .attr('class','day-path')
       .attr('d',lineGen);
 
-    gs.select('line.time-marker')
+    g.select('line.time-marker')
       .attr('x1',0).attr('y1',0)
-      .attr('x2',0).attr('y2',height)
-      //.style('display','none')
-      .raise();
+      .attr('x2',0).attr('y2',height);
   }
 
   testAnimation() {
-    const interpolator = d3.interpolate(0,this.width);
-    const selection = d3.select(this.menuContainer)
-      .select('g')
-      .select('line.time-marker')
-        .transition()
-        .duration(10000)
-        .attrTween('transform',d => console.log(d));
-
-    console.log(selection);
-    console.log('selection.datum() :', selection.datum());
+    let transform, x, index;
+    const svg = d3.select(this.menuContainer)
+      .select('svg.graphics-svg');
+    const { width } = svg.select('path.day-path').node().getBoundingClientRect();
+    const marker = d3.select(this.menuContainer)
+      .select('svg.graphics-svg')
+      .select('g.g-marker');
+    const number = marker.select('text');
+    const interpolator = d3.interpolateTransformSvg('translate(0,0)',`translate(${width},0)`);
+    const bisector = d3.bisector(d => d[0]);
+    marker.transition()
+      .duration(10000)
+      .attrTween('transform',(d) => (t) => {
+        transform = interpolator(t); 
+        x = parseFloat(transform.slice(10));
+        index = bisector.right(d,this.xScale.invert(x)) - 1;
+        number.text(d[index][2]);
+        return transform;
+      });
   }
 };
 
