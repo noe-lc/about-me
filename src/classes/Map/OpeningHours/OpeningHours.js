@@ -238,18 +238,19 @@ export class OpeningHoursMap extends Map {
       .attr('d',lineGen);
 
     g.select('line.time-marker')
-      .attr('x1',0).attr('y1',0)
+      .attr('x1',0).attr('y1',height)
       .attr('x2',0).attr('y2',height);
   }
 
   testAnimation() {
-    let transform, x, index;
+    let transform, x, index, yValue;
     const svg = d3.select(this.menuContainer)
       .select('svg.graphics-svg');
-    const { width } = svg.select('path.day-path').node().getBoundingClientRect();
+    const { height, width } = svg.select('path.day-path').node().getBoundingClientRect();
     const marker = d3.select(this.menuContainer)
       .select('svg.graphics-svg')
       .select('g.g-marker');
+    const line = marker.select('line');
     const number = marker.select('text');
     const interpolator = d3.interpolateTransformSvg('translate(0,0)',`translate(${width},0)`);
     const bisector = d3.bisector(d => d[0]);
@@ -259,7 +260,9 @@ export class OpeningHoursMap extends Map {
         transform = interpolator(t); 
         x = parseFloat(transform.slice(10));
         index = bisector.right(d,this.xScale.invert(x)) - 1;
-        number.text(d[index][2]);
+        yValue = d[index][2];
+        line.attr('y1',height - this.yScale(yValue))
+        number.text(yValue);
         return transform;
       });
   }
