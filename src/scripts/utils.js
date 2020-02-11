@@ -45,9 +45,9 @@ export const getRangeDistribution = (data,bins) => { // bins should be already e
   return bins.map(([lower,upper]) => {
     count = 0;
     copy.forEach((d,i) => {
-      if(!d) {
-        return;
-      }
+      //if(!d) {
+      //  return;
+      //}
       [first,last] = d;
       if(first < lower) { // left
         if(last >= lower) {
