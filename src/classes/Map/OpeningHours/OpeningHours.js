@@ -120,8 +120,6 @@ export class OpeningHoursMap extends Map {
         .attr('class','day-graph-container')
         .style('height',`${heightPct}%`)
         .call(this.appendDayGraphElements);
-    graphs.selectAll('.day-name')
-      .text(d => d.alias);
     graphs.selectAll('.day-graph')
       .call(this.buildDayGraph,featuresWithOpHours.data(),dataBins,days);
   }
@@ -160,37 +158,29 @@ export class OpeningHoursMap extends Map {
     return bins;
   }
 
-  static getOpenHoursInSeconds = (open,close) => {
-    [close,open] = [close,open].map(t => {
-      let index = t.indexOf(':'),
-        hours = +t.slice(0,index),
-        mins = +t.slice(index + 1);
-      return (hours * 60 * 60) + (mins * 60);
-    });
-    return { open, close };
-  };
-
-  static clone(selection,selector,className) {
-    return selection.select(selector).clone()
-      .attr('class',className);  
-  }
-
-  static setAsLower(selection,selector) {
-    return selection
-      .select('g.g-main')
-      .select(selector).lower();
-  }
-
   appendDayGraphElements = (selection) => {
-    selection.append('div')
-      .attr('class','day-name');
+    const infoDiv = selection.append('div')
+      .attr('class','day-info');
     const graph = selection.append('div')
       .attr('class','day-graph');
     const { width, height } = getDimensions(graph.node());
     const svg = graph.append('div')
       .classed('graphics-svg-container',true)
       .append('svg');
+    const info = [{ text: 'Total', class: 'total-lbl' },{ text: 'Max', class: 'max-lbl' }]
 
+    infoDiv.append('h4')
+      .text(d => d.name);
+    infoDiv.selectAll('.info-row').data(info).enter()
+      .append('div')
+      .attr('class','info-row')
+      .call((selection) => {
+        selection.append('h5')
+          .text(d => d.text);
+        selection.append('span')
+          .text(d => d.class);
+      });
+    
     svg.attr('class','graphics-svg')
       .attr('preserveAspectRatio', 'xMinYMin meet')
       .attr('viewBox', `0 0 ${width} ${height}`)
@@ -214,17 +204,20 @@ export class OpeningHoursMap extends Map {
     const { xScale, yScale } = this,
       svgs = selection.selectAll('svg'),
       g = svgs.select('g.g-marker'),
-      { width, height } = getDimensions(selection.node());
-    const lineGen = d3.line()
-      .x(d => xScale(d[0]))
-      .y(d => height - yScale(d[2]));
-    
+      infoDivs = d3.select(this.menuContainer).selectAll('div.day-info'),
+      { width, height } = getDimensions(selection.node()),
+      lineGen = d3.line()
+        .x(d => xScale(d[0]))
+        .y(d => height - yScale(d[2]));
+
     svgs.datum(({alias}) => {
       let dayData = data.map(({ properties: p }) => 
         p[alias] ? [p[alias].open,p[alias].close] : null
       );
       return getRangeDistribution(dayData,bins);
     });
+
+    infoDivs.datum((d,i) => ({ day: d, data: svgs.data()[i] }));
     
     xScale
       .domain([bins[0][0],bins[bins.length - 1][1]])
@@ -232,39 +225,64 @@ export class OpeningHoursMap extends Map {
     yScale
       .domain([0,Math.max(...svgs.data().flat().map(d => d[2]))])
       .range([0,height]);
-    
     svgs.select('g').append('path')
       .attr('class','day-path')
       .attr('d',lineGen);
-
     g.select('line.time-marker')
       .attr('x1',0).attr('y1',height)
       .attr('x2',0).attr('y2',height);
+
+    infoDivs.selectAll('span.number-lbl')
+      .text(d => d3.sum(d.data,d => d[2]));
+    infoDivs.selectAll('span.max-lbl')
+      .text(d => Math.max(...d.data.map(d => d[2])));
   }
 
   testAnimation() {
-    let transform, x, index, yValue;
-    const svg = d3.select(this.menuContainer)
-      .select('svg.graphics-svg');
-    const { height, width } = svg.select('path.day-path').node().getBoundingClientRect();
-    const marker = d3.select(this.menuContainer)
-      .select('svg.graphics-svg')
-      .select('g.g-marker');
-    const line = marker.select('line');
-    const number = marker.select('text');
-    const interpolator = d3.interpolateTransformSvg('translate(0,0)',`translate(${width},0)`);
-    const bisector = d3.bisector(d => d[0]);
+    let transform, x, yOffset,  index, yValue;
+    const container = d3.select(this.menuContainer),
+      svg = container.select('svg.graphics-svg'),
+      marker = container
+        .select('svg.graphics-svg')
+        .select('g.g-marker');
+    const line = marker.select('line'),
+      { height, width } = svg.select('path.day-path').node().getBoundingClientRect(),
+      interpolator = d3.interpolateTransformSvg('translate(0,0)',`translate(${width},0)`),
+      bisector = d3.bisector(d => d[0]);
+
     marker.transition()
       .duration(10000)
       .attrTween('transform',(d) => (t) => {
-        transform = interpolator(t); 
+        transform = interpolator(t);
         x = parseFloat(transform.slice(10));
         index = bisector.right(d,this.xScale.invert(x)) - 1;
         yValue = d[index][2];
-        line.attr('y1',height - this.yScale(yValue))
-        number.text(yValue);
+        yOffset = height - this.yScale(yValue);
+        line.attr('y1',yOffset)
+        //numberLbl .text(yValue);
         return transform;
       });
+  }
+
+  static getOpenHoursInSeconds = (open,close) => {
+    [close,open] = [close,open].map(t => {
+      let index = t.indexOf(':'),
+        hours = +t.slice(0,index),
+        mins = +t.slice(index + 1);
+      return (hours * 60 * 60) + (mins * 60);
+    });
+    return { open, close };
+  };
+
+  static clone(selection,selector,className) {
+    return selection.select(selector).clone()
+      .attr('class',className);  
+  }
+
+  static setAsLower(selection,selector) {
+    return selection
+      .select('g.g-main')
+      .select(selector).lower();
   }
 };
 
