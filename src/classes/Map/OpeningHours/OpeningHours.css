@@ -46,8 +46,11 @@
   stroke: black;
 }
 
-text.number {
+.number {
+  display: block;
   font-size: 0.75rem;
+  position: absolute;
+  top: 0;
 }
 
 .play {

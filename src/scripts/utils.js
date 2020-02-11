@@ -45,7 +45,6 @@ export const getRangeDistribution = (data,bins) => { // bins should be already e
   return bins.map(([lower,upper]) => {
     count = 0;
     nextCopy = [];
-    console.log('copy.length :', copy.length);
     copy.forEach((d) => {
       //if(!d) {
       //  return;

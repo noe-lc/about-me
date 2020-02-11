@@ -43,17 +43,19 @@ export class OpeningHoursMap extends Map {
       .classed('scaled',true);
     this.getFeatureOpeningHours();
     const features = this.findFeatures();
-    this.initStyles(features);
     this.selectionWithOpHours = features.wOpenHours;
     this.dataBins = this.getDataBins(this.selectionWithOpHours);
+    this.initStyles(features);
+    this.appendAdditionalElements(features.alwaysOpen.length);
     this.drawMenu();
 
-    let a = this.selectionWithOpHours.data()
-      .filter(d => d.properties.Mon)
-      .map(d=> [d.properties.Mon.open,d.properties.Mon.close])
-      .sort((a,b) => a[0] - b[0]);
-    
-    console.log('a :', a);
+    // DELETE LATER
+    //let a = this.selectionWithOpHours.data()
+    //  .filter(d => d.properties.Mon)
+    //  .map(d=> [d.properties.Mon.open,d.properties.Mon.close])
+    //  .sort((a,b) => a[0] - b[0]);
+    //
+    //console.log('a :', a);
   }
 
   getFeatureOpeningHours() {
@@ -150,6 +152,13 @@ export class OpeningHoursMap extends Map {
     return bins;
   }
 
+  appendAdditionalElements(alwaysOpen) {
+    const container = d3.select(this.container);
+    container.append('div')
+      .attr('class','number')
+      .text('WAAAAGHHH');
+  }
+
   appendDayGraphElements = (selection) => {
     const infoDiv = selection.append('div')
       .attr('class','day-info');
@@ -165,7 +174,6 @@ export class OpeningHoursMap extends Map {
       .attr('class','play')
       .attr('title','Play animation')
       .on('click',this.runTransition);
-    
     
     infoDiv.append('h4')
       .text(d => d.name);
@@ -189,11 +197,7 @@ export class OpeningHoursMap extends Map {
     const gm = svg.append('g')
       .attr('class','g-marker');
     gm.append('line')
-      .attr('class','time-marker');
-    gm.append('text')
-      .attr('class','number')
-      .attr('x','3px')
-      .attr('y','8px');
+      .attr('class','time-marker');    
     this.width = width;
     this.height = height;
   }
@@ -241,7 +245,7 @@ export class OpeningHoursMap extends Map {
      
   }
 
-  runTransition = ({ alias }) => {
+  runTransition = ({ alias },node) => {
     let transform, x, yOffset,  index, yValue;
     const { openingColor, colorPalette, dayTimeScale, selectionWithOpHours, 
       colorInterpolator, menuContainer, xScale, yScale } = this;
@@ -257,21 +261,13 @@ export class OpeningHoursMap extends Map {
       interpolator = d3.interpolateTransformSvg('translate(0,0)',`translate(${width},0)`),
       bisector = d3.bisector(d => d[0]);
 
-
     // assign starting styles according to day
-    //filteredByDay.filter(d => d.properties[alias].open == '0') 
-    //  .style('fill',openingColor);
-    //filteredByDay.filter(d => d.properties[alias].open != '0')
-    //  .style('fill',colorPalette[colorPalette.length - 1]);
-    
-    filteredByDay.transition()
-      .style('fill','black')
-      .delay(d => dayTimeScale(d.properties[alias].open))
-      .duration(d => dayTimeScale(d.properties[alias].close - d.properties[alias].open))
-      .styleTween('fill',() => colorInterpolator)
-      .style('stroke','white');
+    filteredByDay.filter(d => d.properties[alias].open == '0') 
+      .style('fill',openingColor);
+    filteredByDay.filter(d => d.properties[alias].open != '0')
+      .style('fill',colorPalette[colorPalette.length - 1]);
 
-    marker.transition()
+    marker.transition('marker')
       .duration(10000)
       .attrTween('transform',(d) => (t) => {
         transform = interpolator(t); 
@@ -279,10 +275,18 @@ export class OpeningHoursMap extends Map {
         index = bisector.right(d.distribution,xScale.invert(x)) - 1;
         yValue = d.distribution[index][2];
         yOffset = height - yScale(yValue);
-        line.attr('y1',yOffset)
+        line.attr('y1',yOffset);
         //numberLbl .text(yValue);
         return transform;
       });
+    
+    filteredByDay.transition('day')
+      .style('stroke','black')
+      .delay(d => dayTimeScale(d.properties[alias].open))
+      .duration((d,i) => dayTimeScale(d.properties[alias].close - d.properties[alias].open))
+      .styleTween('fill',() => colorInterpolator)
+      .style('stroke','white');
+
   }
 
   static getOpenHoursInSeconds = (open,close) => {
