@@ -41,10 +41,12 @@ export const fetchData = async (url = '') => {
 export const getRangeDistribution = (data,bins) => { // bins should be already exclusive
   let count, first, last;
   let copy = [...data];
-  let nextCopy = [...copy];
+  let nextCopy = [];
   return bins.map(([lower,upper]) => {
     count = 0;
-    copy.forEach((d,i) => {
+    nextCopy = [];
+    console.log('copy.length :', copy.length);
+    copy.forEach((d) => {
       //if(!d) {
       //  return;
       //}
@@ -52,11 +54,13 @@ export const getRangeDistribution = (data,bins) => { // bins should be already e
       if(first < lower) { // left
         if(last >= lower) {
           count += 1;
-        } else {
-          nextCopy.splice(i,1);
+          nextCopy.push(d);
         }
       } else if(!(first > upper)) { // not right (between)
         count += 1;
+        nextCopy.push(d);
+      } else {
+        nextCopy.push(d);
       }
     });
     copy = [...nextCopy];

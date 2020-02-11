@@ -19,6 +19,7 @@ export default class Map {
       width: dimensions.width || (useParent ? parseInt(container.style('width')) : this.defaultWidth),
       height: dimensions.height || (useParent ? parseInt(container.style('height')) : this.defaultHeight)
     };
+    console.log('this.dimensions :', this.dimensions);
     this.projection = d3[projection] ? d3[projection]() : null || d3.geoMercator();
     this.pathGenerator = d3.geoPath()
       .projection(this.projection.fitSize([this.dimensions.width,this.dimensions.height],data));

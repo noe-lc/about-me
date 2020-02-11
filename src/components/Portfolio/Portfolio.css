@@ -62,6 +62,7 @@
   .graphic-element-map {
     width: 100%;
     height: auto;
+    min-height: 370px;
   }
 
 }

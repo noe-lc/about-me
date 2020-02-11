@@ -14,7 +14,6 @@ export class OpeningHoursMap extends Map {
     };
     this.menuContainer = containers.menu;
     this.addData(additionalData,callback);
-    window.testAnimation = this.testAnimation.bind(this);
   }
 
   width = undefined;
@@ -38,14 +37,23 @@ export class OpeningHoursMap extends Map {
   xScale = d3.scaleLinear();
   yScale = d3.scaleLinear();
 
-  draw() { // amends/overrides the base class method
-    super.draw();
+  draw() { 
+    super.draw(); // amends/overrides the base class method
+    d3.select(this.container).select('svg')
+      .classed('scaled',true);
     this.getFeatureOpeningHours();
     const features = this.findFeatures();
     this.initStyles(features);
     this.selectionWithOpHours = features.wOpenHours;
     this.dataBins = this.getDataBins(this.selectionWithOpHours);
     this.drawMenu();
+
+    let a = this.selectionWithOpHours.data()
+      .filter(d => d.properties.Mon)
+      .map(d=> [d.properties.Mon.open,d.properties.Mon.close])
+      .sort((a,b) => a[0] - b[0]);
+    
+    console.log('a :', a);
   }
 
   getFeatureOpeningHours() {
@@ -155,7 +163,8 @@ export class OpeningHoursMap extends Map {
 
     selection.append('button')
       .attr('class','play')
-      .on('click',this.testAnimation);
+      .attr('title','Play animation')
+      .on('click',this.runTransition);
     
     
     infoDiv.append('h4')
@@ -229,12 +238,10 @@ export class OpeningHoursMap extends Map {
       .text(d => d.data.count);
     infoDivs.select('span.max-lbl')
       .text(d => Math.max(...d.data.distribution.map(d => d[2])));
-    
-    
-    
+     
   }
 
-  testAnimation = ({ alias }) => {
+  runTransition = ({ alias }) => {
     let transform, x, yOffset,  index, yValue;
     const { openingColor, colorPalette, dayTimeScale, selectionWithOpHours, 
       colorInterpolator, menuContainer, xScale, yScale } = this;
@@ -245,15 +252,17 @@ export class OpeningHoursMap extends Map {
       .filter(d => d.alias == alias);
     const marker = svg.select('g.g-marker'),
       line = marker.select('line'),
-      { height, width } = svg.select('path.day-path').node().getBoundingClientRect(),
+      { width } = svg.select('path.day-path').node().getBoundingClientRect(),
+      { height } = svg.node().getBoundingClientRect(),
       interpolator = d3.interpolateTransformSvg('translate(0,0)',`translate(${width},0)`),
       bisector = d3.bisector(d => d[0]);
 
+
     // assign starting styles according to day
-    filteredByDay.filter(d => d.properties[alias].open == '0') 
-      .style('fill',openingColor);
-    filteredByDay.filter(d => d.properties[alias].open != '0')
-      .style('fill',colorPalette[colorPalette.length - 1]);
+    //filteredByDay.filter(d => d.properties[alias].open == '0') 
+    //  .style('fill',openingColor);
+    //filteredByDay.filter(d => d.properties[alias].open != '0')
+    //  .style('fill',colorPalette[colorPalette.length - 1]);
     
     filteredByDay.transition()
       .style('fill','black')
