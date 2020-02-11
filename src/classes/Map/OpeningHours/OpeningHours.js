@@ -176,9 +176,9 @@ export class OpeningHoursMap extends Map {
       .attr('class','info-row')
       .call((selection) => {
         selection.append('h5')
-          .text(d => d.text);
+          .text(d => d.text + ':');
         selection.append('span')
-          .text(d => d.class);
+          .attr('class',d => d.class);
       });
     
     svg.attr('class','graphics-svg')
@@ -211,31 +211,35 @@ export class OpeningHoursMap extends Map {
         .y(d => height - yScale(d[2]));
 
     svgs.datum(({alias}) => {
-      let dayData = data.map(({ properties: p }) => 
-        p[alias] ? [p[alias].open,p[alias].close] : null
-      );
-      return getRangeDistribution(dayData,bins);
+      let dayData = data.reduce((filtered,{ properties: p }) => {
+        if(p[alias]) filtered.push([p[alias].open,p[alias].close]);
+        return filtered;
+      },[]);
+      return { count: dayData.length, distribution: getRangeDistribution(dayData,bins) };
     });
 
     infoDivs.datum((d,i) => ({ day: d, data: svgs.data()[i] }));
     
+    const yDomain = svgs.data()
+      .map(d => d.distribution).flat()
+      .map(d => d[2]);
     xScale
       .domain([bins[0][0],bins[bins.length - 1][1]])
       .range([0,width]);
     yScale
-      .domain([0,Math.max(...svgs.data().flat().map(d => d[2]))])
+      .domain([0,Math.max(...yDomain)])
       .range([0,height]);
     svgs.select('g').append('path')
       .attr('class','day-path')
-      .attr('d',lineGen);
+      .attr('d',d => lineGen(d.distribution));
     g.select('line.time-marker')
       .attr('x1',0).attr('y1',height)
       .attr('x2',0).attr('y2',height);
 
-    infoDivs.selectAll('span.number-lbl')
-      .text(d => d3.sum(d.data,d => d[2]));
-    infoDivs.selectAll('span.max-lbl')
-      .text(d => Math.max(...d.data.map(d => d[2])));
+    infoDivs.select('span.total-lbl')
+      .text(d => d.data.count);
+    infoDivs.select('span.max-lbl')
+      .text(d => Math.max(...d.data.distribution.map(d => d[2])));
   }
 
   testAnimation() {

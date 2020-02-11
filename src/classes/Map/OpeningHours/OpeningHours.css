@@ -5,6 +5,7 @@
   box-sizing: border-box;
   padding: 0.25rem 0.25rem;
   display: flex;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 .day-info {
@@ -12,7 +13,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   white-space: nowrap;
   justify-content: center;
 }
@@ -21,12 +22,13 @@
   margin: 0;
 }
 
-.day-info span {
+.info-row span {
   font-size: 0.85em;
 }
 
-.day-info h5 {
-  display: inline-flex;
+.info-row h5 {
+  display: inline-block;
+  margin-right: 0.25em;
 }
 
 .day-graph {
