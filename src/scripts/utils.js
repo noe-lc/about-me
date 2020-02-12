@@ -11,18 +11,18 @@ export const validateFn = (fn) => {
   return fn;
 };
 
-export const fetchData = async (url = '') => {
+export const fetchData = async (url = '',signal) => {
   let data;
   const urlMembers = url.split('.');
   const extension = urlMembers[urlMembers.length - 1];
 
   if(!FETCH[extension]) {
-    console.warn('Invalid Extension');
+    console.warn(`Invalid Extension. Expecting ${Object.keys(FETCH).join(', ')}`);
     return null;
   }
 
   try {
-    const res = await FETCH[extension](url);
+    const res = await FETCH[extension](url,signal);
     if(res.type === 'Topology') {
       const firstKey = Object.keys(res.objects)[0];
       data = feature(res,res.objects[firstKey]);
