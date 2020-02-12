@@ -10,20 +10,26 @@ const Spinner = () => {
 export default (props) => {
   const containerRef = useRef();
   const menuRef = useRef();
-  const [state,setState] = useState({ isLoading: true });
+  const [state,setState] = useState({ isLoading: true, failedToLoad: false });
+
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
     const onGraphicsMount = async function() {
       const data = await fetchData(props.url,{ signal });
-      if(!data) {
+      if(data instanceof Error) {
+        if(!signal.aborted) {
+          console.error(data);
+          setState({ isLoading: false, failedToLoad: true });
+        }
         return;
       }
-      setState({ isLoading: false });
+      setState({ ...state, isLoading: false });
       const containers = { menu: menuRef.current, main: containerRef.current };
       const params = [containers,data,props,props.additionalData];
       const graphic = new classMap[props.class](...params);
       graphic.draw();
+      props.setLoaded(true);
     };
     onGraphicsMount();
     return () => {
@@ -33,6 +39,10 @@ export default (props) => {
 
   if(state.isLoading) {
     return <Spinner />;
+  }
+
+  if(state.failedToLoad) {
+    return <h1 className='empty-list'>Failed to load.</h1>
   }
   
   switch(props.class) {

@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const urls = [
   { name: 'LinkedIn', url: 'https://www.linkedin.com/in/noe-landaverde-28245aa2/' },
   { name: 'Resume', url:'https://github.com/noe-lc/about-me/raw/gh-pages/files/Resume.pdf' }
@@ -121,10 +123,26 @@ export const portfolioData = [ // these paths are preceded by portfolio/
             className: 'land'
           }
         ],
-        description: `This animated map shows polygons of each physical retail location in lower Manhattan
-        area of New York City. Each polygon takes on the value of the retail location which: a) is within the polygon's
-        bounds, and b) is open the most time per week compared to others sharing the same polygon. 
-        The delay and duration of transitions for each polygon depend on their opening and closing hours.`
+        description: () => {
+          return (
+            <React.Fragment>
+              <p>
+              This map shows polygons of each physical retail location in lower Manhattan
+              area of New York City, and transitions through a normal 24hr-day in a span on 10 seconds. 
+              Each polygon takes on the opening hours of the location which:
+              </p>
+              <ul>
+                <li>Is within the polygon's bounds</li>
+                <li>Is open the most time per week compared to others sharing the same polygon</li>
+              </ul>
+              <p>
+                The delay and duration of transitions for each polygon depend on their opening and closing hours.
+                Furthermore, the line charts describe the number of locations open at any given time, with a total
+                and a maximum of open locations per day.
+              </p>
+            </React.Fragment>
+          )
+        }
       },
     ] 
   },

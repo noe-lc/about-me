@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
 import GraphicsContainer from '../GraphicsContainer/GraphicsContainer';
 import { portfolioData } from '../../data/data';
@@ -7,21 +7,31 @@ import './Portfolio.css';
 
 export default (props) => {
   let { path, url } = props.match;
+  const [loaded,setLoaded] = useState(false);
   const pathArray = props.history.location.pathname.split('/');
   const current = pathArray[pathArray.length - 1];
   url = url.slice(-1) === '/' ? url.slice(0,-1) : url;
   path = path.slice(-1) === '/' ? path.slice(0,-1) : path;
+
+  const renderDescription = (description) => {
+    return description && loaded ? (
+      <div className='graphic-desc'>
+        {description()}
+      </div>
+    ) : null;
+  }
 
   const renderListElements = ({ list,name }) => {
     if(list.length == 0) {
       return <h1 className='empty-list'>Nothing to see here... yet.</h1> 
     }
     return list.map(e => {
-      return(
+      return (
         <div key={e.name} className='portfolio-element'>
           <h1>{e.name}</h1>
           <div className={'graphic-element' + (name === 'Maps' ? ' graphic-element-map' : '')}>
-            <GraphicsContainer useParent={true} {...e}/>
+            <GraphicsContainer useParent={true} setLoaded={setLoaded} {...e}/>
+            {renderDescription(e.description)}
           </div>
         </div>
       )

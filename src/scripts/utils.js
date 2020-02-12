@@ -17,8 +17,8 @@ export const fetchData = async (url = '',signal) => {
   const extension = urlMembers[urlMembers.length - 1];
 
   if(!FETCH[extension]) {
-    console.warn(`Invalid Extension. Expecting ${Object.keys(FETCH).join(', ')}`);
-    return null;
+    const message = `Invalid Extension. Expected ${Object.keys(FETCH).join(', ')}`;
+    return new Error(message);
   }
 
   try {
@@ -29,13 +29,10 @@ export const fetchData = async (url = '',signal) => {
     } else {
       data = res;
     }
-    
+    return data;
   } catch (err) {
-    console.warn(err);
-    data = null;
+    return new Error(err.message);
   }
-
-  return data;  
 };
 
 export const getRangeDistribution = (data,bins) => { // bins should be already exclusive
