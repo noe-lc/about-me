@@ -46,16 +46,8 @@ export class OpeningHoursMap extends Map {
     this.selectionWithOpHours = features.wOpenHours;
     this.dataBins = this.getDataBins(this.selectionWithOpHours);
     this.initStyles(features);
-    this.appendAdditionalElements(features.alwaysOpen.length);
+    this.appendAdditionalElements(features.alwaysOpen.size());
     this.drawMenu();
-
-    // DELETE LATER
-    //let a = this.selectionWithOpHours.data()
-    //  .filter(d => d.properties.Mon)
-    //  .map(d=> [d.properties.Mon.open,d.properties.Mon.close])
-    //  .sort((a,b) => a[0] - b[0]);
-    //
-    //console.log('a :', a);
   }
 
   getFeatureOpeningHours() {
@@ -153,10 +145,16 @@ export class OpeningHoursMap extends Map {
   }
 
   appendAdditionalElements(alwaysOpen) {
-    const container = d3.select(this.container);
-    container.append('div')
+    const detail = d3.select(this.container.parentElement)
+      .append('div')
+      .attr('class','transition-detail')
+    detail.append('span')
+      .attr('class','desc')
+      .text('Currently open:');
+    detail.append('span')
+      .datum(alwaysOpen)
       .attr('class','number')
-      .text('WAAAAGHHH');
+      .text(d => d);
   }
 
   appendDayGraphElements = (selection) => {
@@ -245,41 +243,30 @@ export class OpeningHoursMap extends Map {
      
   }
 
-  runTransition = ({ alias },node) => {
+  runTransition = ({ alias }) => {
     let transform, x, yOffset,  index, yValue;
-    const { openingColor, colorPalette, dayTimeScale, selectionWithOpHours, 
-      colorInterpolator, menuContainer, xScale, yScale } = this;
+    const { colorPalette, dayTimeScale, selectionWithOpHours, 
+      colorInterpolator, container, menuContainer, xScale, yScale } = this;
+
+    selectionWithOpHours.transition();
     // TODO: style those without opening hours for given day
     const filteredByDay = selectionWithOpHours.filter(d => d.properties[alias]);
-    const svg = d3.select(menuContainer)
-      .selectAll('svg.graphics-svg')
-      .filter(d => d.alias == alias);
+    const svgs = d3.select(menuContainer).selectAll('svg.graphics-svg');
+    const svg = svgs.filter(d => d.alias == alias);
     const marker = svg.select('g.g-marker'),
       line = marker.select('line'),
+      number = d3.select(container.parentElement).select('span.number'),
       { width } = svg.select('path.day-path').node().getBoundingClientRect(),
       { height } = svg.node().getBoundingClientRect(),
       interpolator = d3.interpolateTransformSvg('translate(0,0)',`translate(${width},0)`),
       bisector = d3.bisector(d => d[0]);
-
-    // assign starting styles according to day
-    filteredByDay.filter(d => d.properties[alias].open == '0') 
-      .style('fill',openingColor);
-    filteredByDay.filter(d => d.properties[alias].open != '0')
-      .style('fill',colorPalette[colorPalette.length - 1]);
-
-    marker.transition('marker')
-      .duration(10000)
-      .attrTween('transform',(d) => (t) => {
-        transform = interpolator(t); 
-        x = parseFloat(transform.slice(10));
-        index = bisector.right(d.distribution,xScale.invert(x)) - 1;
-        yValue = d.distribution[index][2];
-        yOffset = height - yScale(yValue);
-        line.attr('y1',yOffset);
-        //numberLbl .text(yValue);
-        return transform;
-      });
     
+    
+    // assign starting styles according to day
+    this.initDay(filteredByDay,alias,number);
+    filteredByDay.filter(d => d.properties[alias].open != '0')
+      .style('fill',colorPalette[colorPalette.length - 1]).size();
+
     filteredByDay.transition('day')
       .style('stroke','black')
       .delay(d => dayTimeScale(d.properties[alias].open))
@@ -287,6 +274,31 @@ export class OpeningHoursMap extends Map {
       .styleTween('fill',() => colorInterpolator)
       .style('stroke','white');
 
+    marker.transition('marker')
+      .duration(10000)
+      .attrTween('transform',({ distribution }) => (t) => {
+        transform = interpolator(t); 
+        x = parseFloat(transform.slice(10));
+        index = bisector.right(distribution,xScale.invert(x)) - 1;
+        yValue = distribution[index][2];
+        yOffset = height - yScale(yValue);
+        line.attr('y1',yOffset);
+        number.text(d => d + yValue);
+        return transform;
+      }).on('start',d => { // cancel ongoing transitions in other markers
+        const markers = svgs.selectAll('g.g-marker').filter(dd => dd !== d);
+        markers.transition('marker');
+        marker.call(OpeningHoursMap.resetMarker,yScale,height);
+      }).on('end',() => {
+        this.initDay(filteredByDay,alias,number);
+        marker.call(OpeningHoursMap.resetMarker,yScale,height);
+      }).on('interrupt',() =>  marker.call(OpeningHoursMap.resetMarker,yScale,height));
+  }
+
+  initDay(selection,alias,numberSel) {
+    const open = selection.filter(d => d.properties[alias].open == '0') 
+      .style('fill',this.openingColor);
+    numberSel.text(d => d + open.size());
   }
 
   static getOpenHoursInSeconds = (open,close) => {
@@ -308,6 +320,13 @@ export class OpeningHoursMap extends Map {
     return selection
       .select('g.g-main')
       .select(selector).lower();
+  }
+
+  static resetMarker(selection,scale,height){
+    selection
+      .attr('transform','translate(0,0)')
+      .select('line')
+        .attr('y1',d => height - scale(d.distribution[0][2]));
   }
 };
 

@@ -46,11 +46,26 @@
   stroke: black;
 }
 
-.number {
+
+.transition-detail {
   display: block;
-  font-size: 0.75rem;
   position: absolute;
-  top: 0;
+  bottom: 0;
+  right: 0;
+  text-align: right;
+  padding: 1rem;
+}
+
+.transition-detail span {
+  display: block;
+}
+
+.desc {
+  font-size: 0.75rem;
+}
+
+.number {
+  font-size: 1.5rem;
 }
 
 .play {
