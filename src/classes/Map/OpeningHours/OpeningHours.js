@@ -145,9 +145,8 @@ export class OpeningHoursMap extends Map {
   }
 
   appendAdditionalElements(alwaysOpen) {
-    const detail = d3.select(this.container.parentElement)
-      .append('div')
-      .attr('class','transition-detail')
+    const detail = d3.select(this.container.parentElement).append('div') // counter
+      .attr('class','transition-detail');
     detail.append('span')
       .attr('class','desc')
       .text('Currently open:');
@@ -155,6 +154,11 @@ export class OpeningHoursMap extends Map {
       .datum(alwaysOpen)
       .attr('class','number')
       .text(d => d);
+    
+    const legend = d3.select(this.container).append('div') // legend
+      .attr('class','op-legend');
+    legend.append('img')
+      .attr('src','/imgs/op-color-ramp.png')
   }
 
   appendDayGraphElements = (selection) => {

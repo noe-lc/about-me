@@ -48,16 +48,30 @@
 
 
 .transition-detail {
-  display: block;
   position: absolute;
   bottom: 0;
   right: 0;
   text-align: right;
-  padding: 1rem;
+  margin: 0.5rem;
+  display: flex;
+  align-items: baseline;
 }
 
 .transition-detail span {
   display: block;
+  margin: 0.25rem;
+}
+
+.op-legend {
+  width: 50%;
+  position: absolute;
+  bottom: 35px;
+  right: 0;
+  margin: 0.5rem;
+}
+
+.op-legend img {
+  width: 100%;
 }
 
 .desc {
