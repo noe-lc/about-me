@@ -50,6 +50,23 @@
   margin: 0 auto;
 }
 
+.spinner {
+  width: 100%;
+  height: 100%;
+  background: center / 10% no-repeat url(/icons/loading.gif);
+  border: 1px solid rgba(0,0,0,0.25);
+}
+
+.empty-list {
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: monospace;
+  font-size: 2rem;
+  color: gray;
+}
+
 @media only screen and (max-width:600px) {
   .portfolio-nav {
     justify-content: space-around;

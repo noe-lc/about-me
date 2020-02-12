@@ -120,12 +120,16 @@ export const portfolioData = [ // these paths are preceded by portfolio/
             url: 'https://raw.githubusercontent.com/noe-lc/noe-lc.github.io/master/data/manhattan_polygon.geojson',
             className: 'land'
           }
-        ]
+        ],
+        description: `This animated map shows polygons of each physical retail location in lower Manhattan
+        area of New York City. Each polygon takes on the value of the retail location which: a) is within the polygon's
+        bounds, and b) is open the most time per week compared to others sharing the same polygon. 
+        The delay and duration of transitions for each polygon depend on their opening and closing hours.`
       },
     ] 
   },
-  { name: 
-    'Graphs & Charts', 
+  { 
+    name: 'Graphs & Charts', 
     path:'graphs-and-charts', 
     list: [
       {name:'',path:'',url:''},

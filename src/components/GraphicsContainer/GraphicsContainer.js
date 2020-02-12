@@ -3,8 +3,9 @@ import * as classMap from '../../classes/ClassMap';
 import { fetchData } from '../../scripts/utils';
 import './GraphicsContainer.css';
 
-const flag = ['on mount', 'onUnmount']
-let index = 0;
+const Spinner = () => {
+  return <div className='spinner'></div>
+}
 
 export default (props) => {
   const containerRef = useRef();
@@ -12,12 +13,9 @@ export default (props) => {
   const [state,setState] = useState({ isLoading: true });
   useEffect(() => {
     const abortController = new AbortController();
-    //const { signal } = abortController;
+    const { signal } = abortController;
     const onGraphicsMount = async function() {
-      const data = await fetchData(props.url,{signal: abortController.signal }); // replace for props.url
-      console.log(data,flag[index]);
-      //console.log(signal,flag[index]);
-      index += 1;
+      const data = await fetchData(props.url,{ signal });
       if(!data) {
         return;
       }
@@ -29,7 +27,6 @@ export default (props) => {
     };
     onGraphicsMount();
     return () => {
-      console.log('aborted');
       abortController.abort();
     };
   },[]);
@@ -51,7 +48,3 @@ export default (props) => {
   }
   
 };
-
-const Spinner = () => {
-  return (<div className='spinner'></div>)
-}

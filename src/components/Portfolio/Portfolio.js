@@ -12,6 +12,22 @@ export default (props) => {
   url = url.slice(-1) === '/' ? url.slice(0,-1) : url;
   path = path.slice(-1) === '/' ? path.slice(0,-1) : path;
 
+  const renderListElements = ({ list,name }) => {
+    if(list.length == 0) {
+      return <h1 className='empty-list'>Nothing to see here... yet.</h1> 
+    }
+    return list.map(e => {
+      return(
+        <div key={e.name} className='portfolio-element'>
+          <h1>{e.name}</h1>
+          <div className={'graphic-element' + (name === 'Maps' ? ' graphic-element-map' : '')}>
+            <GraphicsContainer useParent={true} {...e}/>
+          </div>
+        </div>
+      )
+    })
+  };
+
   return (
     <div className='portfolio-main'>
       <nav className="portfolio-nav">
@@ -25,16 +41,7 @@ export default (props) => {
         <Switch>
           {portfolioData.map(d => 
             <Route key={d.name} path={`${path}/${d.path}`}>
-              {d.list.map(e => {
-                return(
-                  <div key={e.name} className='portfolio-element'>
-                    <h1>{e.name}</h1>
-                    <div className={'graphic-element' + (d.name === 'Maps' ? ' graphic-element-map' : '')}>
-                      <GraphicsContainer useParent={true} {...e}/>
-                    </div>
-                  </div>
-                )
-              })}
+              {renderListElements(d)}
             </Route>
           )}
         </Switch>
