@@ -18,6 +18,7 @@ export class OpeningHoursMap extends Map {
 
   width = undefined;
   height = undefined;
+  minGraphHeight = 100;
   openingColor = d3.color('rgb(249, 249, 134)');
   colorPalette = [this.openingColor, 'orange', 'purple'];
   colorInterpolator = d3.piecewise(d3.interpolateRgb.gamma(1),this.colorPalette);
@@ -101,6 +102,8 @@ export class OpeningHoursMap extends Map {
       .sort(([k1,a],[k2,b]) => a - b)
       .map(([k,v]) => ({ alias: k, name: v.name }));
     const heightPct = Math.floor((height / days.length) / height * 100);
+    //let height = Math.floor((height / days.length));
+    //height = height <
     const graphs = menu.selectAll('.day-graph-container').data(days).enter()
       .append('div')
         .attr('class','day-graph-container')
@@ -159,6 +162,12 @@ export class OpeningHoursMap extends Map {
       .attr('class','op-legend');
     legend.append('img')
       .attr('src','/imgs/op-color-ramp.png')
+    legend.selectAll('span').data(['Just Opened','Closed']).enter()
+      .append('span')
+      .attr('class','ramp-label')
+      .style('left',(_,i) => i == 0 ? '0%' : 'initial')
+      .style('right',(_,i) => i == 1 ? '0%' : 'initial')
+      .text(d => d);
   }
 
   appendDayGraphElements = (selection) => {
@@ -166,6 +175,7 @@ export class OpeningHoursMap extends Map {
       .attr('class','day-info');
     const graph = selection.append('div')
       .attr('class','day-graph');
+    console.log(graph.style('height'));
     const { width, height } = getDimensions(graph.node());
     const svg = graph.append('div')
       .classed('graphics-svg-container',true)

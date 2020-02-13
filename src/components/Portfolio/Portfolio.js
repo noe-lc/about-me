@@ -31,8 +31,8 @@ export default (props) => {
           <h1>{e.name}</h1>
           <div className={'graphic-element' + (name === 'Maps' ? ' graphic-element-map' : '')}>
             <GraphicsContainer useParent={true} setLoaded={setLoaded} {...e}/>
-            {renderDescription(e.description)}
           </div>
+          {renderDescription(e.description)}
         </div>
       )
     })

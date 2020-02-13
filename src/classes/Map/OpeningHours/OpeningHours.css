@@ -74,12 +74,19 @@
   width: 100%;
 }
 
-.desc {
+.ramp-label {
+  display: block;
+  position: absolute;
+  top: -0.75rem;
   font-size: 0.75rem;
 }
 
+.desc {
+  font-size: 0.75em;
+}
+
 .number {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 
 .play {
@@ -116,10 +123,20 @@
   .scaled {
     transform: scale(1.75,1.75);
   }
+
+  .day-graph-container {
+    max-height: 100px;
+    height: 100% !important;
+  }
 }
 
 @media only screen and (max-width:900px) {
   .scaled {
     transform: scale(1.75,1.75);
   }
+
+  .transition-detail, .op-legend {
+    font-size: 0.8rem;
+  }
+
 }

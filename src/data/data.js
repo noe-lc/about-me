@@ -127,12 +127,13 @@ export const portfolioData = [ // these paths are preceded by portfolio/
           return (
             <React.Fragment>
               <p>
-              This map shows polygons of each physical retail location in lower Manhattan
+              This is a map I originally had built for a map contest organized by 
+              <a target='_blank' href='https://mapscaping.com/'> MapScaping </a> last December. It shows polygons of each physical retail location in the lower Manhattan
               area of New York City, and transitions through a normal 24hr-day in a span on 10 seconds. 
               Each polygon takes on the opening hours of the location which:
               </p>
               <ul>
-                <li>Is within the polygon's bounds</li>
+                <li>Is within the polygon's bounds, and</li>
                 <li>Is open the most time per week compared to others sharing the same polygon</li>
               </ul>
               <p>
@@ -140,6 +141,10 @@ export const portfolioData = [ // these paths are preceded by portfolio/
                 Furthermore, the line charts describe the number of locations open at any given time, with a total
                 and a maximum of open locations per day.
               </p>
+              <dl className='data-source'>
+                <dt>Data sources: </dt>
+                <dd>Geometry & Patterns by <a target='_blank' href='https://safegraph.com/'>Safegraph</a></dd>
+              </dl>
             </React.Fragment>
           )
         }

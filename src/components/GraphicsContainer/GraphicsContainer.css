@@ -44,12 +44,25 @@
 }
 
 @media only screen and (max-width:600px) {
+  .graphics-container.flex {
+    flex-direction: column;
+  }
+
   .graphics-menu {
-    display: none; /* TODO: rearrange layout for map? */
+    width: 100%;
+    height: 130px;
   }
 
   .graphics-area {
     width: 100%;
     height: 100%;
   }
+}
+
+@media only screen and (max-width:500px) {
+  .graphics-menu {
+    width: 100%;
+    height: 110px;
+  }
+
 }
