@@ -3,4 +3,4 @@ export * from './LineChart';
 export * from './Map';
 export * from './Overlays';
 export * from './SegmentedBar';
-export * from './Treemap';
+export * from './Treemaps';

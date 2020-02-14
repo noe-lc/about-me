@@ -71,3 +71,20 @@ export const getDimensions = (element) => {
     height: parseInt(selection.style('height'))
   }
 };
+
+/* D3 GRAPH UTILS */
+
+export const setSubcontainers = (selection,isStyleResizable,dimensions) => {
+  if(isStyleResizable) {
+    selection.append('div')
+      .classed('graphics-svg-container',true)
+    .append('svg')
+      .attr('class','graphics-svg')
+      .attr('preserveAspectRatio', 'xMinYMin meet')
+      .attr('viewBox', `0 0 ${dimensions.width} ${dimensions.height}`)
+      .classed('svg-content-responsive', true); // Class to make it responsive.
+  } else {
+     selection.append('svg')
+      .attr('class','graphics-svg');
+  }
+};

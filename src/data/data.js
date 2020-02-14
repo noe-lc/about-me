@@ -158,7 +158,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
       {
         name:'Reorganizable Treemap ',
         path:'opening-hours',
-        url:'https://d3.static.observableusercontent.com/files/e65374209781891f37dea1e7a6e1c5e020a3009b8aedf113b4c80942018887a1176ad4945cf14444603ff91d3da371b3b0d72419fa8d2ee0f6e815732475d5de?response-content-disposition=attachment%3Bfilename*%3DUTF-8%27%27flare-2.json&Expires=1581768000000&Key-Pair-Id=APKAJCHFJLLLU4Y2WVSQ&Signature=knx6rXpLLWToIwGcZ7XpS5kFwn598hIzz2jRwTk8r6DpKPPqEZAa2oCpoIqjQ4BeBKFODbQYpGGD7O3FZtAxH02GFyV7JH6ZqS2DGlJqHzsBRH1ICURHrDEM5dQDWLIMhro-rBLquSIqECo0twveOF5LGnJKkXsxHWfVydaI1EVBWJ5jbqWj9U-bE41U5lOYzRLUVRMoTT7pecxU4fbNdyuaWgc59~Vypo9hBPz3IteelW57zNITY5zP9~HNJtCEok4YA01Gu8Nye~8i49574YLX4ygGZ9wLsVxxicleWmY1abQ0Qf1v8XOzntYJD-BegCP1ZiZ4z5ZTD7qqeHRpoQ_',
+        url:'https://raw.githubusercontent.com/noe-lc/about-me/master/src/data/product_data.csv',
         resizeBy: 'method', // style || method 
         class: 'ReorgTreemap',
         dimensions: { height: undefined, width: undefined },

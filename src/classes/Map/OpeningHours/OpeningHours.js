@@ -1,5 +1,6 @@
 import * as d3 from 'd3';
-import { fetchData, getRangeDistribution, getDimensions } from '../../../scripts/utils';
+import { fetchData, getRangeDistribution, 
+  getDimensions, setSubcontainers } from '../../../scripts/utils';
 import Map from '../Map/Map';
 import './OpeningHours.css'
 
@@ -176,9 +177,6 @@ export class OpeningHoursMap extends Map {
     const graph = selection.append('div')
       .attr('class','day-graph');
     const { width, height } = getDimensions(graph.node());
-    const svg = graph.append('div')
-      .classed('graphics-svg-container',true)
-      .append('svg');
     const info = [{ text: 'Total', class: 'total-lbl' },{ text: 'Max', class: 'max-lbl' }]
 
     selection.append('button')
@@ -198,13 +196,11 @@ export class OpeningHoursMap extends Map {
           .attr('class',d => d.class);
       });
     
-    svg.attr('class','graphics-svg')
-      .attr('preserveAspectRatio', 'xMinYMin meet')
-      .attr('viewBox', `0 0 ${width} ${height}`)
-      .classed('svg-content-responsive', true) // Class to make it responsive.
-    .append('g')
-      .attr('class','g-main');
-
+    const svg = graph
+      .call(setSubcontainers,true,{ width, height })
+      .select('svg');
+    svg.append('g')
+      .attr('class','g-main');  
     const gm = svg.append('g')
       .attr('class','g-marker');
     gm.append('line')
