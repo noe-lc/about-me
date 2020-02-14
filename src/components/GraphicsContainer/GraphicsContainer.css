@@ -1,22 +1,11 @@
-.graphics-svg-container {
-  display: inline-block;
-  position: relative;
+.graphics-element {
   width: 100%;
-  padding-bottom: 100%; /* aspect ratio */
-  vertical-align: top;
-  overflow: hidden;
-  transform: scale(1,1);
-}
-
-.svg-content-responsive {
-  display: inline-block;
-  position: absolute;
-  left: 0;
+  height: auto;
 }
 
 .graphics-container {
   width: 100%;
-  height: 100%;
+  height: 500px;
   min-height: inherit;
   margin: 0 auto;
   overflow: hidden;
@@ -41,20 +30,36 @@
   position: relative;
 }
 
-.graphic-desc {
+.graphics-svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* aspect ratio */
+  vertical-align: top;
+  overflow: hidden;
+  transform: scale(1,1);
+}
+
+.svg-content-responsive {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+}
+
+.graphics-desc {
   margin: 1rem 0;
   font-size: 1rem;
 }
 
-.graphic-desc p {
+.graphics-desc p {
   margin: 0;
 }
 
-.graphic-desc ul {
+.graphics-desc ul {
   list-style: lower-alpha;
 }
 
-.graphic-desc a {
+.graphics-desc a {
   text-decoration: none;
   color: #053cdf;
 }

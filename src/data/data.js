@@ -1,5 +1,11 @@
 import React from 'react';
 
+const months = [1,2,3,4,5,6,7,8,9,10];
+const monthRowConversion = r => ({ 
+  ...r, 
+  ...Object.fromEntries(months.map(m => ({ m: r[m] })))
+});
+
 export const urls = [
   { name: 'LinkedIn', url: 'https://www.linkedin.com/in/noe-landaverde-28245aa2/' },
   { name: 'Resume', url:'https://github.com/noe-lc/about-me/raw/gh-pages/files/Resume.pdf' }
@@ -154,18 +160,20 @@ export const portfolioData = [ // these paths are preceded by portfolio/
     ] 
   },
   { 
-    name: 'Graphs & Charts', // _
+    name: 'Graphs & Charts',
     path:'graphs-and-charts', 
     list: [
       {
         name:'Reorganizable Treemap ',
-        path:'opening-hours',
+        path:'reorganizable-treemap',
         url:'https://raw.githubusercontent.com/noe-lc/about-me/master/src/data/product_data.csv',
+        rowConversion: monthRowConversion,
         class: 'ReorgTreemap',
         settings: {
           resizeBy: 'method',
           dimensions: { height: undefined, width: undefined },
-          nestingOrder: ['YEAR','DESCRIPTION','WEIGHT']
+          nestingOrder: ['YEAR','DESCRIPTION','WEIGHT'],
+          rollupFunc: (g) => Math.sum(...months.map(n => g[n]))
         },
         additionalData: [],
         description: () => {

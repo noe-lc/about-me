@@ -14,7 +14,7 @@ export default (props) => {
 
   const renderDescription = (description) => {
     return description && !state.isLoading && !state.failedToLoad ? (
-      <div className='graphic-desc'>
+      <div className='graphics-desc'>
         {description()}
       </div>
     ) : null;
@@ -23,7 +23,7 @@ export default (props) => {
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
-    const { url, rowConversion, settings, additionalData, setLoaded } =  props;
+    const { url, rowConversion, settings, additionalData } =  props;
     const onGraphicsMount = async function() {
       const data = await fetchData(url,{ signal },rowConversion);
       if(data instanceof Error) {
@@ -56,15 +56,14 @@ export default (props) => {
   switch(props.class) {
     case 'OpeningHoursMap':
       return (
-        <React.Fragment>
+        <div className={'graphic-element' /* + (name === 'Maps' ? ' graphic-element-map' : '')*/}>
           <div className='graphics-container flex'>
             <div ref={menuRef} className='graphics-menu'></div>
             <div ref={containerRef} className='graphics-area ocean'></div>
           </div>
           {renderDescription(props.description)}
-        </React.Fragment>
+        </div>
         
-
       )
     default:
       return (

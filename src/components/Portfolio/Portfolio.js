@@ -20,9 +20,7 @@ export default (props) => {
       return (
         <div key={e.name} className='portfolio-element'>
           <h1>{e.name}</h1>
-          <div className={'graphic-element' + (name === 'Maps' ? ' graphic-element-map' : '')}>
-            <GraphicsContainer {...e}/>
-          </div>
+          <GraphicsContainer {...e}/>
         </div>
       )
     })

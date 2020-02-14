@@ -149,7 +149,7 @@ export class OpeningHoursMap extends Map {
   }
 
   appendAdditionalElements(alwaysOpen) {
-    const detail = d3.select(this.container.parentElement).append('div') // counter
+    const detail = d3.select(this.container).append('div') // counter
       .attr('class','transition-detail');
     detail.append('span')
       .attr('class','desc')
