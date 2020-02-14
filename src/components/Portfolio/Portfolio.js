@@ -7,19 +7,10 @@ import './Portfolio.css';
 
 export default (props) => {
   let { path, url } = props.match;
-  const [loaded,setLoaded] = useState(false);
   const pathArray = props.history.location.pathname.split('/');
   const current = pathArray[pathArray.length - 1];
   url = url.slice(-1) === '/' ? url.slice(0,-1) : url;
   path = path.slice(-1) === '/' ? path.slice(0,-1) : path;
-
-  const renderDescription = (description) => {
-    return description && loaded ? (
-      <div className='graphic-desc'>
-        {description()}
-      </div>
-    ) : null;
-  }
 
   const renderListElements = ({ list,name }) => {
     if(list.length == 0) {
@@ -30,9 +21,8 @@ export default (props) => {
         <div key={e.name} className='portfolio-element'>
           <h1>{e.name}</h1>
           <div className={'graphic-element' + (name === 'Maps' ? ' graphic-element-map' : '')}>
-            <GraphicsContainer useParent={true} setLoaded={setLoaded} {...e}/>
+            <GraphicsContainer {...e}/>
           </div>
-          {renderDescription(e.description)}
         </div>
       )
     })

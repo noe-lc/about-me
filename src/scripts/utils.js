@@ -11,7 +11,7 @@ export const validateFn = (fn) => {
   return fn;
 };
 
-export const fetchData = async (url = '',signal) => {
+export const fetchData = async (url = '',signal,rowConversion) => {
   let data;
   const urlMembers = url.split('.');
   const extension = urlMembers[urlMembers.length - 1];
@@ -22,7 +22,7 @@ export const fetchData = async (url = '',signal) => {
   }
 
   try {
-    const res = await FETCH[extension](url,signal);
+    const res = await FETCH[extension](url,signal,rowConversion);
     if(res.type === 'Topology') {
       const firstKey = Object.keys(res.objects)[0];
       data = feature(res,res.objects[firstKey]);

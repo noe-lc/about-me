@@ -112,11 +112,13 @@ export const portfolioData = [ // these paths are preceded by portfolio/
     list: [
       {
         name:'Opening Hours',
+        class: 'OpeningHoursMap',
         path:'opening-hours',
         url:'https://raw.githubusercontent.com/noe-lc/noe-lc.github.io/master/data/manhattan_reduced_tjson.json',
-        resizeBy: 'style', // style || method 
-        class: 'OpeningHoursMap',
-        dimensions: { height: undefined, width: undefined },
+        settings: {
+          resizeBy: 'style', // style || method 
+          dimensions: { height: undefined, width: undefined },
+        },
         additionalData: [
           { 
             url: 'https://raw.githubusercontent.com/noe-lc/noe-lc.github.io/master/data/manhattan_polygon.geojson',
@@ -159,9 +161,12 @@ export const portfolioData = [ // these paths are preceded by portfolio/
         name:'Reorganizable Treemap ',
         path:'opening-hours',
         url:'https://raw.githubusercontent.com/noe-lc/about-me/master/src/data/product_data.csv',
-        resizeBy: 'method', // style || method 
         class: 'ReorgTreemap',
-        dimensions: { height: undefined, width: undefined },
+        settings: {
+          resizeBy: 'method',
+          dimensions: { height: undefined, width: undefined },
+          nestingOrder: ['YEAR','DESCRIPTION','WEIGHT']
+        },
         additionalData: [],
         description: () => {
           return (

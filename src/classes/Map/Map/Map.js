@@ -6,8 +6,7 @@ export default class Map {
   constructor({ main: container },data,settings) {
     this.container = container;
     this.data = data;
-    this.applySettings(settings,data);
-
+    this.applySettings(data,settings);
     const { container: c, isStyleResizable, dimensions } = this;
     setSubcontainers(d3.select(c),isStyleResizable,dimensions);
   }
@@ -15,13 +14,15 @@ export default class Map {
   defaultWidth = '600px';
   defaultHeight = '400px';
   isStyleResizable = true;
+  projection = undefined;
 
-  applySettings(settings,data) {
+  applySettings(data,settings) {
     const container = d3.select(this.container);
-    const { projection, useParent, resizeBy, dimensions } = settings;
+    const { projection, resizeBy, useParent, dimensions } = settings;
+    const useP = typeof useParent !== 'boolean' ? true : useParent;
     this.dimensions = {
-      width: dimensions.width || (useParent ? parseInt(container.style('width')) : this.defaultWidth),
-      height: dimensions.height || (useParent ? parseInt(container.style('height')) : this.defaultHeight)
+      width: dimensions.width || (useP ? parseInt(container.style('width')) : this.defaultWidth),
+      height: dimensions.height || (useP ? parseInt(container.style('height')) : this.defaultHeight)
     };
     this.projection = d3[projection] ? d3[projection]() : null || d3.geoMercator();
     this.pathGenerator = d3.geoPath()

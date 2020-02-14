@@ -41,40 +41,6 @@
   height: 500px;
 }
 
-.graphic-desc {
-  margin: 1rem 0;
-  font-size: 1rem;
-}
-
-.graphic-desc p {
-  margin: 0;
-}
-
-.graph-desc ul {
-  list-style: lower-alpha;
-}
-
-.graphic-desc a {
-  text-decoration: none;
-  color: #053cdf;
-}
-
-.data-source {
-  margin: 0.5rem 0;
-  text-align: right;
-  font-size: 0.75em;
-}
-
-.data-source * {
-  margin: 0;
-  display: inline-block;
-}
-
-.data-source dt {
-  margin-right: 0.25rem;
-  font-weight: bold;
-}
-
 .card-container {
   width: 80%;
   height: 100%;
