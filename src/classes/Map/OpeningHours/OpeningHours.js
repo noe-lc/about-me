@@ -175,7 +175,6 @@ export class OpeningHoursMap extends Map {
       .attr('class','day-info');
     const graph = selection.append('div')
       .attr('class','day-graph');
-    console.log(graph.style('height'));
     const { width, height } = getDimensions(graph.node());
     const svg = graph.append('div')
       .classed('graphics-svg-container',true)
@@ -270,16 +269,20 @@ export class OpeningHoursMap extends Map {
     const marker = svg.select('g.g-marker'),
       line = marker.select('line'),
       number = d3.select(container.parentElement).select('span.number'),
-      { width } = svg.select('path.day-path').node().getBoundingClientRect(),
-      { height } = svg.node().getBoundingClientRect(),
-      interpolator = d3.interpolateTransformSvg('translate(0,0)',`translate(${width},0)`),
+      [vWidth,vHeight] = svg.attr('viewBox').split(' ').slice(2),  // viewbox
+      { width: sWidth, height: sHeight } = svg.node().getBoundingClientRect(),
+      { width, height } = svg.select('path.day-path').node().getBoundingClientRect(),
+      tWidth = (vWidth / sWidth) * width, // calculate final width and height in terms of "viewport units"
+      tHeight = (vHeight / sHeight) * height,
+      interpolator = d3.interpolateTransformSvg('translate(0,0)',`translate(${tWidth},0)`),
       bisector = d3.bisector(d => d[0]);
     
+    yScale.range([0,tHeight]); // adjust the scales to the current dimensions
+    xScale.range([0,tWidth]);
     
-    // assign starting styles according to day
-    this.initDay(filteredByDay,alias,number);
+    this.initDay(filteredByDay,alias,number); // assign init styles according to day
     filteredByDay.filter(d => d.properties[alias].open != '0')
-      .style('fill',colorPalette[colorPalette.length - 1]).size();
+      .style('fill',colorPalette[colorPalette.length - 1]);
 
     filteredByDay.transition('day')
       .style('stroke','black')
@@ -295,7 +298,7 @@ export class OpeningHoursMap extends Map {
         x = parseFloat(transform.slice(10));
         index = bisector.right(distribution,xScale.invert(x)) - 1;
         yValue = distribution[index][2];
-        yOffset = height - yScale(yValue);
+        yOffset = tHeight - yScale(yValue);
         line.attr('y1',yOffset);
         number.text(d => d + yValue);
         return transform;
@@ -340,7 +343,7 @@ export class OpeningHoursMap extends Map {
     selection
       .attr('transform','translate(0,0)')
       .select('line')
-        .attr('y1',d => height - scale(d.distribution[0][2]));
+        .attr('y1',0);
   }
 };
 

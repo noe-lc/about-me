@@ -51,6 +51,12 @@
   .graphics-menu {
     width: 100%;
     height: 130px;
+    flex-direction: row;
+    /* enables horizontal scrolling and hides the scrollbar */
+    overflow-y: hidden;
+    overflow-x: scroll;
+    margin-bottom: -50px;
+    padding-bottom: 50px;
   }
 
   .graphics-area {

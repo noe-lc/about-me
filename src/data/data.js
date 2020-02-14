@@ -142,7 +142,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
                 and a maximum of open locations per day.
               </p>
               <dl className='data-source'>
-                <dt>Data sources: </dt>
+                <dt>Data source: </dt>
                 <dd>Geometry & Patterns by <a target='_blank' href='https://safegraph.com/'>Safegraph</a></dd>
               </dl>
             </React.Fragment>
