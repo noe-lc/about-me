@@ -11,6 +11,8 @@ export const validateFn = (fn) => {
   return fn;
 };
 
+/* MISC */
+
 export const fetchData = async (url = '',signal,rowConversion) => {
   let data;
   const urlMembers = url.split('.');
@@ -23,6 +25,7 @@ export const fetchData = async (url = '',signal,rowConversion) => {
 
   try {
     const res = await FETCH[extension](url,signal,rowConversion);
+    console.log('rowConversion :', rowConversion);
     if(res.type === 'Topology') {
       const firstKey = Object.keys(res.objects)[0];
       data = feature(res,res.objects[firstKey]);
@@ -34,6 +37,8 @@ export const fetchData = async (url = '',signal,rowConversion) => {
     return new Error(err.message);
   }
 };
+
+/* DATA UTILS */
 
 export const getRangeDistribution = (data,bins) => { // bins should be already exclusive
   let count, first, last;
@@ -64,6 +69,11 @@ export const getRangeDistribution = (data,bins) => { // bins should be already e
   });
 };
 
+export const sum = (array) => array.reduce((sum,e) => sum += e,0);
+
+
+/* D3 GRAPH UTILS */
+
 export const getDimensions = (element) => {
   const selection = select(element);
   return {
@@ -71,8 +81,6 @@ export const getDimensions = (element) => {
     height: parseInt(selection.style('height'))
   }
 };
-
-/* D3 GRAPH UTILS */
 
 export const setSubcontainers = (selection,isStyleResizable,dimensions) => {
   if(isStyleResizable) {

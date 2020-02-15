@@ -1,9 +1,10 @@
 import React from 'react';
+import { sum } from '../scripts/utils';
 
-const months = [1,2,3,4,5,6,7,8,9,10];
+const months = [1,2,3,4,5,6,7,8,9,10,11,12];
 const monthRowConversion = r => ({ 
   ...r, 
-  ...Object.fromEntries(months.map(m => ({ m: r[m] })))
+  ...Object.fromEntries(months.map(m => [m,+r[m]]))
 });
 
 export const urls = [
@@ -173,7 +174,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
           resizeBy: 'method',
           dimensions: { height: undefined, width: undefined },
           nestingOrder: ['YEAR','DESCRIPTION','WEIGHT'],
-          rollupFunc: (g) => Math.sum(...months.map(n => g[n]))
+          rollupFn: g => sum( g.map(e => sum(months.map(m => e[m]) )))
         },
         additionalData: [],
         description: () => {
