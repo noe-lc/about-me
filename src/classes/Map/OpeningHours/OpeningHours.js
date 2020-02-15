@@ -214,7 +214,7 @@ export class OpeningHoursMap extends Map {
       svgs = selection.selectAll('svg'),
       g = svgs.select('g.g-marker'),
       infoDivs = d3.select(this.menuContainer).selectAll('div.day-info'),
-      { width, height } = getDimensions(selection.node()),
+      { width, height } = getDimensions(svgs.nodes()[0]),
       lineGen = d3.line()
         .x(d => xScale(d[0]))
         .y(d => height - yScale(d[2]));
@@ -266,10 +266,10 @@ export class OpeningHoursMap extends Map {
       line = marker.select('line'),
       number = d3.select(container.parentElement).select('span.number'),
       [vWidth,vHeight] = svg.attr('viewBox').split(' ').slice(2),  // viewbox
-      { width: sWidth, height: sHeight } = svg.node().getBoundingClientRect(),
-      { width, height } = svg.select('path.day-path').node().getBoundingClientRect(),
-      tWidth = (vWidth / sWidth) * width, // calculate final width and height in terms of "viewport units"
-      tHeight = (vHeight / sHeight) * height,
+      { width: sWidth } = svg.node().getBoundingClientRect(),
+      { width } = svg.select('path.day-path').node().getBoundingClientRect(),
+      tWidth = (vWidth / sWidth) * width, // calculate final width in terms of "viewport units"
+      tHeight = vHeight, // vertical viewport units are maintained
       interpolator = d3.interpolateTransformSvg('translate(0,0)',`translate(${tWidth},0)`),
       bisector = d3.bisector(d => d[0]);
     
@@ -299,13 +299,13 @@ export class OpeningHoursMap extends Map {
         number.text(d => d + yValue);
         return transform;
       }).on('start',d => { // cancel ongoing transitions in other markers
+        line.style('display','block');
         const markers = svgs.selectAll('g.g-marker').filter(dd => dd !== d);
         markers.transition('marker');
-        marker.call(OpeningHoursMap.resetMarker,yScale,height);
       }).on('end',() => {
         this.initDay(filteredByDay,alias,number);
-        marker.call(OpeningHoursMap.resetMarker,yScale,height);
-      }).on('interrupt',() =>  marker.call(OpeningHoursMap.resetMarker,yScale,height));
+        marker.call(OpeningHoursMap.resetMarker);
+      }).on('interrupt',() => marker.call(OpeningHoursMap.resetMarker));
   }
 
   initDay(selection,alias,numberSel) {
@@ -335,11 +335,12 @@ export class OpeningHoursMap extends Map {
       .select(selector).lower();
   }
 
-  static resetMarker(selection,scale,height){
+  static resetMarker(selection){
     selection
       .attr('transform','translate(0,0)')
       .select('line')
-        .attr('y1',0);
+        .attr('y1',0)
+        .style('display','none');
   }
 };
 
