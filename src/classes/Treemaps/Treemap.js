@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { transitionFactory } from '../../scripts/utils';
+import { transitionFactory, getDimensions } from '../../scripts/utils';
 import './Treemap.css';
 
 export class Treemap {
@@ -78,6 +78,7 @@ export class Treemap {
   }
 
   renderNewLeaves = (selection) => {
+    const self = this;
     const t = transitionFactory('newLeaf', 750);
     const leaves = selection.append('div')
       .attr('class', 'leaf')
@@ -86,15 +87,10 @@ export class Treemap {
       .call(this.relocateLeaves)
       .call(this.resizeLeaves)
       .call(this.createLabel)
-      .attr('title', this.setLeafTitle)
-      .on('end',function(d) { // resize label on transition end
-        console.log(d3.select(this).select('.leaf-label').size());
-        //selection.selectAll('div.leaf-label')
-        //  .call(this.resizeLeafLabel);
+      .on('end',function() { // resize label on transition end
+        self.resizeLabel.call(this);
       });
-    //leaves
-    //  .call(this.createLabel, newLeafTransition)
-    //  .attr('title', this.setLeafTitle);
+    leaves.attr('title',this.setLeafTitle);
     //newLeafTransition // interrupt i
     //  .on('start', this.interruptIfDataIsNull(leaves, 'newLeaf'));
   }
@@ -111,8 +107,12 @@ export class Treemap {
       .style('height', d => d.y1 - d.y0 + 'px');
   }
 
+  setLeafTitle = ({ data,value}) => {
+    return `${value}, (${(value / this.layout.value * 100).toFixed(1)}%) - ${data.key}`;
+  }
+
   createLabel = (transition) => {
-    console.log('transition :', transition);
+    //console.log('transition :', transition instanceof d3.transition);
     transition.selection().append('div')
       .attr('class', 'leaf-label')
       .call(this.setLabelContent);
@@ -121,7 +121,7 @@ export class Treemap {
   setLabelContent = (selection) => {
     selection.append('h1')
       .attr('class','leaf-total')
-      .text(d => d.value);
+      .text(d => d.value.toLocaleString());
     selection.append('span')
       .attr('class','leaf-pct')
       .text(d => `${(d.value / this.layout.value * 100).toFixed(1)}%`);
@@ -129,12 +129,32 @@ export class Treemap {
       .attr('class','leaf-name')
       .text(d => d.data.key);
     //try {
-//
     //} catch (err) {
     //  if (this.data === null) {
     //    this.clear();
     //  }
     //}
+  }
+
+  resizeLabel() { // meant to be called with a different 'this' value
+    const label = d3.select(this).select('.leaf-label');
+    const { width: lWidth, height: lHeight } = getDimensions(this);
+    const { width, height } = getDimensions(label.node());
+    if(lWidth >= width && lHeight >= height) {
+      return;
+    }
+    const hFactor = lWidth / width;
+    const vFactor = lHeight / height;
+    const factor = hFactor * vFactor;
+    if(hFactor < 1 && vFactor >= 1) {
+      label.style('font-size',`${hFactor * 16}px`);
+    } else if(vFactor < 1 && hFactor >= 1) {
+      label.style('font-size',`${vFactor * 16}px`);
+    } else if(factor >= 1){
+      return;
+    } else {
+      label.style('font-size',`${factor * 16}px`)
+    }
   }
 
 }

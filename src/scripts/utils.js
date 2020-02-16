@@ -5,14 +5,16 @@ import { feature } from 'topojson';
 const geojson = json;
 const FETCH = { csv, json, geojson };
 
+/* STRING UTILS */
+
+/* MISC */
+
 export const validateFn = (fn) => {
   if(!fn || typeof fn !== 'function') {
     return null;
   }
   return fn;
 };
-
-/* MISC */
 
 export const fetchData = async (url = '',signal,rowConversion) => {
   let data;
