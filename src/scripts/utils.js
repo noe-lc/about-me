@@ -1,4 +1,5 @@
 import { select, csv, json } from 'd3';
+import { transition, easeCubicInOut } from 'd3';
 import { feature } from 'topojson';
 
 const geojson = json;
@@ -25,7 +26,6 @@ export const fetchData = async (url = '',signal,rowConversion) => {
 
   try {
     const res = await FETCH[extension](url,signal,rowConversion);
-    console.log('rowConversion :', rowConversion);
     if(res.type === 'Topology') {
       const firstKey = Object.keys(res.objects)[0];
       data = feature(res,res.objects[firstKey]);
@@ -96,3 +96,9 @@ export const setSubcontainers = (selection,isStyleResizable,dimensions) => {
       .attr('class','graphics-svg');
   }
 };
+
+export const  transitionFactory = (name, miliseconds, easing = easeCubicInOut) => {
+  return transition(name)
+    .duration(miliseconds)
+    .ease(easing);
+}

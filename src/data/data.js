@@ -174,6 +174,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
           resizeBy: 'method',
           dimensions: { height: undefined, width: undefined },
           nestingOrder: ['YEAR','DESCRIPTION','WEIGHT'],
+          symbolKey: null,
           rollupFn: g => sum( g.map(e => sum(months.map(m => e[m]) )))
         },
         additionalData: [],
