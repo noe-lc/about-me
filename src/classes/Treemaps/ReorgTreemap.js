@@ -27,44 +27,61 @@ export class ReorgTreemap extends Treemap {
   }
 
   enableDrag = (sel) => {
-    let evt, rest;
+    let evt, rest, isLast = false;
     const self = this;
+
     const reset = (sel) => { 
       sel.attr('style',null)
+        .transition()
+        .duration(250)
         .style('position','relative')
     };
+    const reInsert = (refNode,node,before = true) => {
+      console.log('node.nextElementSibling :', node.nextElementSibling);
+      refNode.parentElement.insertBefore(refNode,before ? node : node.nextElementSibling);
+    };
+
     sel.call(
       d3.drag()
         .subject(d => sel.filter(dt => dt === d))
-        .on('start',function(d) { 
+        .on('start',function(d,_,nodes) { 
           rest = sel.filter(dt => dt !== d);
+          isLast = this.isSameNode(nodes[nodes.length -1]);
          })
         .on('drag',function() { // TODO: set a "snapped" status to animate elements?
           evt = d3.event;
           evt.subject
             .style('position','absolute')
             .style('left',evt.x + 'px')
-            .style('top',evt.y + 'px');
+            //.style('top',evt.y + 'px');
         })
         .on('end',function() {
-          const node = evt.subject.node()
-          const { left } = node.getBoundingClientRect();
+          const evtNode = evt.subject.node();
           const nodes = rest.nodes();
-
-          if(left > nodes[nodes.length -1].getBoundingClientRect().left) {
+          const lastRect = nodes[nodes.length - 1].getBoundingClientRect();
+          const { left } = evtNode.getBoundingClientRect();
+          
+          if(isLast && left > lastRect.left) { // no change from last position
             evt.subject.call(reset);
-            return;
-          }
-
-          for(let e of nodes) {
-            let rect = e.getBoundingClientRect()
-            if(left < rect.left) {
-              console.log('Left to ', e);
-              node.parentElement.insertBefore(node,e);
-              evt.subject.call(reset);
-              break;
+          } else if(!isLast && left > lastRect.right) { // moved to last position
+            evtNode.parentElement.appendChild(evtNode);
+            evt.subject.call(reset);
+          } else { // in between and all other previous
+            for(let n of nodes) {
+              let rect = n.getBoundingClientRect()
+              if(left < rect.left) {
+                reInsert(evtNode,n);
+                evt.subject.call(reset);
+                break;
+              } else if(left > rect.right) {
+                reInsert(evtNode,n,false);
+                evt.subject.call(reset);
+                break;
+              }
             }
           }
+          sel = d3.select(evtNode.parentElement).selectAll('.nest-option'); // reassign selection after reordering
+          isLast = false;
           
         })
     )
