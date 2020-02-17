@@ -16,12 +16,13 @@
   padding: 0.25rem;
   display: flex;
   font-size: 0.9em;
+  position: relative;
 }
 
 .nest-option {
+  max-height: 100%;
   border: 2px solid #b4b4b4;
   text-align: center;
-  line-height: 1;
   padding: 0 0.5em;
   margin-right: 1em;
   cursor: pointer;

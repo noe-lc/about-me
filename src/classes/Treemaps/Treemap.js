@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { transitionFactory, getDimensions, treemapLayout, areArrayValuesEqual } from '../../scripts/utils';
+import { transitionFactory, getDimensions, treemapLayout } from '../../scripts/utils';
 import './Treemap.css';
 
 export class Treemap {
@@ -121,7 +121,6 @@ export class Treemap {
   }
 
   updateLeaves = (selection) => {
-    console.log('selection :', selection);
     const self = this;
     const resizeT = transitionFactory('updateLeaf', 500);
     const relocateT = transitionFactory('relocate',500);
