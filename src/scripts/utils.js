@@ -1,5 +1,5 @@
 import { select, csv, json } from 'd3';
-import { transition, easeCubicInOut } from 'd3';
+import { transition, easeCubicInOut, treemap } from 'd3';
 import { feature } from 'topojson';
 
 const geojson = json;
@@ -73,6 +73,10 @@ export const getRangeDistribution = (data,bins) => { // bins should be already e
 
 export const sum = (array) => array.reduce((sum,e) => sum += e,0);
 
+export const areArrayValuesEqual = (array1,array2) => {
+  return array1.every((e,i) => e === array2[i]);
+};
+
 
 /* D3 GRAPH UTILS */
 
@@ -99,8 +103,16 @@ export const setSubcontainers = (selection,isStyleResizable,dimensions) => {
   }
 };
 
-export const  transitionFactory = (name, miliseconds, easing = easeCubicInOut) => {
+export const  transitionFactory = (name,miliseconds,easing = easeCubicInOut) => {
   return transition(name)
     .duration(miliseconds)
     .ease(easing);
-}
+};
+
+export const treemapLayout = (width,height) => { // default settings
+  return treemap()
+    .size([width,height])
+    .paddingInner(1)
+    .paddingOuter(2)
+    .round(true);
+};

@@ -67,10 +67,10 @@ export default (props) => {
       )
     default:
       return (
-        <React.Fragment>
+        <div className='graphic-element'>
           <div ref={containerRef} className='graphics-container'></div>
           {renderDescription(props.description)}
-        </React.Fragment>
+        </div>
       )
   }
   

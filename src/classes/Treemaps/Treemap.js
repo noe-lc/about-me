@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { transitionFactory, getDimensions } from '../../scripts/utils';
+import { transitionFactory, getDimensions, treemapLayout, areArrayValuesEqual } from '../../scripts/utils';
 import './Treemap.css';
 
 export class Treemap {
@@ -11,24 +11,31 @@ export class Treemap {
 
   defaultWidth = '600px';
   defaultHeight = '400px';
+  hierarchy = null;
   layout = null;
   categoricalScale = d3.scaleOrdinal().unknown('gray');
 
   init(settings) {
-    const { rollupFn, symbolKey } = settings;
+    const { rollupFn } = settings;
     this.rollupFn = rollupFn;
     this.applySettings(settings);
-    this.createScale(symbolKey);
-    this.createLayout();
+    this.setSubcontainers();
   }
 
-  createScale(symbolKey) {
-    const { data, nestingOrder: nOrder } = this;
-    symbolKey = symbolKey || nOrder[nOrder.length - 1]; // symbolize by leaves' keys
-    const set = d3.set(data,d => d[symbolKey]);
-    this.categoricalScale
+  createScale(hierarchy) {
+    //const { hierarchy, nestingOrder: nOrder } = this;
+    //const symbolKey = nOrder[nOrder.length - 1]; // symbolize by leaves' keys
+    const set = d3.set(hierarchy.leaves(),d => d.data.key);
+    return this.categoricalScale
       .domain(set.values())
       .range(d3.schemeCategory10);
+  }
+
+  nestData(data) {
+    return this.nestingOrder
+      .reduce((nest,e) => nest.key(d => d[e]),d3.nest())
+      .rollup(this.rollupFn)
+      .entries(data);
   }
 
   applySettings(settings) {
@@ -42,39 +49,50 @@ export class Treemap {
     this.nestingOrder = nestingOrder || [];
   }
 
-  nestData() {
-    return this.nestingOrder
-      .reduce((nest,e) => nest.key(d => d[e]),d3.nest())
-      .rollup(this.rollupFn)
-      .entries(this.data);
-  }
-  
-  createLayout() {
+  createHierarchyAndLayout(data) {
     const { width, height } = this.dimensions;
-    const nest = this.nestData();
+    const nest = this.nestData(data);
     const rootNode = { root: 'root', values: nest };
-    const hierarchy = d3.hierarchy(rootNode, d => d.values)
+    const hierarchy = d3.hierarchy(rootNode,d => d.values)
       .sum(d => d.value)
       .sort((a, b) => b.value - a.value);
-    const layout = d3.treemap()
-      .size([width,height])
-      .paddingInner(1)
-      .paddingOuter(2)
-      .round(true)(hierarchy);
-    this.layout = layout; // width and height must be defined
+    const layout = treemapLayout(width,height)(hierarchy);
+    return { hierarchy, layout };
+    
   }
 
-  draw() {
-    const { container, layout, renderNewLeaves } = this;
-    const tContainer = d3.select(container).append('div')
+  setSubcontainers() {
+    d3.select(this.container).append('div')
       .attr('class','treemap-wrapper')
     .append('div')
       .attr('class','treemap-container');
+  }
+
+  draw() {
+    this.update();
+  }
+
+  resizeByLayout({ width, height }) {
+    const layout =  treemapLayout(width,height)(this.hierarchy);
+
+  }
+
+  update(data,nestingOrder) {
+    this.data = data || this.data;
+    this.nestingOrder = nestingOrder || this.nestingOrder;
+    const { hierarchy, layout } = this.createHierarchyAndLayout(this.data);
+    this.hierarchy = hierarchy;
+    this.layout = layout;
+    this.categoricalScale = this.createScale(hierarchy);
     
-    tContainer.selectAll('.leaf')
-      .data(layout.leaves(), d => d.data.key)
-      .enter()
-      .call(renderNewLeaves)
+    const update = d3.select(this.container).select('.treemap-container')
+      .selectAll('.leaf').data(layout.leaves())
+      
+    update.enter()
+      .call(this.renderNewLeaves)
+
+    update.exit()
+
   }
 
   renderNewLeaves = (selection) => {
@@ -95,45 +113,62 @@ export class Treemap {
     //  .on('start', this.interruptIfDataIsNull(leaves, 'newLeaf'));
   }
 
-  relocateLeaves = (selection) => {
+  updateLeaves = (selection) => {
+    const self = this;
+    const resizeT = transitionFactory('updateLeaf', 500);
+    const relocateT = transitionFactory('relocate',500);
     selection
-      .style('left', d => d.x0 + 'px')
+      .attr('title', this.setLeafTitle)
+      .style('background-color',d => this.categoricalScale(d.data.key))
+    .transition(resizeT)
+      .call(this.resize)
+    .transition(relocateT)
+      .call(this.relocate)
+      .call(this.updateLabel)
+      .on('end',function() {
+        self.resizeLabel.call(this);
+      });
+  }
+
+  relocateLeaves = (sel) => {
+    sel.style('left', d => d.x0 + 'px')
       .style('top', d => d.y0 + 'px');
   }
 
-  resizeLeaves = (selection) => {
-    selection
-      .style('width', d => d.x1 - d.x0 + 'px')
+  resizeLeaves = (sel) => {
+    sel.style('width', d => d.x1 - d.x0 + 'px')
       .style('height', d => d.y1 - d.y0 + 'px');
   }
 
-  setLeafTitle = ({ data,value}) => {
+  setLeafTitle = ({ data, value }) => {
     return `${value}, (${(value / this.layout.value * 100).toFixed(1)}%) - ${data.key}`;
   }
 
   createLabel = (transition) => {
-    //console.log('transition :', transition instanceof d3.transition);
     transition.selection().append('div')
       .attr('class', 'leaf-label')
       .call(this.setLabelContent);
   }
 
-  setLabelContent = (selection) => {
-    selection.append('h1')
+  setLabelContent = (sel) => {
+    sel.append('h1')
       .attr('class','leaf-total')
       .text(d => d.value.toLocaleString());
-    selection.append('span')
+    sel.append('span')
       .attr('class','leaf-pct')
       .text(d => `${(d.value / this.layout.value * 100).toFixed(1)}%`);
-    selection.append('span')
+    sel.append('span')
       .attr('class','leaf-name')
       .text(d => d.data.key);
-    //try {
-    //} catch (err) {
-    //  if (this.data === null) {
-    //    this.clear();
-    //  }
-    //}
+  }
+
+  updateLabel = (sel) => {
+    sel.select('.leaf-total')
+      .text(d => d.value.toLocaleString());
+    sel.select('.leaf-pct')
+      .text(d => `${(d.value / this.layout.value * 100).toFixed(1)}%`);
+    sel.select('.leaf-name')
+      .text(d => d.data.key);
   }
 
   resizeLabel() { // meant to be called with a different 'this' value
