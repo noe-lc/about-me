@@ -11,6 +11,7 @@ export class Treemap {
 
   defaultWidth = '600px';
   defaultHeight = '400px';
+  dimensions = {};
   hierarchy = null;
   layout = null;
   categoricalScale = d3.scaleOrdinal().unknown('gray');
@@ -73,8 +74,12 @@ export class Treemap {
   }
 
   resizeByLayout({ width, height }) {
+    this.dimensions = { width, height };
     const layout =  treemapLayout(width,height)(this.hierarchy);
-
+    d3.select(this.container)
+      .selectAll('.leaf').data(layout.leaves())
+      .call(this.updateLeaves);
+    return layout;
   }
 
   update(data,nestingOrder) {
@@ -87,11 +92,13 @@ export class Treemap {
     
     const update = d3.select(this.container).select('.treemap-container')
       .selectAll('.leaf').data(layout.leaves())
+      //.call(this.updateLeaves);
       
     update.enter()
-      .call(this.renderNewLeaves)
+      .call(this.renderNewLeaves);
 
     update.exit()
+      .remove();
 
   }
 
@@ -114,6 +121,7 @@ export class Treemap {
   }
 
   updateLeaves = (selection) => {
+    console.log('selection :', selection);
     const self = this;
     const resizeT = transitionFactory('updateLeaf', 500);
     const relocateT = transitionFactory('relocate',500);
@@ -121,9 +129,9 @@ export class Treemap {
       .attr('title', this.setLeafTitle)
       .style('background-color',d => this.categoricalScale(d.data.key))
     .transition(resizeT)
-      .call(this.resize)
+      .call(this.resizeLeaves)
     .transition(relocateT)
-      .call(this.relocate)
+      .call(this.relocateLeaves)
       .call(this.updateLabel)
       .on('end',function() {
         self.resizeLabel.call(this);
