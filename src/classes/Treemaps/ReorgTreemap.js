@@ -1,10 +1,10 @@
 import * as d3 from 'd3';
 import { Treemap } from './Treemap';
-import { getDimensions } from '../../scripts/utils';
+import { getDimensions, areArrayValuesEqual } from '../../scripts/utils';
 
 export class ReorgTreemap extends Treemap {
-  constructor(containers,data,settings) {
-    super(containers,data,settings);
+  constructor(containers,data,settings,additionalData,setState) {
+    super(containers,data,settings,additionalData,setState);
   }
 
   draw() {
@@ -27,8 +27,9 @@ export class ReorgTreemap extends Treemap {
   }
 
   enableDrag = (sel) => {
-    let subject, clone, rest, wTransition = false;
-    let initL, initR;
+    let subject, subjectWidth, clone, rest, initL, initR, wTransition = false;
+    const instance = this;
+
     const reset = (subject,wTransition) => { 
       subject.attr('style',null)
         .style('position','relative');
@@ -51,6 +52,7 @@ export class ReorgTreemap extends Treemap {
         .subject(d => sel.filter(dt => dt === d))
         .on('start',function(d) {
           subject = d3.event.subject;
+          subjectWidth = parseInt(subject.style('width')) / 2;
           rest = sel.filter(dt => dt !== d);
           ({ left: initL, right: initR } = this.getBoundingClientRect());
           initL += 10; // tolerance 
@@ -62,7 +64,7 @@ export class ReorgTreemap extends Treemap {
         .on('drag',function() { // TODO: set a "snapped" status to animate elements?
           subject
             .style('position','absolute')
-            .style('left',d3.event.x - (parseInt(subject.style('width')) / 2) + 'px');
+            .style('left',d3.event.x - subjectWidth + 'px');
         })
         .on('end',function() {
           const nodes = rest.nodes(),
@@ -94,10 +96,14 @@ export class ReorgTreemap extends Treemap {
             compare();
           }
 
-          reset(d3.event.subject,wTransition);
+          reset(subject,wTransition);
           sel = d3.select(this.parentElement).selectAll('.nest-option') // reassign selection after reordering
             .filter(d => d);
           wTransition = false;
+
+          if(!areArrayValuesEqual(sel.data(),instance.nestingOrder)) {
+            instance.update(null,sel.data());
+          }
         })
     )
   }

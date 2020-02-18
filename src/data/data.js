@@ -178,10 +178,26 @@ export const portfolioData = [ // these paths are preceded by portfolio/
           rollupFn: g => sum( g.map(e => sum(months.map(m => e[m]) )))
         },
         additionalData: [],
-        description: () => {
+        description: ({ descProps }) => { // expects a 2D array to render a legend
+          const renderLegend = () => {
+            return descProps ? (
+              <dl className='desc-legend inline'>
+                <dt>Leaf color coding:</dt>
+                {descProps.map(([name,backgroundColor]) => 
+                  <dd>
+                    <span className='desc-legend-patch' style={{ backgroundColor }}></span>
+                    <span className='desc-legend-label'>{name}</span>
+                  </dd>
+                )}
+              </dl>
+            ): null;   
+          };
           return (
             <React.Fragment>
-              
+              {renderLegend()}
+              <p>
+  
+              </p>              
             </React.Fragment>
           )
         }

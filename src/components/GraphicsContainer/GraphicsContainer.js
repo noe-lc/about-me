@@ -10,12 +10,13 @@ const Spinner = () => {
 export default (props) => {
   const containerRef = useRef();
   const menuRef = useRef();
+  const [descProps,setDescProps] = useState(null);
   const [state,setState] = useState({ isLoading: true, failedToLoad: false });
 
-  const renderDescription = (description) => {
-    return description && !state.isLoading && !state.failedToLoad ? (
+  const renderDescription = (Description) => {
+    return Description && !state.isLoading && !state.failedToLoad ? (
       <div className='graphics-desc'>
-        {description()}
+        <Description descProps={descProps}/>
       </div>
     ) : null;
   };
@@ -35,7 +36,7 @@ export default (props) => {
       }
       setState({ ...state, isLoading: false });
       const containers = { menu: menuRef.current, main: containerRef.current };
-      const params = [containers,data,settings,additionalData];
+      const params = [containers,data,settings,additionalData,setDescProps];
       const graphic = new classMap[props.class](...params);
       graphic.draw();
     };

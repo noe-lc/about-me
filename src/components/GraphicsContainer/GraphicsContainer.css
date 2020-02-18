@@ -1,3 +1,8 @@
+dt {
+  font-weight: bold;
+  color: #737373;
+}
+
 .graphics-element {
   width: 100%;
   height: auto;
@@ -14,6 +19,10 @@
 
 .flex {
   display: flex;
+}
+
+.inline * {
+  display: inline-block;
 }
 
 .graphics-menu {
@@ -78,7 +87,23 @@
 
 .data-source dt {
   margin-right: 0.25rem;
-  font-weight: bold;
+}
+
+.desc-legend {
+  font-size: 0.8em;
+  margin-top: -1em;
+  text-align: right;
+}
+
+.desc-legend dd {
+  margin: 0;
+}
+
+.desc-legend-patch {
+  height: 0.75em;
+  width: 0.75em;
+  margin-left: 0.75em;
+  margin-right: 0.25em;
 }
 
 @media only screen and (max-width:600px) {

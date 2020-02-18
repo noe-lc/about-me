@@ -3,9 +3,10 @@ import { transitionFactory, getDimensions, treemapLayout } from '../../scripts/u
 import './Treemap.css';
 
 export class Treemap {
-  constructor({ main: container },data,settings) {
+  constructor({ main: container },data,settings,additionalData,setState) {
     this.container = container;
     this.data = data;
+    this.setState = setState || (() => { }) // 
     this.init(settings);
   }
 
@@ -59,7 +60,6 @@ export class Treemap {
       .sort((a, b) => b.value - a.value);
     const layout = treemapLayout(width,height)(hierarchy);
     return { hierarchy, layout };
-    
   }
 
   setSubcontainers() {
@@ -92,19 +92,18 @@ export class Treemap {
     
     const update = d3.select(this.container).select('.treemap-container')
       .selectAll('.leaf').data(layout.leaves())
-      //.call(this.updateLeaves);
-      
+      .call(this.updateLeaves);
     update.enter()
       .call(this.renderNewLeaves);
-
     update.exit()
       .remove();
 
+    this.setState(this.categoricalScale.domain().map(e => [e,this.categoricalScale(e)]));
   }
 
   renderNewLeaves = (selection) => {
     const self = this;
-    const t = transitionFactory('newLeaf', 750);
+    const t = transitionFactory('newLeaf', 1000);
     const leaves = selection.append('div')
       .attr('class', 'leaf')
       .style('background-color',d => this.categoricalScale(d.data.key));
@@ -179,24 +178,25 @@ export class Treemap {
   }
 
   resizeLabel() { // meant to be called with a different 'this' value
-    const label = d3.select(this).select('.leaf-label');
-    const { width: lWidth, height: lHeight } = getDimensions(this);
-    const { width, height } = getDimensions(label.node());
-    if(lWidth >= width && lHeight >= height) {
-      return;
-    }
-    const hFactor = lWidth / width;
-    const vFactor = lHeight / height;
-    const factor = hFactor * vFactor;
+    let fontSize = 16;
+    const label = d3.select(this).select('.leaf-label'),
+      { width: lWidth, height: lHeight } = getDimensions(this),
+      { width, height } = getDimensions(label.node()),
+      hFactor = lWidth / width,
+      vFactor = lHeight / height,
+      factor = hFactor * vFactor;
+
     if(hFactor < 1 && vFactor >= 1) {
-      label.style('font-size',`${hFactor * 16}px`);
-    } else if(vFactor < 1 && hFactor >= 1) {
-      label.style('font-size',`${vFactor * 16}px`);
-    } else if(factor >= 1){
-      return;
-    } else {
-      label.style('font-size',`${factor * 16}px`)
-    }
+      fontSize = fontSize * hFactor;
+    } else if(hFactor >= 1 && vFactor < 1) {
+      fontSize = fontSize * vFactor;
+    } else if(factor >= 1) {
+      fontSize = fontSize * factor;
+      fontSize = fontSize > 16 ? 16 : fontSize;
+    } 
+
+    if(fontSize <= 16) label.style('font-size',fontSize + 'px');
+
   }
 
 }
