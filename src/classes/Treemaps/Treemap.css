@@ -31,12 +31,24 @@
   position: relative;
 }
 
+.nest-option.clone {
+  border: none;
+  padding: 0;
+  opacity: 0.25;
+}
+
 .nest-option::after {
   content: '';
   border: 0.5em solid transparent;
   border-left: 0.5em solid black;
   position: absolute;
   right: -1.25em;
+}
+
+.nest-option.clone::after {
+  content: none;
+  border: none;
+  display: none;
 }
 
 .nest-option:last-child::after {
