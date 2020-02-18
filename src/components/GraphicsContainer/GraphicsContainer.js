@@ -8,6 +8,7 @@ const Spinner = () => {
 }
 
 export default (props) => {
+  let graphic;
   const containerRef = useRef();
   const menuRef = useRef();
   const [descProps,setDescProps] = useState(null);
@@ -21,7 +22,7 @@ export default (props) => {
     ) : null;
   };
 
-  useEffect(() => {
+  useEffect(() => { // data fetching
     const abortController = new AbortController();
     const { signal } = abortController;
     const { url, rowConversion, settings, additionalData } =  props;
@@ -37,13 +38,24 @@ export default (props) => {
       setState({ ...state, isLoading: false });
       const containers = { menu: menuRef.current, main: containerRef.current };
       const params = [containers,data,settings,additionalData,setDescProps];
-      const graphic = new classMap[props.class](...params);
+      graphic = new classMap[props.class](...params);
       graphic.draw();
     };
     onGraphicsMount();
     return () => {
       abortController.abort();
     };
+  },[]);
+
+  useEffect(() => { // resizing based on media queries
+    if(props.settings.resizeBy === 'method') {
+      const mqls = [600,900,1200].map(width => window.matchMedia(`(max-width:${width}px)`));
+      const resize = () => graphic.resize();
+      mqls.forEach(m => m.addListener(resize));
+      return () => {
+        mqls.forEach(m => m.removeListener(resize));
+      };
+    }
   },[]);
 
   if(state.isLoading) {

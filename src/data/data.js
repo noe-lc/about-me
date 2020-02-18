@@ -184,7 +184,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
               <dl className='desc-legend inline'>
                 <dt>Leaf color coding:</dt>
                 {descProps.map(([name,backgroundColor]) => 
-                  <dd>
+                  <dd key={name}>
                     <span className='desc-legend-patch' style={{ backgroundColor }}></span>
                     <span className='desc-legend-label'>{name}</span>
                   </dd>
@@ -195,9 +195,14 @@ export const portfolioData = [ // these paths are preceded by portfolio/
           return (
             <React.Fragment>
               {renderLegend()}
-              <p>
-  
-              </p>              
+              <p className='content-margin'>
+                At one of my previous jobs we constantly used treemaps for displaying hierarchical data, and
+                I always wanted to build one on which the user could control the order in which the data were nested. <br/>
+              </p>
+              <p className='content-margin'>
+                On this example, <b>you can drag and drop the property name containers above the treemap to change the nesting order. </b> 
+                By default, the color scheme is modified to reflect the new unique values in the tree's leaves.
+              </p>           
             </React.Fragment>
           )
         }

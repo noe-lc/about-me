@@ -17,14 +17,6 @@ dt {
   position: relative;
 }
 
-.flex {
-  display: flex;
-}
-
-.inline * {
-  display: inline-block;
-}
-
 .graphics-menu {
   width: 30%;
   display: flex;
@@ -62,7 +54,7 @@ dt {
 }
 
 .graphics-desc p {
-  margin: 0;
+  line-height: 1.25em;
 }
 
 .graphics-desc ul {
@@ -106,6 +98,20 @@ dt {
   margin-right: 0.25em;
 }
 
+/* MODIFIERS */
+.flex {
+  display: flex;
+}
+
+.inline * {
+  display: inline-block;
+}
+
+.content-margin {
+  margin: 0.25em 0;
+}
+
+/* MEDIA QUERIES */
 @media only screen and (max-width:600px) {
   .graphics-container.flex {
     flex-direction: column;

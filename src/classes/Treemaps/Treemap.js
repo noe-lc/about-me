@@ -25,8 +25,6 @@ export class Treemap {
   }
 
   createScale(hierarchy) {
-    //const { hierarchy, nestingOrder: nOrder } = this;
-    //const symbolKey = nOrder[nOrder.length - 1]; // symbolize by leaves' keys
     const set = d3.set(hierarchy.leaves(),d => d.data.key);
     return this.categoricalScale
       .domain(set.values())
@@ -73,12 +71,13 @@ export class Treemap {
     this.update();
   }
 
-  resizeByLayout({ width, height }) {
-    this.dimensions = { width, height };
+  resize(container = this.container) {
+    const { width, height } = getDimensions(container);
     const layout =  treemapLayout(width,height)(this.hierarchy);
     d3.select(this.container)
       .selectAll('.leaf').data(layout.leaves())
       .call(this.updateLeaves);
+    this.dimensions = { width, height };
     return layout;
   }
 

@@ -26,6 +26,10 @@ export class ReorgTreemap extends Treemap {
         .call(this.enableDrag);
   }
 
+  resize() {
+    super.resize(d3.select(this.container).select('.treemap-container').node());
+  }
+
   enableDrag = (sel) => {
     let subject, subjectWidth, clone, rest, initL, initR, wTransition = false;
     const instance = this;
