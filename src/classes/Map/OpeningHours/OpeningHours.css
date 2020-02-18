@@ -94,7 +94,7 @@
   height: 1.25rem;
   border: 1px solid rgba(0,0,0,0.1);
   border-radius: 50%;
-  background: whitesmoke 60% 50% / 80% no-repeat url('/icons/play.png');
+  background: whitesmoke 60% 50% / 80% no-repeat url('https://noe-lc.github.io/about-me/icons/play.png');
   padding: 0;
   position: absolute;
   top: 10%;
