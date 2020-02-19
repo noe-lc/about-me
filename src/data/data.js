@@ -118,6 +118,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
     path: 'maps', 
     list: [
       {
+        type: 'graphics',
         name:'Opening Hours',
         class: 'OpeningHoursMap',
         path:'opening-hours',
@@ -165,6 +166,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
     path:'graphs-and-charts', 
     list: [
       {
+        type: 'graphics',
         name:'Reorganizable Treemap ',
         path:'reorganizable-treemap',
         url:'https://raw.githubusercontent.com/noe-lc/about-me/master/src/data/product_data.csv',
@@ -214,6 +216,23 @@ export const portfolioData = [ // these paths are preceded by portfolio/
   { 
     name: 'Web Apps', 
     path:'web-apps', 
-    list: [] 
+    list: [
+      {
+        type: 'fixed',
+        name:'Public Reports',
+        content: () => {
+          return (
+            <iframe src="https://player.vimeo.com/video/392540761" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+          )
+        },
+        description: () => {
+          return (
+            <p>
+              Sample video.
+            </p>
+          )
+        }
+      }
+    ] 
   }
 ];

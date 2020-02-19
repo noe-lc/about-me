@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
 import GraphicsContainer from '../GraphicsContainer/GraphicsContainer';
+import FixedContent from '../FixedGraphicsContent/FixedGraphicsContent';
 import { portfolioData } from '../../data/data';
 import './Portfolio.css';
 
@@ -12,6 +13,17 @@ export default (props) => {
   url = url.slice(-1) === '/' ? url.slice(0,-1) : url;
   path = path.slice(-1) === '/' ? path.slice(0,-1) : path;
 
+  const renderListElement = ({ type, ...rest }) => {
+    switch(type) {
+      case 'graphics':
+        return <GraphicsContainer {...rest}/>;
+      case 'fixed':
+        return <FixedContent {...rest} />
+      default:
+        return null;
+    }
+  };
+
   const renderListElements = ({ list,name }) => {
     if(list.length == 0) {
       return <h1 className='empty-list'>Nothing to see here... yet.</h1> 
@@ -20,7 +32,7 @@ export default (props) => {
       return (
         <div key={e.name} className='portfolio-element'>
           <h1>{e.name}</h1>
-          <GraphicsContainer {...e}/>
+          {renderListElement(e)}
         </div>
       )
     })

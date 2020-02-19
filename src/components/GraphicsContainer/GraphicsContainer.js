@@ -5,7 +5,7 @@ import './GraphicsContainer.css';
 
 const Spinner = () => {
   return <div className='spinner' ></div>
-}
+};
 
 export default (props) => {
   let graphic;
