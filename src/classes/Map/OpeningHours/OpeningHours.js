@@ -162,7 +162,7 @@ export class OpeningHoursMap extends Map {
     const legend = d3.select(this.container).append('div') // legend
       .attr('class','op-legend');
     legend.append('img')
-      .attr('src','/imgs/op-color-ramp.png')
+      .attr('src','https://noe-lc.github.io/about-me/imgs/op-color-ramp.png')
     legend.selectAll('span').data(['Just Opened','Closed']).enter()
       .append('span')
       .attr('class','ramp-label')

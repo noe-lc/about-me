@@ -23,9 +23,10 @@ function App(props) {
   return (
     <Router basename={process.env.PUBLIC_URL}>
       <Switch>
+        
         <Route path={'/portfolio'} component={Portfolio}/>
         <Route path={'/'} component={AboutMe}/>
-        {/*<Redirect from='/' to='/skills-and-languages' /> */}
+        <Redirect strict from='/' to='/skills-and-languages' />
         {/*<Route render={(props) => <SquaredButton/>}/> No match component? */} 
       </Switch>
     </Router>
@@ -63,7 +64,7 @@ const AboutMe = props => {
           </InfoContainer>
         </Route>
         <Route exact path={`${path}/skills-and-languages`}>
-          <InfoContainer>
+          <InfoContainer scrollOnMount={false}>
             {Object.entries(skillsLangData).map(([key,value]) => 
               <SkInfo key={key} title={key[0].toUpperCase() + key.slice(1)} data={value} />
             )}

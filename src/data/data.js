@@ -181,14 +181,16 @@ export const portfolioData = [ // these paths are preceded by portfolio/
         description: ({ descProps }) => { // expects a 2D array to render a legend
           const renderLegend = () => {
             return descProps ? (
-              <dl className='desc-legend inline'>
-                <dt>Leaf color coding:</dt>
-                {descProps.map(([name,backgroundColor]) => 
-                  <dd key={name}>
-                    <span className='desc-legend-patch' style={{ backgroundColor }}></span>
-                    <span className='desc-legend-label'>{name}</span>
-                  </dd>
-                )}
+              <dl className='desc-legend'>
+                <dt>Key:</dt>
+                <div className='desc-legend-cont'>
+                  {descProps.map(([name,backgroundColor]) => 
+                    <dd key={name}>
+                      <span className='desc-legend-patch' style={{ backgroundColor }}></span>
+                      <span className='desc-legend-label'>{name}</span>
+                    </dd>
+                  )}
+                </div>               
               </dl>
             ): null;   
           };
@@ -201,7 +203,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
               </p>
               <p className='content-margin'>
                 On this example, <b>you can drag and drop the property name containers above the treemap to change the nesting order. </b> 
-                By default, the color scheme is modified to reflect the new unique values in the tree's leaves.
+                After each update, the key will be modified to reflect the new unique values in the tree's leaves.
               </p>           
             </React.Fragment>
           )

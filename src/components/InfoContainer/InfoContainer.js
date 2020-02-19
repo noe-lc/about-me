@@ -7,21 +7,22 @@ const scrollTo = (element) => window.scrollTo({
   behavior: 'smooth'
 });
 
-export default (props) => {
-    try {
-      const infoRef = useRef(null);
-      useEffect(() => {
-        if(!infoRef.current) return;
-        scrollTo(infoRef.current);
-      },[]);
+export default ({ children,scrollOnMount }) => {
+  const scroll = typeof scrollOnMount == 'boolean' ? scrollOnMount : true;
+  try {
+    const infoRef = useRef(null);
+    useEffect(() => {
+      if(!infoRef.current || !scroll) return;
+      scrollTo(infoRef.current);
+    },[]);
 
-      return (
-        <div ref={infoRef} className='info-container'>
-          {props.children}
-        </div>
-      )
-    } catch(e) {
-      return <h1>Could not render this component!</h1>
-    }
+    return (
+      <div ref={infoRef} className='info-container'>
+        {children}
+      </div>
+    )
+  } catch(e) {
+    return <h1>Could not render this component!</h1>
+  }
 };
 
