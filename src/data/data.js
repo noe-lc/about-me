@@ -227,19 +227,39 @@ export const portfolioData = [ // these paths are preceded by portfolio/
         description: () => {
           return (
             <div className='flex-divider'>
-              <div className='app-video-desc'>
+              <div className='flex-3'>
                 <h3>Description</h3>
-                <p>
+                <p className='content-margin'>
                   Based on data mined from social media, geographical references were used to digitize features on a map
                   and link them to public posts. Such features were uploaded to a database using internal tools and then consumed
                   by the app in order to find clusters and frequencies of issues related to government services.
                 </p>
+                <p className='content-margin'>
+                  The app provided ways of filtering spatially, by date, or category.
+                </p>
               </div>
-              <div className='app-video-tools'>
-                <h3>Tools/Technologies</h3>
-              </div>
-              <div className='app-video-challenges'>
+              <div className='flex-3'>
                 <h3>Challenges</h3>
+                <ol className='app-video-listing'>
+                  <li>Managing layer visibility at different zoom levels <sup>*</sup></li>
+                  <li>Spatial filtering at street and block level on drag events <sup>*</sup></li>
+                  <li>Leveraging the marker clustering library to add color codes, and cluster features not only by proximity, but by attributes as well.</li>
+                  <li>Creating custom overlays and make them act as proportional symbols</li>
+                </ol>
+                <div className='note'>
+                  <mark><sup>*</sup> Required behaviour to improve performance</mark>
+                </div> 
+              </div>
+              <div>
+                <h3>Tools/Technologies</h3>
+                <ol className='app-video-listing'>
+                  <li>React</li>
+                  <li>Redux</li>
+                  <li>Google Maps API</li>
+                  <li>D3.js</li>
+                  <li><a target='_blank' href='https://github.com/gmaps-marker-clusterer/gmaps-marker-clusterer'>Google Maps Marker Clustering</a></li>
+                  <li>Turf.js</li>
+                </ol>
               </div>
             </div>
           )
@@ -253,9 +273,39 @@ export const portfolioData = [ // these paths are preceded by portfolio/
         },
         description: () => {
           return (
-            <p>
-              Sample video.
-            </p>
+            <div className='flex-divider'>
+              <div className='flex-3'>
+                <h3>Description</h3>
+                <p className='content-margin'>
+                  As a way of keeping track and following service issues (reported on Social Media by users), our organization
+                  devised a framework for classifying and organizing them so that the data could be visualized in different ways, namely:
+                  Summary Tables, Rankings, Bar Charts (constructed on nominal and time dimensions), a Treemap, and a Map.
+                </p>
+                <p className='content-margin'>
+                  In addition, custom and highly interactive filters were built for the data itself was content-rich and
+                  required detailed exploration. To further support this, components were contained to maintain consistent updates
+                  such as those found in dashboards.
+                </p>
+              </div>
+              <div className='flex-3'>
+                <h3>Challenges</h3>
+                <ol className='app-video-listing'>
+                  <li>Finding easy-to-build and use data structures that could be reused by as many components as possible</li>
+                  <li>Using these data structures to reflect updates and data availability on the filters (e.g. graying out or disabling controls)</li>                
+                  <li>Generating filter options dynamically</li>
+                  <li>Error handling for DOM transitions which could be interrupted by fast user interaction</li>                 
+                </ol>
+              </div>
+              <div>
+                <h3>Tools/Technologies</h3>
+                <ol className='app-video-listing'>
+                  <li>React</li>
+                  <li>Redux</li>
+                  <li>Google Maps API</li>
+                  <li>D3.js</li>
+                </ol>
+              </div>
+            </div>
           )
         }
       },
@@ -269,9 +319,30 @@ export const portfolioData = [ // these paths are preceded by portfolio/
         },
         description: () => {
           return (
-            <p>
-              Sample video.
-            </p>
+            <div className='flex-divider'>
+              <div className='flex-3'>
+                <h3>Description</h3>
+                <p className='content-margin'>
+                  The app provided ways of filtering spatially, by date, or category.
+                </p>
+              </div>
+              <div className='flex-3'>
+                <h3>Challenges</h3>
+                <ol className='app-video-listing'>
+                  <li></li>                 
+                </ol>
+              </div>
+              <div>
+                <h3>Tools/Technologies</h3>
+                <ol className='app-video-listing'>
+                  <li>React</li>
+                  <li>Redux</li>
+                  <li>Google Maps API</li>
+                  <li>D3.js</li>
+                  <li>Turf.js</li>
+                </ol>
+              </div>
+            </div>
           )
         }
       }
@@ -283,8 +354,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
         showcased below. A lot of text and media content are either blurred out, pixelated, or even censored. This
         is due to the data behind them which was deemed to be sensitive to external users. However, they do a good job in
         showing their overall functionality, design, and interactive capabilities; more information regarding
-        the tools used and the challenges faced while building them is in the description below the videos.
-        `
+        the tools used and the challenges faced while building them is in the description below the videos.`
       }
     ] 
   }

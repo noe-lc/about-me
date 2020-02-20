@@ -1,3 +1,13 @@
+sup {
+  vertical-align: text-top;
+  font-weight: bold;
+}
+
+mark {
+  background-color: transparent;
+  font-size: 0.8em;
+}
+
 .portfolio-main {
   width: 100%;
 }
@@ -69,13 +79,19 @@
   border: 1px solid rgba(0,0,0,0.25);
 }
 
+.note {
+  text-align: right;
+}
+
 .flex-divider > * {
-  flex: 1;
-  padding: 0.5em;
+  padding: 0.5em 1em;
+}
+
+.flex-divider h3 {
+  margin: 0;
 }
 
 .flex-divider * {
-  margin: 0;
   box-sizing: border-box;
 }
 
@@ -84,8 +100,19 @@
   height: 500px
 }
 
-.app-video {
+.app-video-listing {
+  list-style: circle;
+  padding-left: 1.25em;
+}
 
+/* MODIFIERS */
+
+.flex-2 {
+  flex: 2;
+}
+
+.flex-3 {
+ flex: 3;
 }
 
 @media only screen and (max-width:600px) {
@@ -113,8 +140,14 @@
 
 }
 @media only screen and (max-width: 900px){
-  .video {
+  .app-video {
     height: 400px;
+  }
+}
+
+@media only screen and (max-width: 750px){
+  .app-video {
+    height: 40vh;
   }
 }
 
@@ -123,7 +156,7 @@
     font-size: 0.9rem;
   }
 
-  .video {
+  .app-video {
     height: 30vh;
   }
 }
