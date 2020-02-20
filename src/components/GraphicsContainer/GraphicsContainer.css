@@ -120,6 +120,10 @@ dt {
   margin: 0.25em 0;
 }
 
+.height-auto {
+  height: auto;
+}
+
 /* MEDIA QUERIES */
 @media only screen and (max-width:600px) {
   .graphics-container.flex {

@@ -7,11 +7,16 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  font-family: 'Fira Sans', sans-serif;
+  font-family: 'Hind', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #eeeeee;
+  background-color: whitesmoke;
   height: inherit;
+  --clr-gray: rgba(80, 81, 79, 1);
+  --clr-red: rgba(242, 95, 92, 1);
+  --clr-yellow: rgba(255, 224, 102, 1);
+  --clr-green: rgba(112, 193, 179, 1);
+  --clr-blue: rgba(36, 123, 160, 1);
 }
 
 code {

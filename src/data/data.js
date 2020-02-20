@@ -221,8 +221,50 @@ export const portfolioData = [ // these paths are preceded by portfolio/
         type: 'fixed',
         name:'Public Reports',
         content: () => {
+          return <iframe className='app-video' src="https://player.vimeo.com/video/392540452" frameBorder="0" allow="autoplay; fullscreen" allowFullScreen></iframe>
+
+        },
+        description: () => {
           return (
-            <iframe src="https://player.vimeo.com/video/392540761" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+            <div className='flex-divider'>
+              <div className='app-video-desc'>
+                <h3>Description</h3>
+                <p>
+                  Based on data mined from social media, geographical references were used to digitize features on a map
+                  and link them to public posts. Such features were uploaded to a database using internal tools and then consumed
+                  by the app in order to find clusters and frequencies of issues related to government services.
+                </p>
+              </div>
+              <div className='app-video-tools'>
+                <h3>Tools/Technologies</h3>
+              </div>
+              <div className='app-video-challenges'>
+                <h3>Challenges</h3>
+              </div>
+            </div>
+          )
+        }
+      },
+      {
+        type: 'fixed',
+        name:'Subway Reports',
+        content: () => {
+          return <iframe className='app-video' src="https://player.vimeo.com/video/392540761" frameBorder="0" allow="autoplay; fullscreen" allowFullScreen></iframe>
+        },
+        description: () => {
+          return (
+            <p>
+              Sample video.
+            </p>
+          )
+        }
+      },
+      {
+        type: 'fixed',
+        name: 'Incidences',
+        content: () => {
+          return (
+            <iframe className='app-video'  src="https://player.vimeo.com/video/392540894"  frameBorder="0" allow="autoplay; fullscreen" allowFullScreen></iframe>
           )
         },
         description: () => {
@@ -233,6 +275,21 @@ export const portfolioData = [ // these paths are preceded by portfolio/
           )
         }
       }
+    ],
+    messages: [
+      {
+        type: 'warning',
+        text: `Unfortunately I cannot provide a very detailed description, nor the links to the web applications
+        showcased below. A lot of text and media content are either blurred out, pixelated, or even censored. This
+        is due to the data behind them which was deemed to be sensitive to external users. However, they do a good job in
+        showing their overall functionality, design, and interactive capabilities; more information regarding
+        the tools used and the challenges faced while building them is in the description below the videos.
+        `
+      }
     ] 
   }
 ];
+
+// subway
+// Georef
+//<iframe  width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>

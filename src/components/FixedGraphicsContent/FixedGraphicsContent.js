@@ -12,7 +12,7 @@ export default (props) => {
   
   return (
     <div className='graphic-element'>
-      <div className='graphics-container'>
+      <div className='graphics-container height-auto'>
         {props.content()}
       </div>
       {renderDescription(props.description)}
