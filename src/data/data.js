@@ -290,7 +290,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
               <div className='flex-3'>
                 <h3>Challenges</h3>
                 <ol className='app-video-listing'>
-                  <li>Finding easy-to-build and use data structures that could be reused by as many components as possible</li>
+                  <li>Finding a data structure that could be reused by as many components as possible</li>
                   <li>Using these data structures to reflect updates and data availability on the filters (e.g. graying out or disabling controls)</li>                
                   <li>Generating filter options dynamically</li>
                   <li>Error handling for DOM transitions which could be interrupted by fast user interaction</li>                 
@@ -314,7 +314,10 @@ export const portfolioData = [ // these paths are preceded by portfolio/
         name: 'Incidences',
         content: () => {
           return (
-            <iframe className='app-video'  src="https://player.vimeo.com/video/392540894"  frameBorder="0" allow="autoplay; fullscreen" allowFullScreen></iframe>
+            <React.Fragment>
+              <iframe className='app-video'  src="https://player.vimeo.com/video/393004335"  frameBorder="0" allow="autoplay; fullscreen" allowFullScreen></iframe>
+              <iframe className='app-video'  src="https://player.vimeo.com/video/392995897"  frameBorder="0" allow="autoplay; fullscreen" allowFullScreen></iframe>
+            </React.Fragment>    
           )
         },
         description: () => {
@@ -323,13 +326,29 @@ export const portfolioData = [ // these paths are preceded by portfolio/
               <div className='flex-3'>
                 <h3>Description</h3>
                 <p className='content-margin'>
-                  The app provided ways of filtering spatially, by date, or category.
+                  We created a couple of applications for geolocating and "tracking" incidences in Mexico City. It was decided
+                  that we would have the qualitative and spatial concerns separate, these are contained respectively in the videos above.
+                </p>
+                <p>
+                  The first application consists of a summary table, a treemap and a segmented bar chart. The user can click the elements to
+                  filter and explore the entries belonging to it. More details of the data are provided in a modal and other sections where each
+                  event is presented separately, and clicking on a link will take the user to the second app via <code><a target='_blank' href='https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage'>postMessage</a></code>. 
+                  This window method allowed us to send the current state of the filters as well as the selected incidence, in order to apply these changes on component mounting.
+                </p>
+                <p>
+                  Each incidence was linked to official data sources, media content, and more importantly, related 
+                  events that followed the first one registered. We included polygon data layers and a heatmap to help
+                  authorities find hotspots and identify sectors which required attention.
                 </p>
               </div>
               <div className='flex-3'>
                 <h3>Challenges</h3>
                 <ol className='app-video-listing'>
-                  <li></li>                 
+                  <li>Fine-tuning the order of execution to accomodate the changes sent from the other application, regardless the window was open or not</li>
+                  <li>Sharing state and component methods with the map, sidebar, and filters</li>
+                  <li>Finding features with the same coordinates and symbolizing them differently including the number of features</li>
+                  <li>Linking features by their attributes, and changing their style</li>
+                  <li>Creating a data layer style that highlighted the current feature for a short period of time</li>               
                 </ol>
               </div>
               <div>

@@ -83,16 +83,16 @@ mark {
   text-align: right;
 }
 
+.flex-divider * {
+  box-sizing: border-box;
+}
+
 .flex-divider > * {
   padding: 0.5em 1em;
 }
 
 .flex-divider h3 {
   margin: 0;
-}
-
-.flex-divider * {
-  box-sizing: border-box;
 }
 
 .app-video {
@@ -103,6 +103,7 @@ mark {
 .app-video-listing {
   list-style: circle;
   padding-left: 1.25em;
+  margin: 0.25em 0;
 }
 
 /* MODIFIERS */
@@ -114,6 +115,8 @@ mark {
 .flex-3 {
  flex: 3;
 }
+
+/* */
 
 @media only screen and (max-width:600px) {
   .portfolio-nav {
@@ -142,6 +145,27 @@ mark {
 @media only screen and (max-width: 900px){
   .app-video {
     height: 400px;
+  }
+
+  .note {
+    text-align: left;
+  }
+
+  .flex-divider {
+    flex-wrap: wrap;
+  }
+
+  .flex-divider > div:first-child {
+    width: 100%;
+    flex: none;
+  }
+
+  .flex-divider > div:not(:first-child) {
+    flex: 1;
+  }
+
+  .flex-divider > div:not(:first-child).flex-3 {
+    flex: 2;
   }
 }
 
