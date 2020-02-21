@@ -31,7 +31,7 @@ export default (props) => {
     return list.map(e => {
       return (
         <div key={e.name} className='portfolio-element'>
-          <h1>{e.name}</h1>
+          <h1 className='portfolio-element-title'>{e.name}</h1>
           {renderListElement(e)}
         </div>
       )

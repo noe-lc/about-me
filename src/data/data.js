@@ -138,7 +138,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
             <React.Fragment>
               <p>
               This is a map I originally had built for a map contest organized by 
-              <a target='_blank' href='https://mapscaping.com/'> MapScaping </a> last December. It shows polygons of each physical retail location in the lower Manhattan
+              <a target='_blank' rel='noopener noreferrer' href='https://mapscaping.com/'> MapScaping </a> last December. It shows polygons of each physical retail location in the lower Manhattan
               area of New York City, and transitions through a normal 24hr-day in a span on 10 seconds. 
               Each polygon takes on the opening hours of the location which:
               </p>
@@ -153,7 +153,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
               </p>
               <dl className='data-source'>
                 <dt>Data source: </dt>
-                <dd>Geometry & Patterns by <a target='_blank' href='https://safegraph.com/'>Safegraph</a></dd>
+                <dd>Geometry & Patterns by <a target='_blank' rel='noopener noreferrer' href='https://safegraph.com/'>Safegraph</a></dd>
               </dl>
             </React.Fragment>
           )
@@ -221,7 +221,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
         type: 'fixed',
         name:'Public Reports',
         content: () => {
-          return <iframe className='app-video' src="https://player.vimeo.com/video/392540452" frameBorder="0" allow="autoplay; fullscreen" allowFullScreen></iframe>
+          return <iframe title='Public Reports App Sample' className='app-video' src="https://player.vimeo.com/video/392540452" frameBorder="0" allow="autoplay; fullscreen" allowFullScreen></iframe>
 
         },
         description: () => {
@@ -257,7 +257,9 @@ export const portfolioData = [ // these paths are preceded by portfolio/
                   <li>Redux</li>
                   <li>Google Maps API</li>
                   <li>D3.js</li>
-                  <li><a target='_blank' href='https://github.com/gmaps-marker-clusterer/gmaps-marker-clusterer'>Google Maps Marker Clustering</a></li>
+                  <li>
+                    <a target='_blank' rel='noopener noreferrer' href='https://github.com/gmaps-marker-clusterer/gmaps-marker-clusterer'>Google Maps Marker Clustering</a>
+                  </li>
                   <li>Turf.js</li>
                 </ol>
               </div>
@@ -269,7 +271,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
         type: 'fixed',
         name:'Subway Reports',
         content: () => {
-          return <iframe className='app-video' src="https://player.vimeo.com/video/392540761" frameBorder="0" allow="autoplay; fullscreen" allowFullScreen></iframe>
+          return <iframe title='Subway Reports App Sample' className='app-video' src="https://player.vimeo.com/video/392540761" frameBorder="0" allow="autoplay; fullscreen" allowFullScreen></iframe>
         },
         description: () => {
           return (
@@ -315,8 +317,8 @@ export const portfolioData = [ // these paths are preceded by portfolio/
         content: () => {
           return (
             <React.Fragment>
-              <iframe className='app-video'  src="https://player.vimeo.com/video/393004335"  frameBorder="0" allow="autoplay; fullscreen" allowFullScreen></iframe>
-              <iframe className='app-video'  src="https://player.vimeo.com/video/392995897"  frameBorder="0" allow="autoplay; fullscreen" allowFullScreen></iframe>
+              <iframe title='Incidences summary App sample' className='app-video'  src="https://player.vimeo.com/video/393004335"  frameBorder="0" allow="autoplay; fullscreen" allowFullScreen></iframe>
+              <iframe title='Geolocated Incidences App sample' className='app-video'  src="https://player.vimeo.com/video/392995897"  frameBorder="0" allow="autoplay; fullscreen" allowFullScreen></iframe>
             </React.Fragment>    
           )
         },
@@ -332,7 +334,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
                 <p>
                   The first application consists of a summary table, a treemap and a segmented bar chart. The user can click the elements to
                   filter and explore the entries belonging to it. More details of the data are provided in a modal and other sections where each
-                  event is presented separately, and clicking on a link will take the user to the second app via <code><a target='_blank' href='https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage'>postMessage</a></code>. 
+                  event is presented separately, and clicking on a link will take the user to the second app via <code><a target='_blank' rel='noopener noreferrer' href='https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage'>postMessage</a></code>. 
                   This window method allowed us to send the current state of the filters as well as the selected incidence, in order to apply these changes on component mounting.
                 </p>
                 <p>

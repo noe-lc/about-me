@@ -8,11 +8,16 @@ const Spinner = () => {
 };
 
 export default (props) => {
-  let graphic;
   const containerRef = useRef();
   const menuRef = useRef();
+  const { settings, additionalData, url, rowConversion, class: className } = props;
   const [descProps,setDescProps] = useState(null);
-  const [state,setState] = useState({ isLoading: true, failedToLoad: false });
+  const [state,setState] = useState({ 
+    isLoading: true, 
+    failedToLoad: false,
+    data: null,
+    graphic: null 
+  });
 
   const renderDescription = (Description) => {
     return Description && !state.isLoading && !state.failedToLoad ? (
@@ -25,7 +30,6 @@ export default (props) => {
   useEffect(() => { // data fetching
     const abortController = new AbortController();
     const { signal } = abortController;
-    const { url, rowConversion, settings, additionalData } =  props;
     const onGraphicsMount = async function() {
       const data = await fetchData(url,{ signal },rowConversion);
       if(data instanceof Error) {
@@ -35,11 +39,7 @@ export default (props) => {
         }
         return;
       }
-      setState({ ...state, isLoading: false });
-      const containers = { menu: menuRef.current, main: containerRef.current };
-      const params = [containers,data,settings,additionalData,setDescProps];
-      graphic = new classMap[props.class](...params);
-      graphic.draw();
+      setState(s => ({ ...s, isLoading: false, data }));
     };
     onGraphicsMount();
     return () => {
@@ -50,7 +50,7 @@ export default (props) => {
   useEffect(() => { // resizing based on media queries
     if(props.settings.resizeBy === 'method') {
       const mqls = [600,900,1200].map(width => window.matchMedia(`(max-width:${width}px)`));
-      const resize = () => graphic.resize();
+      const resize = () => state.graphic.resize();
       mqls.forEach(m => m.addListener(resize));
       return () => {
         mqls.forEach(m => m.removeListener(resize));
@@ -58,6 +58,16 @@ export default (props) => {
     }
   },[]);
 
+  useEffect(() => { // render graphic
+    if(!state.data) return;
+    const containers = { menu: menuRef.current, main: containerRef.current };
+    const params = [containers,state.data,settings,additionalData,setDescProps];
+    const graphic = new classMap[className](...params);
+    graphic.draw();
+    setState(s => ({ ...s, graphic }));
+  },[state.data]);
+
+  /* Rendering */
   if(state.isLoading) {
     return <Spinner />;
   }
@@ -69,7 +79,7 @@ export default (props) => {
   switch(props.class) {
     case 'OpeningHoursMap':
       return (
-        <div className={'graphic-element' /* + (name === 'Maps' ? ' graphic-element-map' : '')*/}>
+        <div className={'graphics-element' /* + (name === 'Maps' ? ' graphic-element-map' : '')*/}>
           <div className='graphics-container flex'>
             <div ref={menuRef} className='graphics-menu'></div>
             <div ref={containerRef} className='graphics-area ocean'></div>

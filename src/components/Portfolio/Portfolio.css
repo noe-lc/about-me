@@ -46,6 +46,10 @@ mark {
   width: 100%;
 }
 
+.portfolio-element-title {
+  margin-bottom: 1rem;
+}
+
 .card-container {
   width: 80%;
   height: 100%;
@@ -141,8 +145,17 @@ mark {
     min-height: 250px;
   }
 
+  .flex-divider > div:not(:first-child) {
+    width: 100%;
+    flex: none;
+  }
 }
-@media only screen and (max-width: 900px){
+
+@media only screen and (max-width: 900px) {
+  .graphics-desc {
+    margin-top: 0;
+  }
+
   .app-video {
     height: 400px;
   }
@@ -176,12 +189,8 @@ mark {
 }
 
 @media only screen and (max-width: 600px){
-  .graphic-desc {
-    font-size: 0.9rem;
-  }
-
   .app-video {
-    height: 30vh;
+    height: 35vh;
   }
 }
 
