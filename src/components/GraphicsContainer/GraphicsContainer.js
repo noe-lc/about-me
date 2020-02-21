@@ -56,7 +56,7 @@ export default (props) => {
         mqls.forEach(m => m.removeListener(resize));
       };
     }
-  },[]);
+  },[state.graphic]);
 
   useEffect(() => { // render graphic
     if(!state.data) return;

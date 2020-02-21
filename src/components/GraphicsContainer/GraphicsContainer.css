@@ -49,12 +49,13 @@ dt {
 }
 
 .graphics-desc {
-  margin: 1rem 0;
-  font-size: 1rem;
+  margin: 0.5rem 0;
+  font-size: 0.9em;
 }
 
 .graphics-desc p {
   line-height: 1.25em;
+  padding: 0 0.25em;
 }
 
 .graphics-desc ul {
@@ -79,12 +80,17 @@ dt {
 
 .data-source dt {
   margin-right: 0.25rem;
+  display: inline-block;
 }
 
 .desc-legend {
   font-size: 0.8em;
-  margin-top: -1em;
+  margin-top: 0;
   text-align: right;
+}
+
+.desc-legend-cont {
+  display: inline-block;
 }
 
 .desc-legend-cont * {
@@ -92,6 +98,7 @@ dt {
 }
 
 .desc-legend dt {
+  display: inline-block;
   margin-bottom: 0.25em;
 }
 
@@ -151,13 +158,13 @@ dt {
   .desc-legend-cont {
     display: flex;
     flex-wrap: wrap;
+    display: inline-flex;
   }
 
-  .desc-legend {
-    text-align: left;
+  .desc-legend dt {
+    display: inline-block;
   }
 
-  
 }
 
 @media only screen and (max-width:500px) {

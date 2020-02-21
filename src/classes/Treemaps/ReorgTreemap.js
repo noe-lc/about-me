@@ -3,10 +3,6 @@ import { Treemap } from './Treemap';
 import { getDimensions, areArrayValuesEqual } from '../../scripts/utils';
 
 export class ReorgTreemap extends Treemap {
-  constructor(containers,data,settings,additionalData,setState) {
-    super(containers,data,settings,additionalData,setState);
-  }
-
   draw() {
     const wrapper = d3.select(this.container).select('.treemap-wrapper');
     const tContainer =  wrapper.select('.treemap-container');

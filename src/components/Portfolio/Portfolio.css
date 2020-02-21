@@ -47,7 +47,7 @@ mark {
 }
 
 .portfolio-element-title {
-  margin-bottom: 1rem;
+  margin: 0.5rem 0;
 }
 
 .card-container {
@@ -61,7 +61,6 @@ mark {
 
 .flex-divider {
   display: flex;
-  font-size: 0.9rem;
 }
 
 .spinner {
@@ -108,6 +107,11 @@ mark {
   list-style: circle;
   padding-left: 1.25em;
   margin: 0.25em 0;
+  line-height: 1.25em;
+}
+
+.app-video-listing li {
+  margin-bottom: 0.3em;
 }
 
 /* MODIFIERS */
@@ -120,42 +124,8 @@ mark {
  flex: 3;
 }
 
-/* */
-
-@media only screen and (max-width:600px) {
-  .portfolio-nav {
-    justify-content: space-around;
-  }
-
-  .portfolio-nav a {
-    margin: 0 0.5rem;
-  }
-
-  .graphic-element-map {
-    width: 100%;
-    height: auto;
-    min-height: 370px;
-  }
-
-  .empty-list {
-    min-height: 300px;
-  }
-
-  .spinner {
-    min-height: 250px;
-  }
-
-  .flex-divider > div:not(:first-child) {
-    width: 100%;
-    flex: none;
-  }
-}
-
+/* MEDIA QUERIES */
 @media only screen and (max-width: 900px) {
-  .graphics-desc {
-    margin-top: 0;
-  }
-
   .app-video {
     height: 400px;
   }
@@ -188,9 +158,46 @@ mark {
   }
 }
 
-@media only screen and (max-width: 600px){
+@media only screen and (max-width:600px) {
   .app-video {
     height: 35vh;
+  }
+
+  .portfolio-nav {
+    justify-content: space-around;
+  }
+
+  .portfolio-nav a {
+    margin: 0 0.5rem;
+  }
+
+  .graphic-element-map {
+    width: 100%;
+    height: auto;
+    min-height: 370px;
+  }
+
+  .empty-list {
+    min-height: 300px;
+  }
+
+  .spinner {
+    min-height: 250px;
+  }
+
+  .flex-divider > * {
+    padding: 0.25em 0.5em;
+  }
+
+  .flex-divider > div:not(:first-child) {
+    width: 100%;
+    flex: none;
+  }
+}
+
+@media only screen and (max-width: 550px){
+  .app-video {
+    height: 30vh;
   }
 }
 
