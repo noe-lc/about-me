@@ -1,0 +1,24 @@
+.message {
+  width: 100%;
+  padding: 1em;
+}
+
+.message-icon {
+  width: 1em;
+  margin-right: 0.5em;
+}
+
+.info {
+
+}
+
+.warning {
+  border: 2px solid #dac400;
+  background-color: #ffecb5;
+  box-sizing: border-box;
+  line-height: 1.25em;
+}
+
+.error {
+
+}

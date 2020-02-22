@@ -371,16 +371,14 @@ export const portfolioData = [ // these paths are preceded by portfolio/
         }
       }
     ],
-    messages: [
-      {
-        type: 'warning',
-        text: `Unfortunately I cannot provide a very detailed description, nor the links to the web applications
-        showcased below. A lot of text and media content are either blurred out, pixelated, or even censored. This
-        is due to the data behind them which was deemed to be sensitive to external users. However, they do a good job in
-        showing their overall functionality, design, and interactive capabilities; more information regarding
-        the tools used and the challenges faced while building them is in the description below the videos.`
-      }
-    ] 
+    message: {
+      type: 'warning',
+      text: `Unfortunately I cannot provide a very detailed description, nor the links to the web applications
+      showcased below. A lot of text and media content are either blurred out, pixelated, or even censored. This
+      is due to the data behind them which was deemed to be sensitive to external users. However, they do a good job in
+      showing their overall functionality, design, and interactive capabilities; more information regarding
+      the tools used and the challenges faced while building them is in the description below the videos.`
+    }
   }
 ];
 

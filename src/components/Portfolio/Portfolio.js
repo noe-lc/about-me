@@ -2,10 +2,12 @@ import React, { useEffect } from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
 import GraphicsContainer from '../GraphicsContainer/GraphicsContainer';
 import FixedContent from '../FixedGraphicsContent/FixedGraphicsContent';
+import Message from '../Message/Message';
 import { portfolioData } from '../../data/data';
 import './Portfolio.css';
 
 portfolioData.sort((a,b) => a.appearanceOrder - b.appearanceOrder);
+const { path: defaultPath } = portfolioData[0];
 
 export default (props) => {
   let { path, url } = props.match;
@@ -14,7 +16,11 @@ export default (props) => {
   url = url.slice(-1) === '/' ? url.slice(0,-1) : url;
   path = path.slice(-1) === '/' ? path.slice(0,-1) : path;
 
-  //useEffect(() => { props.history.push(portfolioData[0].path) },[]);
+  useEffect(() => { props.history.push(`${url}/${defaultPath}`) },[]);
+
+  const renderMessages = ({ message }) => {
+    return <Message {...message}/>
+  };
 
   const renderListElement = ({ type, ...rest }) => {
     switch(type) {
@@ -55,6 +61,7 @@ export default (props) => {
         <Switch>
           {portfolioData.map(d => 
             <Route key={d.name} path={`${path}/${d.path}`}>
+              {renderMessages(d)}
               {renderListElements(d)}
             </Route>
           )}

@@ -27,6 +27,9 @@
 .btn-container {
   width: 10%;
   text-align: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .collapsed {
@@ -40,13 +43,14 @@
   transition: max-height ease-out 0.5s;
 }
 
-.header h4 {
+.header .title {
   opacity: 0.5;
+  line-height: 1.75em;
 }
 
 .btn {
-  width: 1.5em;
-  height: 1.5em;
+  width: 2em;
+  height: 2em;
   border-radius: 50%;
   border: none;
   background-color: transparent;
