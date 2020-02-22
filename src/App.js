@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { urls, educationData, experienceData, skillsLangData } from './data/data';
 
 import CoverLetter from './components/CoverLetter/CoverLetter';
@@ -23,12 +23,11 @@ function App(props) {
   return (
     <Router basename={process.env.PUBLIC_URL}>
       <Switch>
-        
         <Route path={'/portfolio'} component={Portfolio}/>
         <Route path={'/'} component={AboutMe}/>
-        <Redirect strict from='/' to='/skills-and-languages' />
         {/*<Route render={(props) => <SquaredButton/>}/> No match component? */} 
       </Switch>
+      
     </Router>
   );
 }
@@ -37,6 +36,9 @@ const AboutMe = props => {
   let { url, path } = props.match;
   url = url.slice(-1) === '/' ? url.slice(0,-1) : url;
   path = path.slice(-1) === '/' ? path.slice(0,-1) : path;
+
+  useEffect(() => props.history.push('/skills-and-languages'),[]); // "redirect"
+
   return (
     <div className="main">
       <CoverLetter />

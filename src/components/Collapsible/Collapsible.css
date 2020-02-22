@@ -56,9 +56,9 @@
 }
 
 .btn-collapsed {
-  background-image: url(/icons/expand.svg);
+  background-image: url(https://noe-lc.github.io/about-me/icons/expand.svg);
 }
 
 .btn-expanded {
-  background-image: url(/icons/collapse.svg);
+  background-image: url(https://noe-lc.github.io/about-me/icons/collapse.svg);
 }

@@ -19,6 +19,8 @@
   margin-bottom: 0.5em;
   text-align: left;
   font-family: monospace;
+  word-break: break-all;
+  white-space: normal;
 }
 
 .function-menu a {

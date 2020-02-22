@@ -115,7 +115,8 @@ export const skillsLangData = {
 export const portfolioData = [ // these paths are preceded by portfolio/
   { 
     name: 'Maps', 
-    path: 'maps', 
+    path: 'maps',
+    appearanceOrder: 2,
     list: [
       {
         type: 'graphics',
@@ -136,7 +137,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
         description: () => {
           return (
             <React.Fragment>
-              <p>
+              <p className='content-margin'>
               This is a map I originally had built for a map contest organized by 
               <a target='_blank' rel='noopener noreferrer' href='https://mapscaping.com/'> MapScaping </a> last December. It shows polygons of each physical retail location in the lower Manhattan
               area of New York City, and transitions through a normal 24hr-day in a span on 10 seconds. 
@@ -146,7 +147,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
                 <li>Is within the polygon's bounds, and</li>
                 <li>Is open the most time per week compared to others sharing the same polygon</li>
               </ul>
-              <p>
+              <p className='content-margin'>
                 The delay and duration of transitions for each polygon depend on their opening and closing hours.
                 Furthermore, the line charts describe the number of locations open at any given time, with a total
                 and a maximum of open locations per day.
@@ -163,7 +164,8 @@ export const portfolioData = [ // these paths are preceded by portfolio/
   },
   { 
     name: 'Graphs & Charts',
-    path:'graphs-and-charts', 
+    path:'graphs-and-charts',
+    appearanceOrder: 3,
     list: [
       {
         type: 'graphics',
@@ -215,7 +217,8 @@ export const portfolioData = [ // these paths are preceded by portfolio/
   },
   { 
     name: 'Web Apps', 
-    path:'web-apps', 
+    path:'web-apps',
+    appearanceOrder: 1,
     list: [
       {
         type: 'fixed',
@@ -329,7 +332,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
                 <h3>Description</h3>
                 <p className='content-margin'>
                   We created a couple of applications for geolocating and "tracking" incidences in Mexico City. It was decided
-                  that we would have the qualitative and spatial concerns separate, these are contained respectively in the videos above.
+                  that we should have the qualitative and spatial concerns separate. They can be found respectively in the videos above.
                 </p>
                 <p>
                   The first application consists of a summary table, a treemap and a segmented bar chart. The user can click the elements to
