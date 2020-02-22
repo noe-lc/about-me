@@ -3,6 +3,7 @@ import { Route, Link, Switch } from 'react-router-dom';
 import GraphicsContainer from '../GraphicsContainer/GraphicsContainer';
 import FixedContent from '../FixedGraphicsContent/FixedGraphicsContent';
 import Message from '../Message/Message';
+import makeCollapsible from '../MakeCollapsible/MakeCollapsible';
 import { portfolioData } from '../../data/data';
 import './Portfolio.css';
 
@@ -18,8 +19,10 @@ export default (props) => {
 
   useEffect(() => { props.history.push(`${url}/${defaultPath}`) },[]);
 
-  const renderMessages = ({ message }) => {
-    return <Message {...message}/>
+  const renderMessage = ({ message }) => {
+    if(!message) return;
+    const Collapsible = makeCollapsible(Message,{ minHeight: '2em' },message.type,'Tap to expand message');
+    return <Collapsible {...message} />
   };
 
   const renderListElement = ({ type, ...rest }) => {
@@ -61,7 +64,7 @@ export default (props) => {
         <Switch>
           {portfolioData.map(d => 
             <Route key={d.name} path={`${path}/${d.path}`}>
-              {renderMessages(d)}
+              {renderMessage(d)}
               {renderListElements(d)}
             </Route>
           )}

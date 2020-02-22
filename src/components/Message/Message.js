@@ -5,7 +5,6 @@ import './Message.css';
 
 export default ({ type, text }) => {
   const className = 'message ' + (type || '');
-  console.log('type, text :', type, text);
   const iconData = messageIcons(type);
   switch(type) {
     case 'warning':
@@ -13,7 +12,7 @@ export default ({ type, text }) => {
         <div className={className}>
           {iconData ? 
             <a href={iconData.href} title={iconData.title}>
-              <img src={iconData.src} className='message-icon'/>
+              <img src={iconData.src} className='message-icon' alt={`${type} icon`}/>
             </a> : null
           }
           {text}
