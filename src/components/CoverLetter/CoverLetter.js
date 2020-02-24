@@ -7,7 +7,7 @@ export default () => {
       <div className='img-container'>
         <img src='./imgs/profile.jpg' alt="Author of this site" />
       </div>
-      <div className="desc-container">
+      <div className="bio-container">
         <h1 className='greeting'>Hi!</h1>
         <p>
           My name is Noé Landaverde and I am a Mexican Geoinformatics Engineer.

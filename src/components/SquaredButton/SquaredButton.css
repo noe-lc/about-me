@@ -3,6 +3,23 @@
   padding: 0.5rem;
   display: inline-block;
   text-align: center;
-  margin: 0.25em;
+  margin: 0.5rem;
   cursor: pointer;
+}
+
+.squared-btn:active {
+  position: relative;
+  top: 2px;
+}
+
+.squared-btn:hover {
+  animation: color 5s ease-in-out infinite;
+}
+
+@keyframes color {
+  0% { border-color: black; color: black; }
+  25% { border-color: var(--clr-red); color: var(--clr-red); }
+  50% { border-color: var(--clr-yellow); color: var(--clr-yellow); }
+  75% { border-color: var(--clr-blue); color: var(--clr-blue); }
+  100% { border-color: var(--clr-gray); color: var(--clr-gray); }
 }

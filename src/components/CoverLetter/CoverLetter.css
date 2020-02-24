@@ -11,7 +11,7 @@
   justify-content: center;
 }
 
-.desc-container {
+.bio-container {
   width: 65%;
   line-height: 1.25rem;
 }
@@ -24,11 +24,7 @@
 
 .greeting {
   display: inline-block;
-  padding: 0.5rem 2rem;
-  background-color:black;
-  color: #ffe834;
   margin-bottom: 0.5rem;
-  opacity: 0.75;
 }
 
 @media only screen and (max-width: 600px) {
@@ -42,7 +38,7 @@
     width: 50%;
   }
 
-  .desc-container {
+  .bio-container {
     width: 90%;
   }
 }

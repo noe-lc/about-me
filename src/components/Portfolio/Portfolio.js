@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route, Link, Switch } from 'react-router-dom';
+import { Route, Link, Switch, Redirect } from 'react-router-dom';
 import GraphicsContainer from '../GraphicsContainer/GraphicsContainer';
 import FixedContent from '../FixedGraphicsContent/FixedGraphicsContent';
 import Message from '../Message/Message';
@@ -16,12 +16,13 @@ export default (props) => {
   const current = pathArray[pathArray.length - 1];
   url = url.slice(-1) === '/' ? url.slice(0,-1) : url;
   path = path.slice(-1) === '/' ? path.slice(0,-1) : path;
+  console.log('url :', url);
 
   useEffect(() => { props.history.push(`${url}/${defaultPath}`) },[]);
 
   const renderMessage = ({ message }) => {
     if(!message) return;
-    const Collapsible = makeCollapsible(Message,null,message.type,'Click to expand this message');
+    const Collapsible = makeCollapsible(Message,null,message.type,'⚠️ Click to expand this message');
     return <Collapsible {...message} />
   };
 
@@ -62,6 +63,7 @@ export default (props) => {
       </nav>
       <div className='portfolio-content'>
         <Switch>
+          <Redirect exact from={url} to={defaultPath}/>
           {portfolioData.map(d => 
             <Route key={d.name} path={`${path}/${d.path}`}>
               {renderMessage(d)}
