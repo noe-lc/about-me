@@ -21,7 +21,7 @@ export default (props) => {
 
   const renderMessage = ({ message }) => {
     if(!message) return;
-    const Collapsible = makeCollapsible(Message,{ minHeight: '2em' },message.type,'Tap to expand message');
+    const Collapsible = makeCollapsible(Message,null,message.type,'Click to expand this message');
     return <Collapsible {...message} />
   };
 

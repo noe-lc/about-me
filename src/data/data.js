@@ -139,9 +139,9 @@ export const portfolioData = [ // these paths are preceded by portfolio/
             <React.Fragment>
               <p className='content-margin'>
               This is a map I originally had built for a map contest organized by 
-              <a target='_blank' rel='noopener noreferrer' href='https://mapscaping.com/'> MapScaping </a> last December. It shows polygons of each physical retail location in the lower Manhattan
-              area of New York City, and transitions through a normal 24hr-day in a span on 10 seconds. 
-              Each polygon takes on the opening hours of the location which:
+              <a target='_blank' rel='noopener noreferrer' href='https://mapscaping.com/'> MapScaping </a> last December. 
+              It shows polygons of each physical retail location in the lower Manhattan area of New York City, 
+              and transitions through a normal 24hr-day in a span on 10 seconds. Each polygon takes on the opening hours of the location which:
               </p>
               <ul>
                 <li>Is within the polygon's bounds, and</li>
@@ -149,7 +149,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
               </ul>
               <p className='content-margin'>
                 The delay and duration of transitions for each polygon depend on their opening and closing hours.
-                Furthermore, the line charts describe the number of locations open at any given time, with a total
+                In addition, the line charts describe the number of locations open at any given time, with a total
                 and a maximum of open locations per day.
               </p>
               <dl className='data-source'>
@@ -244,10 +244,10 @@ export const portfolioData = [ // these paths are preceded by portfolio/
               <div className='flex-3'>
                 <h3>Challenges</h3>
                 <ol className='app-video-listing'>
-                  <li>Managing layer visibility at different zoom levels <sup>*</sup></li>
-                  <li>Spatial filtering at street and block level on drag events <sup>*</sup></li>
+                  <li>Managing layer visibility at different zoom levels<sup>*</sup></li>
+                  <li>Spatial filtering at street and block levels on drag events<sup>*</sup></li>
                   <li>Leveraging the marker clustering library to add color codes, and cluster features not only by proximity, but by attributes as well.</li>
-                  <li>Creating custom overlays and make them act as proportional symbols</li>
+                  <li>Creating a custom overlay and make it act as proportional symbols</li>
                 </ol>
                 <div className='note'>
                   <mark><sup>*</sup> Required behaviour to improve performance</mark>
@@ -282,13 +282,13 @@ export const portfolioData = [ // these paths are preceded by portfolio/
               <div className='flex-3'>
                 <h3>Description</h3>
                 <p className='content-margin'>
-                  As a way of keeping track and following service issues (reported on Social Media by users), our organization
+                  As a way of keeping track and following service issues (reported on social media by users), our organization
                   devised a framework for classifying and organizing them so that the data could be visualized in different ways, namely:
                   Summary Tables, Rankings, Bar Charts (constructed on nominal and time dimensions), a Treemap, and a Map.
                 </p>
                 <p className='content-margin'>
-                  In addition, custom and highly interactive filters were built for the data itself was content-rich and
-                  required detailed exploration. To further support this, components were contained to maintain consistent updates
+                  In addition, custom and highly interactive filters were built since the data itself were content-rich and
+                  required detailed exploration. To further support this, components were contained to ensure consistent updates
                   such as those found in dashboards.
                 </p>
               </div>
@@ -296,7 +296,7 @@ export const portfolioData = [ // these paths are preceded by portfolio/
                 <h3>Challenges</h3>
                 <ol className='app-video-listing'>
                   <li>Finding a data structure that could be reused by as many components as possible</li>
-                  <li>Using these data structures to reflect updates and data availability on the filters (e.g. graying out or disabling controls)</li>                
+                  <li>Reflecting updates and data availability on the filters (i.e. graying out or disabling controls)</li>                
                   <li>Generating filter options dynamically</li>
                   <li>Error handling for DOM transitions which could be interrupted by fast user interaction</li>                 
                 </ol>
@@ -332,26 +332,26 @@ export const portfolioData = [ // these paths are preceded by portfolio/
                 <h3>Description</h3>
                 <p className='content-margin'>
                   We created a couple of applications for geolocating and "tracking" incidences in Mexico City. It was decided
-                  that we should have the qualitative and spatial concerns separate. They can be found respectively in the videos above.
+                  that we should have the qualitative and spatial concerns separate (found respectively in the videos above).
                 </p>
                 <p>
                   The first application consists of a summary table, a treemap and a segmented bar chart. The user can click the elements to
-                  filter and explore the entries belonging to it. More details of the data are provided in a modal and other sections where each
-                  event is presented separately, and clicking on a link will take the user to the second app via <code><a target='_blank' rel='noopener noreferrer' href='https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage'>postMessage</a></code>. 
-                  This window method allowed us to send the current state of the filters as well as the selected incidence, in order to apply these changes on component mounting.
+                  filter and explore the entries belonging to them. More details of the data are provided in a modal and other sections, where each
+                  incidence is presented separately, and clicking on a link will take the user to the second app via <code><a target='_blank' rel='noopener noreferrer' href='https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage'>postMessage</a></code>. 
+                  This window method allowed us to send the current state of the filters as well as the selected feature on the map, in order to apply these changes on first render.
                 </p>
                 <p>
                   Each incidence was linked to official data sources, media content, and more importantly, related 
-                  events that followed the first one registered. We included polygon data layers and a heatmap to help
+                  events that followed the first one registered. We also included polygon data layers and a heatmap to help
                   authorities find hotspots and identify sectors which required attention.
                 </p>
               </div>
               <div className='flex-3'>
                 <h3>Challenges</h3>
                 <ol className='app-video-listing'>
-                  <li>Fine-tuning the order of execution to accomodate the changes sent from the other application, regardless the window was open or not</li>
+                  <li>Fine-tuning the order of execution to accomodate the changes sent from the other application, regardless of whether window was open or not</li>
                   <li>Sharing state and component methods with the map, sidebar, and filters</li>
-                  <li>Finding features with the same coordinates and symbolizing them differently including the number of features</li>
+                  <li>Finding features with the same coordinates and symbolizing them differently, while showing the number of grouped features</li>
                   <li>Linking features by their attributes, and changing their style</li>
                   <li>Creating a data layer style that highlighted the current feature for a short period of time</li>               
                 </ol>
@@ -374,10 +374,10 @@ export const portfolioData = [ // these paths are preceded by portfolio/
     message: {
       type: 'warning',
       text: `Unfortunately I cannot provide a very detailed description, nor the links to the web applications
-      showcased below. A lot of text and media content are either blurred out, pixelated, or even censored. This
-      is due to the data behind them which was deemed to be sensitive to external users. However, they do a good job in
-      showing their overall functionality, design, and interactive capabilities; more information regarding
-      the tools used and the challenges faced while building them is in the description below the videos.`
+      showcased below. A lot of text and media content is either blurred out, pixelated, or even censored because the data
+      behind them is considered to be sensitive to external users. However, the videos do a good job in
+      showing the overall functionality, design, and interactive capabilities of the apps. More information regarding
+      the tools used and the challenges faced while building them is available on their description sections.`
     }
   }
 ];

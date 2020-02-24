@@ -7,14 +7,14 @@
   padding: 0.25em;
   padding-left: 1em;
   opacity: 1;
-  animation: collapse 1s ease-in;
+  animation: collapse 0.5s ease-in;
   animation-fill-mode: forwards;
 }
 
 .make-collapsible.expanded div:first-child {
-  animation: expand 0.25s ease-in;
-  animation-fill-mode: forwards;
   height: 0;
+  animation: expand 0.25s ease-out;
+  animation-fill-mode: forwards;
 }
 
 @keyframes expand {
@@ -23,8 +23,8 @@
 }
 
 @keyframes collapse {
-  0% { opacity: 0; }
-  100% { opacity: 1; min-height: 2em;}
+  0% { opacity: 0; height: 0; }
+  100% { opacity: 1; min-height: 2em; }
 }
 
 
