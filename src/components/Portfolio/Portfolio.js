@@ -4,10 +4,11 @@ import GraphicsContainer from '../GraphicsContainer/GraphicsContainer';
 import FixedContent from '../FixedGraphicsContent/FixedGraphicsContent';
 import Message from '../Message/Message';
 import makeCollapsible from '../MakeCollapsible/MakeCollapsible';
-import { portfolioData } from '../../data/data';
+import * as data from '../../data/portfolio';
 import './Portfolio.css';
 
-portfolioData.sort((a,b) => a.appearanceOrder - b.appearanceOrder);
+const portfolioData = Object.values(data)
+  .sort((a,b) => a.appearanceOrder - b.appearanceOrder);
 const { path: defaultPath } = portfolioData[0];
 
 export default (props) => {
@@ -16,9 +17,6 @@ export default (props) => {
   const current = pathArray[pathArray.length - 1];
   url = url.slice(-1) === '/' ? url.slice(0,-1) : url;
   path = path.slice(-1) === '/' ? path.slice(0,-1) : path;
-  console.log('url :', url);
-
-  useEffect(() => { props.history.push(`${url}/${defaultPath}`) },[]);
 
   const renderMessage = ({ message }) => {
     if(!message) return;
@@ -63,7 +61,7 @@ export default (props) => {
       </nav>
       <div className='portfolio-content'>
         <Switch>
-          <Redirect exact from={url} to={defaultPath}/>
+          <Redirect exact from={url} to={`${url}/${defaultPath}`}/>
           {portfolioData.map(d => 
             <Route key={d.name} path={`${path}/${d.path}`}>
               {renderMessage(d)}

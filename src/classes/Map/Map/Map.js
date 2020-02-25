@@ -1,20 +1,27 @@
 import * as d3 from 'd3';
 import { setSubcontainers } from './../../../scripts/utils';
+import { geoVanDerGrinten } from 'd3-geo-projection';
 import './Map.css';
 
-export default class Map {
+const projections = { geoVanDerGrinten };
+
+export class Map {
   constructor({ main: container },data,settings) {
     this.container = container;
     this.data = data;
-    this.applySettings(data,settings);
-    const { container: c, isStyleResizable, dimensions } = this;
-    setSubcontainers(d3.select(c),isStyleResizable,dimensions);
+    this.init(data,settings);  
   }
 
   defaultWidth = '600px';
   defaultHeight = '400px';
   isStyleResizable = true;
   projection = undefined;
+
+  init(data,settings) {
+    this.applySettings(data,settings);
+    const { container: c, isStyleResizable, dimensions } = this;
+    setSubcontainers(d3.select(c),isStyleResizable,dimensions);
+  }
 
   applySettings(data,settings) {
     const container = d3.select(this.container);
@@ -24,11 +31,17 @@ export default class Map {
       width: dimensions.width || (useP ? parseInt(container.style('width')) : this.defaultWidth),
       height: dimensions.height || (useP ? parseInt(container.style('height')) : this.defaultHeight)
     };
-    this.projection = d3[projection] ? d3[projection]() : null || d3.geoMercator();
+    this.projection = this.setProjection(projection);
     this.pathGenerator = d3.geoPath()
       .projection(this.projection.fitSize([this.dimensions.width,this.dimensions.height],data));
     
     this.setResizeMethod(resizeBy);
+  }
+
+  setProjection(name) {
+    const fn = d3[name] || projections[name];
+    const prj = fn ? fn() : null;
+    return prj || d3.geoMercator();
   }
 
   draw() {

@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import { fetchData, getRangeDistribution, 
   getDimensions, setSubcontainers } from '../../../scripts/utils';
-import Map from '../Map/Map';
+import { Map } from '../Map/Map';
 import './OpeningHours.css'
 
 export class OpeningHoursMap extends Map {
