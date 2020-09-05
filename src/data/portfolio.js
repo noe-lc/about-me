@@ -220,7 +220,7 @@ export const maps = {
         )
       }
     },
-    {
+    /*{
       type: 'graphics',
       name:'Corruption and Fragile States Indexes',
       class: 'Map',
@@ -257,7 +257,7 @@ export const maps = {
           </React.Fragment>
         )
       }
-    },
+    },*/
   ] 
 };
 
